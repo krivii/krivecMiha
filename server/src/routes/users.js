@@ -7,13 +7,34 @@ const router = express.Router()
 
 router.post("/register", async (req, res) => {
     const {username, password} = req.body;
-
     const user = await UserModel.findOne({username});
+
+    if(user){
+        return res.json({message: "User already exists!"})
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new UserModel({username, password: hashedPassword});
+    await newUser.save();
     
-    res.json(user);
+    res.json({message: "User registered successfully!"})
 });
 
-router.post("/login");
+router.post("/login", async (req, res) => {
+    const {username, password} = req.body;
+    const user = await UserModel.findOne({username});
+
+    if(!user){
+        return res.json({message: "User doesn't exists!"})
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if(!isPasswordValid){
+        return res.json({message: "Incorrect password."});
+    }
+    const token = jwt.sign({id: user._id}, "secret");
+    res.json({message: "Successfull login.", token, userID: user._id});
+
+});
 
 
 export {router as userRouter};
