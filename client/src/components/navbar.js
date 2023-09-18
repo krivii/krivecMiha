@@ -17,14 +17,14 @@ return (
 			<NavLink to='/about' activeStyle>
 				About
 			</NavLink>
-			<NavLink to='/photos' activeStyle>
-				Photos
-			</NavLink>
-			<NavLink to='/videos' activeStyle>
-				Videos
+			<NavLink to='/ourWork' activeStyle>
+				Our work
 			</NavLink>
 			<NavLink to='/contact' activeStyle>
 				Contact
+			</NavLink>
+			<NavLink to='/register' activeStyle>
+				Register
 			</NavLink>
 			{/* Second Nav */}
 			{/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
