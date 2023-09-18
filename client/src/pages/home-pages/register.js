@@ -1,15 +1,40 @@
 import React, { useState } from 'react';
+import axios from "axios";
+// import dotenv from 'dotenv';
+// dotenv.config({ path: '../../../.env' });
+// require('dotenv').config({ path: '../../../.env' });
+
 
 
 const Register = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
+    
+    const onSubmit = async (event) => {
+        event.preventDefault();
+    
+        try {
+            const response = await axios.post(`http://localhost:3001/auth/register`, {
+                username,
+                password
+            });
+    
+            if (response.status === 200) {
+                alert("Registration successful");
+            } else {
+                alert("Registration failed. Please try again later.");
+            }
+        } catch (error) {
+            alert(error);
+        }
+    };
+    
 
     return (        
 
         <div className="register-container">
-            <form action="">
+            <form onSubmit={onSubmit} action="">
                 <h2>Register</h2>
                 <div className="from-group">
                     <label htmlFor="username">Username: </label>
