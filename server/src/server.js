@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 
 import { userRouter } from "./routes/users.js"
 import { customerPhotoRouter } from "./routes/customerPhotos.js"
+import { promoPhotoRouter } from "./routes/promoPhotos.js"
+import { videoRouter } from "./routes/videos.js"
 import { eventRouter } from "./routes/events.js"
 import { categoryRouter } from "./routes/categories.js"
 
@@ -25,6 +27,8 @@ app.use(cors());
 
 app.use("/auth", userRouter);
 app.use("/cmedia", customerPhotoRouter);
+app.use("/photo", promoPhotoRouter);
+app.use("/video", videoRouter);
 app.use("/event", eventRouter);
 app.use("/category", categoryRouter);
 
