@@ -9,6 +9,7 @@ import { promoPhotoRouter } from "./routes/promoPhotos.js"
 import { videoRouter } from "./routes/videos.js"
 import { eventRouter } from "./routes/events.js"
 import { categoryRouter } from "./routes/categories.js"
+import { adminRouter } from "./routes/admin.js"
 
 
 // Load environment variables from the specified path
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use(cors());
 
+app.use("/admin", adminRouter);
 app.use("/auth", userRouter);
 app.use("/cmedia", customerPhotoRouter);
 app.use("/photo", promoPhotoRouter);

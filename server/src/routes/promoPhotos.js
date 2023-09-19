@@ -24,13 +24,10 @@ router.post("/", async (req, res) => {
     try {
 
         if (!categoryId) {
-
             return res.status(400).json({ error: "Category ID is missing." });
         }
         
-        const foundCategory = await CategoryModel.findById(categoryId);
-
-            
+        const foundCategory = await CategoryModel.findById(categoryId);            
         const photo = new PromoPhotoModel(req.body);
 
         await photo.save();
