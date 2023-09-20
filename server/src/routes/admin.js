@@ -199,7 +199,7 @@ router.get("/cmedia/:photoId", async (req, res) => {
   }
 });
 
-// Update event route
+// Update photo route
 router.put("/cmedia/:photoId", async (req, res) => {
   try {
     const photoId = req.params.photoId;
@@ -272,7 +272,7 @@ router.get("/categories/:categoryId", async (req, res) => {
   }
 });
 
-// Update event route
+
 router.put("/categories/:categoryId", async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
@@ -318,6 +318,185 @@ router.delete("/categories/:categoryId", async (req, res) => {
 
 
 
+
+
+
+// promo photos route
+router.get("/photos", async (req, res) => {
+  try {
+      const response = await PromoPhotoModel.find({});
+      res.json(response);
+  } catch (error) {
+      res.json(error);
+  }
+});
+
+router.post("/photos", async (req, res) => {
+  const photosData = req.body; 
+  const { category: categoryId } = photosData; 
+  
+  try {
+
+      if (!categoryId) {
+          return res.status(400).json({ error: "Category ID is missing." });
+      }
+      
+      const foundCategory = await CategoryModel.findById(categoryId);            
+      const photo = new PromoPhotoModel(req.body);
+
+      await photo.save();
+
+      foundCategory.photos.push(photo._id);
+
+      await foundCategory.save();
+      res.json(photo);
+
+  } catch (error) {
+      res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+
+router.get("/photos/:photoId", async (req, res) => {
+try {
+    const photoId = req.params.photoId;
+
+    const photo = await PromoPhotoModel.findById(photoId);
+    
+    if (!photo) {
+        return res.status(404).json({ message: "Photo not found" });
+    }
+
+    res.json({ message: "photo retrieved successfully", photos: photo });
+
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+}
+});
+
+
+router.put("/photos/:photoId", async (req, res) => {
+try {
+  const photoId = req.params.photoId;
+  const updates = req.body; 
+
+  const updatedPhoto = await PromoPhotoModel.findByIdAndUpdate(photoId, updates, { new: true });
+
+  if (!updatedPhoto) {
+    return res.status(404).json({ message: "photo not found" });
+  }
+
+  res.json({ message: "photo updated successfully", updatedPhoto });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "Internal Server Error" });
+}
+});
+
+router.delete("/photos/:photoId", async (req, res) => {
+try {
+  const photoId = req.params.photoId;
+
+  const photoToDelete = await PromoPhotoModel.findById(photoId);
+
+
+  if (!photoToDelete) {
+    return res.status(404).json({ message: "photo not found" });
+  }
+
+  await photoToDelete.deleteOne();
+
+  res.json({ message: "photo deleted successfully", photoToDelete });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "Internal Server Error" });
+}
+});
+
+
+
+
+//video route
+
+router.get("/videos", async (req, res) => {
+  try {
+      const response = await VideoModel.find({});
+      res.json(response);
+  } catch (error) {
+      res.json(error);
+  }
+});
+
+
+router.post("/videos", async (req, res) => {
+  try { 
+      const video = new VideoModel(req.body);
+      await video.save();
+      res.json(video);
+
+  } catch (error) {
+      res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+
+router.get("/videos/:videoId", async (req, res) => {
+try {
+    const videoId = req.params.videoId;
+
+    const video = await VideoModel.findById(videoId);
+    
+    if (!video) {
+        return res.status(404).json({ message: "video not found" });
+    }
+
+    res.json({ message: "video retrieved successfully", videos: video });
+
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+}
+});
+
+
+router.put("/videos/:videoId", async (req, res) => {
+try {
+  const videoId = req.params.videoId;
+  const updates = req.body; 
+
+  const updatedVideo = await VideoModel.findByIdAndUpdate(videoId, updates, { new: true });
+
+  if (!updatedVideo) {
+    return res.status(404).json({ message: "video not found" });
+  }
+
+  res.json({ message: "video updated successfully", updatedVideo });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "Internal Server Error" });
+}
+});
+
+router.delete("/videos/:videoId", async (req, res) => {
+try {
+  const videoId = req.params.videoId;
+
+  const videoToDelete = await VideoModel.findById(videoId);
+
+
+  if (!videoToDelete) {
+    return res.status(404).json({ message: "video not found" });
+  }
+
+  await videoToDelete.deleteOne();
+
+  res.json({ message: "video deleted successfully", videoToDelete });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "Internal Server Error" });
+}
+});
 
   
 export { router as adminRouter };
