@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { CustomerPhotoModel } from "./CustomerPhotos.js";
 
 const EventSchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true},
@@ -7,6 +8,20 @@ const EventSchema = new mongoose.Schema({
     date:{type: Date, required: true}    
 });
 
-export const EventModel = mongoose.model("events", EventSchema);
+// Mongoose middleware to remove associated photos before deleting the event
+EventSchema.pre("deleteOne", async function (next) {
 
+    console.log("User found in the database:");
+  try {
+    // Remove all photos associated with this event
+    await CustomerPhotoModel.deleteMany({ _id: { $in: this.photos } });
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+export const EventModel = mongoose.model("Event", EventSchema);
 

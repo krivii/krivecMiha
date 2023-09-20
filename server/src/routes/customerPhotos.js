@@ -23,15 +23,19 @@ router.post("/", async (req, res) => {
 
     try {
         if (!eventId) {
-
             return res.status(400).json({ error: "Event ID is missing." });
         }
+
         const foundEvent = await EventModel.findById(eventId);
+        if (!foundEvent) {
+            return res.status(404).json({ error: "Event not found." });
+        }
 
+        const photo = new CustomerPhotoModel(req.body);
 
-        const photo = new CustomerPhotosModel(req.body);
 
         await photo.save();
+
 
         foundEvent.photos.push(photo._id);
         await foundEvent.save();
