@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import { UserModel } from "../models/Users.js";
 import { EventModel } from "../models/Events.js"; 
 import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
+import { CategoryModel } from "../models/Categories.js";
+import { PromoPhotoModel } from "../models/PromoPhotos.js";
+import { VideoModel } from "../models/Videos.js";
 
 
 
@@ -110,7 +113,7 @@ router.get("/events/:eventId", async (req, res) => {
       const event = await EventModel.findById(eventId);
       
       if (!event) {
-          return event.status(404).json({ message: "Event not found" });
+          return res.status(404).json({ message: "Event not found" });
       }
 
       res.json({ message: "Event retrieved successfully", photos: event.photos });
@@ -167,8 +170,150 @@ router.delete("/events/:eventId", async (req, res) => {
 
 
 
-  // CATEGORY ROUTES
+  // CUSTOMER MEDIA ROUTES
 
+  router.get("/cmedia", async (req, res) => {
+    try {
+        const response = await CustomerPhotoModel.find({});
+        res.json(response);
+    } catch (error) {
+        res.json(error);
+    }
+});
+
+router.get("/cmedia/:photoId", async (req, res) => {
+  try {
+      const photoId = req.params.photoId;
+
+      const photo = await CustomerPhotoModel.findById(photoId);
+      
+      if (!photo) {
+          return res.status(404).json({ message: "Photo not found" });
+      }
+
+      res.json({ message: "photo retrieved successfully", photos: photo });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Update event route
+router.put("/cmedia/:photoId", async (req, res) => {
+  try {
+    const photoId = req.params.photoId;
+    const updates = req.body; 
+
+    const updatedPhoto = await CustomerPhotoModel.findByIdAndUpdate(photoId, updates, { new: true });
+
+    if (!updatedPhoto) {
+      return res.status(404).json({ message: "photo not found" });
+    }
+
+    res.json({ message: "photo updated successfully", updatedPhoto });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.delete("/cmedia/:photoId", async (req, res) => {
+  try {
+    const photoId = req.params.photoId;
+
+    const photoToDelete = await CustomerPhotoModel.findById(photoId);
+
+
+    if (!photoToDelete) {
+      return res.status(404).json({ message: "photo not found" });
+    }
+
+    await photoToDelete.deleteOne();
+
+    res.json({ message: "photo deleted successfully", photoToDelete });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
+
+
+// CATEGORY ROUTES
+
+router.get("/categories", async (req, res) => {
+  try {
+      const response = await CategoryModel.find({});
+      res.json(response);
+  } catch (error) {
+      res.json(error);
+  }
+});
+
+// get photos list
+router.get("/categories/:categoryId", async (req, res) => {
+  try {
+      const categoryId = req.params.categoryId;
+
+      const category = await CategoryModel.findById(categoryId);
+      
+      if (!category) {
+          return res.status(404).json({ message: "category not found" });
+      }
+
+      res.json({ message: "category retrieved successfully", photos: category.photos });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Update event route
+router.put("/categories/:categoryId", async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const updates = req.body; 
+
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(categoryId, updates, { new: true });
+
+    if (!updatedCategory) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    res.json({ message: "Category updated successfully", updatedCategory });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+router.delete("/categories/:categoryId", async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+
+    const categoryToDelete = await CategoryModel.findById(categoryId);
+
+
+    if (!categoryToDelete) {
+      return res.status(404).json({ message: "category not found" });
+    }
+
+    // Remove all photos associated with this event
+    await PromoPhotoModel.deleteMany({ _id: { $in: categoryToDelete.photos } });
+
+    await categoryToDelete.deleteOne();
+
+    res.json({ message: "category deleted successfully", categoryToDelete });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 
 
