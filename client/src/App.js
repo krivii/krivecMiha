@@ -7,7 +7,7 @@ import Contact from "./pages/home-pages/contact";
 import Login from "./pages/home-pages/login";
 import Register from "./pages/home-pages/register";
 import Library from "./pages/home-pages/library";
-import { Navbar } from "./components/navbar";
+import  Navbar  from "./components/Navbar";
 import  Nav  from "./components/Nav";
 import { AnimatePresence } from "framer-motion";
 
@@ -18,7 +18,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Nav />
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
