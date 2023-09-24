@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation  } from "react-router-dom";
 import Home from "./pages/home-pages/home"; 
 import About from "./pages/home-pages/about";
 import OurWork from "./pages/home-pages/ourWork";
@@ -8,8 +8,9 @@ import Login from "./pages/home-pages/login";
 import Register from "./pages/home-pages/register";
 import Library from "./pages/home-pages/library";
 import  Navbar  from "./components/Navbar";
-import  Nav  from "./components/Nav";
 import { AnimatePresence } from "framer-motion";
+import GlobalStyle from './components/GlobalStyle'
+
 
 
 
@@ -18,19 +19,27 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/ourWork" element={<OurWork />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/library" element={<Library />} />
-        </Routes>
+      <GlobalStyle />
+      <Navbar />
+      <AnimatePresence mode="wait">
+        <Inner/>
+      </AnimatePresence>
       </Router>
     </div>
   );
+}
+
+function Inner() {
+  const location = useLocation();
+
+  return(
+    <Routes location={location} key={location.pathname}>
+      <Route path="/" element={<About />} />
+      <Route path="/ourWork" element={<OurWork />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/library" element={<Library />} />
+    </Routes>
+  )
 }
 
 export default App;

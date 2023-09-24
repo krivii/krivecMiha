@@ -15,6 +15,7 @@ function Navbar() {
 	};
 
 	return (
+    
 		<NavbarContainer extendNavbar={extendNavbar}>
 			<NavbarInnerContainer>
 				<LeftContainer>
@@ -52,7 +53,8 @@ function Navbar() {
 									animate={{ width: pathname === '/library' ? '70%' : '0%' }}
 								/>
 							</li>
-							<OpenLinksButton
+							<OpenLinksButton 
+                className="burger-button"
 								onClick={() => {
 									setExtendNavbar((curr) => !curr);
 								}}
@@ -63,7 +65,9 @@ function Navbar() {
 					</NavbarLinkContainer>
 				</LeftContainer>
 				<RightContainer>
-					<Logo src={LogoImg}></Logo>
+        <Link to="/" onClick={closeNavbar}>
+          <Logo src={LogoImg} />
+        </Link>
 				</RightContainer>
 			</NavbarInnerContainer>
 			{extendNavbar && (
