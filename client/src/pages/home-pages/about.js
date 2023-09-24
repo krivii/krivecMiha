@@ -2,7 +2,7 @@ import React from 'react'
 
 import AboutSection from '../../components/AboutSection'
 // import ServicesSection from '../components/ServicesSection'
-// import FaqSection from '../components/FaqSection'
+import FaqSection from '../../components/Faq'
 // import ScrollTop from '../components/ScrollTop'
 
 import { motion } from "framer-motion";
@@ -17,8 +17,9 @@ const AboutUs = () => {
             exit="exit"
         >
             <AboutSection />
-            {/* <ServicesSection />
             <FaqSection />
+            {/* <ServicesSection />
+            
             <ScrollTop /> */}
         </motion.div>
     )

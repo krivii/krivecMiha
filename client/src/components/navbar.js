@@ -88,7 +88,7 @@ function Navbar() {
 
   const StyledLine = styled(motion.div)`
   height: 0.3rem;
-  background: #23d997;
+  background: #800080;
   width: 0%;
   position: absolute;
   bottom: -60%;

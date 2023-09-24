@@ -31,11 +31,14 @@ const AboutSection = () => {
                         </motion.h2>
                     </StyledHide>
                     <motion.p variants={fadeAnim}>
-                    We encourage you to reach out to us with your unique ideas. We are passionate about turning your concepts into visual masterpieces. From brainstorming to execution, we're here to provide the expertise and creativity required.
+                    Reach out to us with your unique ideas. We are passionate about turning them into visual masterpieces. From brainstorming to execution, we provide the expertise and creativity required.
                     </motion.p>
-                    <motion.button variants={fadeAnim}>
-                        Contact Us
-                    </motion.button>
+                    <a href="http://localhost:3000/contact">
+                        <motion.button variants={fadeAnim}>
+                            Contact Us
+                        </motion.button>
+                    </a>
+                    
                 </motion.div>
             </StyledDescription>
             <StyledImage>
@@ -50,7 +53,6 @@ const AboutSection = () => {
     )
 }
 
-// styled components 
 
 
 export default AboutSection

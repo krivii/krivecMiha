@@ -19,26 +19,7 @@ const GlobalStyle = createGlobalStyle`
         overflow-x: hidden;
     }
 
-    /* button {
-        font-weight: bold;
-        font-size: 1.1rem;
-        cursor: pointer;
-        padding: 1rem 2rem;
-        border: 3px solid #23d997;
-        background: transparent;
-        color: #fff;
-        transition: all .5s ease;
-        font-family: 'Roboto', sans-serif;
-
-        &:focus {
-            outline: none;
-        }
-
-        &:hover {
-            background: #23d997;
-            color: #fff;
-        }
-    } */
+   
 
     
 
@@ -62,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
 
     span {
         font-weight: bold;
-        color: #23d997;
+        color: #800080;
     }
 
     p {

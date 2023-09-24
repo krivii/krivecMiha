@@ -9,7 +9,8 @@ export const StyledBase = styled(motion.div)`
     justify-content: center;
     padding: 5rem 10rem;
     color: white;
-    border: 1px solid red;
+
+    
 
     @media (max-width: 1300px) {
         display: block;
@@ -23,19 +24,45 @@ export const StyledDescription = styled.div`
     padding-right: 5rem;
     z-index: 2;
 
+
     @media (max-width: 1300px) {
         padding: 0;
     }
 
     h2 {
         font-weight: lighter;
+        margin: 0;
     }
 
     button {
+
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        padding: 1rem 2rem;
+        border: 3px solid #800080;
+        background: transparent;
+        color: #fff;
+        transition: all 1s ease;
+        font-family: 'Roboto', sans-serif;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:hover {
+            background: #800080;
+            color: #fff;
+        }
+
         @media (max-width: 1300px) {
             margin: 2rem 0rem 5rem 0rem;
         }
     }
+
+     /* button {
+        
+    } */
 `
 
 export const StyledImage = styled.div`
