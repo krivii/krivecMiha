@@ -1,5 +1,5 @@
 import React from 'react'
-import Wave from "./Wave";
+import WaveAbout from "./WaveAbout";
 import { StyledBase, StyledDescription, StyledImage, StyledHide } from "../styled";
 
 import { motion } from "framer-motion";
@@ -45,7 +45,7 @@ const AboutSection = () => {
                     alt="The guy with cammera"
                 />
             </StyledImage>
-               <Wave />
+               <WaveAbout />
         </StyledBase>
     )
 }

@@ -35,7 +35,7 @@ function Inner() {
   return(
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<About />} />
-      <Route path="/ourWork" element={<OurWork />} />
+      <Route path="/work" element={<OurWork />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/library" element={<Library />} />
     </Routes>

@@ -3,6 +3,7 @@ import emailjs from 'emailjs-com';
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { fadeAnim, photoFromAboveAnim } from "../animation";
+// import WaveContact from "./WaveContact";
 import LjubljanaImg from '../assets/ljubljana-map.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -108,6 +109,7 @@ const ContactForm = () => {
           alt="Location map"
         />
       </StyledImage>
+   
       <ToastContainer />
     </StyledBase>
   );

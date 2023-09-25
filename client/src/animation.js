@@ -40,7 +40,7 @@ export const fadeAnim = {
     show : {
         opacity: 1,
         transition: {
-            duration : .75,
+            duration : 1.2,
             ease: "easeOut"
         }
     }
@@ -83,7 +83,7 @@ export const sliderAnim = {
         skew: '0deg',
         transition: {
             ease: "easeOut",
-            duration : 1
+            duration : 1.2
         }
     }
 }

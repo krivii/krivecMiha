@@ -113,7 +113,6 @@ export const LeftContainer = styled.div`
   flex: 70%;
   display: flex;
   align-items: center;
-
   background-color: black;
   align-items: center;
   justify-content: space-between;
@@ -145,6 +144,7 @@ export const LeftContainer = styled.div`
 
 export const RightContainer = styled.div`
   flex: 30%;
+  top: 0;
   display: flex;
   justify-content: flex-end;
   padding-right: 50px;
