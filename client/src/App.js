@@ -4,7 +4,7 @@ import Home from "./pages/home-pages/home";
 import About from "./pages/home-pages/about";
 import OurWork from "./pages/home-pages/ourWork";
 import Contact from "./pages/home-pages/contact";
-import Login from "./pages/home-pages/login";
+import Photo from "./pages/home-pages/photo";
 import Register from "./pages/home-pages/register";
 import Library from "./pages/home-pages/library";
 import  Navbar  from "./components/Navbar";
@@ -36,6 +36,7 @@ function Inner() {
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<About />} />
       <Route path="/work" element={<OurWork />} />
+      <Route path="/work/photo" element={<Photo />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/library" element={<Library />} />
     </Routes>

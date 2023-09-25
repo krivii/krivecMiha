@@ -3,9 +3,6 @@ import mongoose from "mongoose";
 
 import { CategoryModel } from "../models/Categories.js";
 
-
-
-
 const router = express.Router();
 
 router.get("/", async (req, res) => {
