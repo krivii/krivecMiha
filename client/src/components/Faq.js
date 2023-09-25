@@ -1,40 +1,36 @@
 import React, { useState, useEffect  } from "react";
-import { useInView } from "react-intersection-observer";
-
 import styled from 'styled-components';
-import { AnimateSharedLayout, useAnimation, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
-import { fadeAnim } from "../animation";
 import { StyledBase } from "../styled";
 
 
 const FaqSection = () => {
 
-
     return (
 
-        <StyledFaq >        
+        <StyledFaq >                     
             <h2>Any Questions <span>FAQ</span> </h2>
             <layout>
-                <Toggle title="Where are you positioned?">
+                <Toggle title="Where are you positioned">
                     <div className="answers">
                         <p>Lorem ipsum dolor sit amet.</p>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
                     </div>
                 </Toggle>
-                <Toggle title="What products do you offer?">
+                <Toggle title="What products do you offer">
                     <div className="answers">
                         <p>Lorem ipsum dolor sit amet.</p>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
                     </div>
                 </Toggle>
-                <Toggle title="What is your pricing?">
+                <Toggle title="What is your pricing">
                     <div className="answers">
                         <p>Lorem ipsum dolor sit amet.</p>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
                     </div>
                 </Toggle>
-                <Toggle title="What is your availability?">
+                <Toggle title="What is your availability">
                     <div className="answers">
                         <p>Lorem ipsum dolor sit amet.</p>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
@@ -61,17 +57,7 @@ const Toggle = ({ children, title }) => {
 }
 
 
-export const useScroll = () => {
-    const controls = useAnimation()
-    const [element, view] = useInView({ threshold: 0.3 })
-    if (view) {
-        controls.start("show")
-    }
-    else {
-        controls.start("hidden")
-    }
-    return [element, controls]
-}
+
 
 const StyledFaq = styled(StyledBase)`
     display: block;
@@ -99,7 +85,7 @@ const StyledFaq = styled(StyledBase)`
     }
 
     .question {
-        padding: 3rem 0;
+        padding: 1rem 0;
         cursor: pointer;
     }
 

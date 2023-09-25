@@ -59,10 +59,6 @@ export const StyledDescription = styled.div`
             margin: 2rem 0rem 5rem 0rem;
         }
     }
-
-     /* button {
-        
-    } */
 `
 
 export const StyledImage = styled.div`

@@ -1,7 +1,5 @@
 import React from 'react'
-// import home1 from '../images/home1.png';
 import Wave from "./Wave";
-
 import { StyledBase, StyledDescription, StyledImage, StyledHide } from "../styled";
 
 import { motion } from "framer-motion";
@@ -12,7 +10,6 @@ const AboutSection = () => {
     return (
         
         <StyledBase>
-            
              <StyledDescription>
                 <motion.div >
                     <StyledHide>
@@ -22,7 +19,7 @@ const AboutSection = () => {
                     </StyledHide>
                     <StyledHide>
                         <motion.h2 variants={titleAnim}>
-                            eternalize your  <span>Precious </span> 
+                            eternalize your <span>precious </span> 
                         </motion.h2>
                     </StyledHide>
                     <StyledHide>
