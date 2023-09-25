@@ -2,36 +2,85 @@ import React, { useRef } from 'react';
 import emailjs from 'emailjs-com';
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { titleAnim, fadeAnim, photoFromAboveAnim } from "../animation";
+import { fadeAnim, photoFromAboveAnim } from "../animation";
 import LjubljanaImg from '../assets/ljubljana-map.png';
-import Wave from './Wave';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 
 const ContactForm = () => {
+
   const form = useRef();
 
+  const notifySuccess = () => {
+    toast.success('Message sent!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+  }
+  const notifyError = () => {
+    toast.error('Please fill in all fields!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+  }
+  
+  
   const sendEmail = (e) => {
+
     e.preventDefault();
 
-    emailjs
-      .sendForm(
-        "service_twh6vzf",
-        "template_yftjf0x",
-        form.current,
-        "h2qNYqo3OHd3NAvHE"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-          console.log("message sent");
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
-    
-  };
+
+  const emailField = form.current.querySelector('input[name="user_email"]');
+  const subjectField = form.current.querySelector('input[name="subject"]');
+  const messageField = form.current.querySelector('textarea[name="message"]');
+
+
+  if (!emailField.value || !subjectField.value || !messageField.value) {
+
+    notifyError();
+    return; 
+  }
+
+  emailjs
+  .sendForm(
+    "service_twh6vzf",
+    "template_yftjf0x",
+    form.current,
+    "h2qNYqo3OHd3NAvHE"
+  )
+  .then(
+    (result) => {
+      console.log(result.text);
+      console.log("message sent");
+
+
+      emailField.value = "";
+      subjectField.value = "";
+      messageField.value = "";
+
+
+      notifySuccess();
+    },
+    (error) => {
+      console.log(error.text);
+    }
+  );
+};
 
   return (
     <StyledBase>
@@ -59,16 +108,14 @@ const ContactForm = () => {
           alt="Location map"
         />
       </StyledImage>
-      <Wave/>
+      <ToastContainer />
     </StyledBase>
-
-
   );
 };
 
 export default ContactForm;
 
-// Styles
+
 
 export const StyledImage = styled.div`
     flex: 1;
@@ -98,7 +145,7 @@ const StyledForm = styled.form`
     padding: 7px;
     background-color: transparent;
     font-family: 'Roboto', sans-serif;
-    border: 3px solid #800080;
+    border: 3px solid grey;
     color: white;
     text-indent: 5px;
     font-size: 20px;
@@ -115,7 +162,7 @@ const StyledForm = styled.form`
     min-height: 35px;
     background-color: transparent;
     font-family: 'Roboto', sans-serif;
-    border: 3px solid #800080;
+    border: 3px solid grey;
     color: white;
     text-indent: 5px;
     font-size: 20px;
@@ -168,8 +215,6 @@ const StyledForm = styled.form`
     }
   }
 `;
-
-
 
 const StyledBase = styled(motion.div)`
   min-height: 90vh;
