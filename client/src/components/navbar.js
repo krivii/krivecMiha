@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import LogoImg from '../assets/logo.png';
+import LogoImg from '../assets/logo-white.png';
 
 function Navbar() {
 	const [extendNavbar, setExtendNavbar] = useState(false);

@@ -32,6 +32,7 @@ export const StyledDescription = styled.div`
     h2 {
         font-weight: lighter;
         margin: 0;
+        padding: 0;
     }
 
     button {
