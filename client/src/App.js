@@ -5,6 +5,8 @@ import About from "./pages/home-pages/about";
 import OurWork from "./pages/home-pages/ourWork";
 import Contact from "./pages/home-pages/contact";
 import Photo from "./pages/home-pages/photo";
+import CategoryGallery from "./pages/home-pages/categoryGallery";
+import Video from "./pages/home-pages/video";
 import Register from "./pages/home-pages/register";
 import Library from "./pages/home-pages/library";
 import  Navbar  from "./components/Navbar";
@@ -37,6 +39,8 @@ function Inner() {
       <Route path="/" element={<About />} />
       <Route path="/work" element={<OurWork />} />
       <Route path="/work/photo" element={<Photo />} />
+      <Route path="/work/photo/:categoryId" element={<CategoryGallery />} />
+      <Route path="/work/video" element={<Video />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/library" element={<Library />} />
     </Routes>

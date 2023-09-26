@@ -138,10 +138,11 @@ const StyledForm = styled.form`
   display: inline-block;
   flex-direction: column;
   font-size: 16px;
+  
 
   textarea {
-    max-width: 80%;
-    min-width: 80%;
+    max-width: 100%;
+    min-width: 100%;
     max-height: 100px;
     min-height: 100px;
     padding: 7px;
@@ -151,6 +152,7 @@ const StyledForm = styled.form`
     color: white;
     text-indent: 5px;
     font-size: 20px;
+    flex: 1;
 
     &:focus {
       border: 0px;
@@ -158,8 +160,8 @@ const StyledForm = styled.form`
   }
 
   input {
-    max-width: 80%;
-    min-width: 80%;
+    max-width: 100%;
+    min-width: 100%;
     max-height: 35px;
     min-height: 35px;
     background-color: transparent;
@@ -168,6 +170,7 @@ const StyledForm = styled.form`
     color: white;
     text-indent: 5px;
     font-size: 20px;
+    flex: 1;
 
 
     &:focus {
@@ -176,9 +179,12 @@ const StyledForm = styled.form`
   }
 
   label {
+    max-width: 100%;
+    min-width: 100%;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem; 
     display: block;
+    flex: 1;
   }
 
   @media (max-width: 1300px) {
@@ -192,6 +198,7 @@ const StyledForm = styled.form`
   }
 
     button {
+    flex: 1;
     font-weight: bold;
     font-size: 1.1rem;
     cursor: pointer;

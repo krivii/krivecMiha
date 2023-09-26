@@ -43,7 +43,7 @@ const OurWork = () => {
             <StyledMedia>
                 <motion.h2 variants={fadeAnim}>Videos</motion.h2>
                 <motion.div variants={lineAnim} className="line"></motion.div>
-                <Link to="/work/videos">
+                <Link to="/work/video">
                 <StyledHide>
                         <motion.img 
                             variants={photoAnim} 

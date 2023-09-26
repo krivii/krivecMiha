@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
@@ -7,6 +7,9 @@ import { pageAnimation, fadeAnim, photoAnim, lineAnim } from "../../animation";
 
 
 const Photo = () => { 
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+      }, []);
 
     return (
 
