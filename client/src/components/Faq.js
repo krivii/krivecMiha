@@ -1,8 +1,7 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState} from "react";
 import styled from 'styled-components';
 import { motion } from "framer-motion";
 
-import { StyledBase } from "../styled";
 
 
 const FaqSection = () => {
@@ -57,7 +56,22 @@ const Toggle = ({ children, title }) => {
 }
 
 
+export const StyledBase = styled(motion.div)`
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 10rem;
+    color: white;
 
+    
+
+    @media (max-width: 1300px) {
+        display: block;
+        padding: 2rem;
+        text-align: center;
+    }
+`
 
 const StyledFaq = styled(StyledBase)`
     display: block;
