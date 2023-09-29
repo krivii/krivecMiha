@@ -147,7 +147,7 @@ export const RightContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   position: sticky;
-  padding-right: 50px;
+  padding-right: 10%;
   background-color: black;
 
   top: 0;
@@ -197,7 +197,7 @@ export const Logo = styled.img`
 
 export const OpenLinksButton = styled.button`
   width: 70px;
-  height: 50px;
+  height: 70px;
   background: none;
   border: none;
   color: white;

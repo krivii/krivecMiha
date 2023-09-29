@@ -145,7 +145,6 @@ const StyledForm = styled.form`
     min-width: 100%;
     max-height: 100px;
     min-height: 100px;
-    padding: 7px;
     background-color: transparent;
     font-family: 'Roboto', sans-serif;
     border: 3px solid grey;

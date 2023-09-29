@@ -30,7 +30,7 @@ const AboutSection = () => {
                     <motion.p variants={fadeAnim}>
                     Reach out to us with your unique ideas. We are passionate about turning them into visual masterpieces. From brainstorming to execution, we provide the expertise and creativity required.
                     </motion.p>
-                    <a href="http://localhost:3000/contact">
+                    <a href="/contact">
                         <motion.button variants={fadeAnim}>
                             Contact Us
                         </motion.button>
