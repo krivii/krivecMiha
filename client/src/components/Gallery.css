@@ -1,4 +1,39 @@
+.base {
+  text-align: center; /* Center-align the contents horizontally */
+}
+
+.base button {
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 1rem 2rem;
+  margin: 1rem 0;
+  transition: all 0.6s ease;
+  font-family: 'Roboto', sans-serif;
+
+  border-radius: 10px;
+  background: #148F40;
+  color: #fff;
+  width: 30%;
+  min-width: 200px;
+  width: 30%;
+
+  &:focus {
+      outline: none;
+  }
+
+  &:hover {
+
+      background: transparent;
+      border: 3px solid #148F40;
+      color: #148F40;
+  }
+
+
+}
+
 .galleryWrap {
+    padding: 3rem 0;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -6,11 +41,15 @@
     justify-content: center;
     max-width: 80%;
     margin: 0 auto;
+
+    background: #E8DFC2;
   }
   
   .galleryWrap .single {
     width: 400px;
     cursor: pointer;
+    padding: 2rem;
+    border: 3px solid #A17800;
   }
   
   .galleryWrap .single img {
@@ -18,7 +57,9 @@
   }
   
   .galleryWrap .single img:hover {
-    transform: scale(1.02);
+    transform: scale(1.05);
+
+
   }
   
   .sliderWrap {
@@ -48,22 +89,36 @@
     opacity: 1;
   }
   
+  .sliderWrap .btnClose,
+  .sliderWrap .btnPrev,
+  .sliderWrap .btnNext {
+      width: 50px; 
+      height: 50px; 
+      color: #fff; 
+      border: none; 
+      border-radius: 50%; 
+      cursor: pointer;
+      position: absolute;
+
+  }
+  
   .sliderWrap .btnClose {
-    top: 40px;
-    right: 40px;
+      top: 40px;
+      right: 40px;
   }
   
   .sliderWrap .btnPrev {
-    top: 50%;
-    transform: translateY(-50%);
-    left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 40px;
   }
   
   .sliderWrap .btnNext {
-    top: 50%;
-    transform: translateY(-50%);
-    right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 40px;
   }
+  
   
   .fullScreenImage {
     width: calc(100% - 40px);
@@ -77,7 +132,7 @@
     max-width: 100%;
     max-height: 100%;
     pointer-events: none;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */  
+    -webkit-user-select: none;
+    -ms-user-select: none; 
+    user-select: none;  
   }

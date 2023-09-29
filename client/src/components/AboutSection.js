@@ -67,7 +67,7 @@ export const StyledBase = styled(motion.div)`
         padding: 2rem;
         text-align: center;
     }
-`
+`;
 
 export const StyledDescription = styled.div`
     flex: 1;
@@ -110,7 +110,7 @@ export const StyledDescription = styled.div`
             margin: 2rem 0rem 5rem 0rem;
         }
     }
-`
+`;
 
 export const StyledImage = styled.div`
     flex: 1;
@@ -122,11 +122,11 @@ export const StyledImage = styled.div`
         height: 80vh;
         object-fit: cover;
     }
-`
+`;
 
 export const StyledHide = styled.div`
     overflow: hidden;
-`
+`;
 
 
 export default AboutSection;

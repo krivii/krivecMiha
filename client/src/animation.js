@@ -116,20 +116,16 @@ export const scrollRevealAnim = {
             duration: .5
         }
     }
-
-    
 }
 
 export const photoFromAboveAnim = {
     hidden: {
-        y: -300, // Start above the screen
         opacity: 0
     },
     show: {
-        y: 0, // Settle in the middle of the screen
         opacity: 1,
         transition: {
-            duration: 1,
+            duration: 3,
             ease: "easeOut"
         }
     }

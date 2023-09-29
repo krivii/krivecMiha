@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import emailjs from 'emailjs-com';
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { fadeAnim, photoFromAboveAnim } from "../animation";
+import { fadeAnim, photoFromAboveAnim, photoAnim } from "../animation";
 // import WaveContact from "./WaveContact";
-import LjubljanaImg from '../assets/ljubljana-map.png';
+import LjubljanaImg from '../assets/contact.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -104,7 +104,7 @@ const ContactForm = () => {
       </StyledForm>
       <StyledImage>
         <motion.img 
-          variants={photoFromAboveAnim} 
+        variants={photoAnim} 
           src={LjubljanaImg} 
           alt="Location map"
         />

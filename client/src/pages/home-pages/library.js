@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import WaveAbout from "../../components/WaveAbout";
 import Gallery from "../../components/Gallery";
 import { motion } from "framer-motion";
-import { titleAnim, fadeAnim, photoAnim } from "../../animation";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { titleAnim, fadeAnim, pageAnimation, lineAnim} from "../../animation";
+
 
 const Library = () => {
 
@@ -28,15 +29,18 @@ const Library = () => {
     };
 
     const handleSignOut = () => {
-        // Perform sign-out logic if needed
-        // Then navigate to the AboutUs page and pass a reference to the notify function
-        navigate('/about', { state: { notifyReference: notify } });
+       navigate('/about', { state: { notifyReference: notify } });
     };
     
 
 
     return (
-        <motion.div >
+        <motion.div 
+        variants={pageAnimation} 
+        initial="hidden" 
+        animate="show"
+        exit="exit"
+        >
             <StyledBase>
                 <StyledDescription>
                 <motion.div >
@@ -63,13 +67,13 @@ const Library = () => {
                 <StyledLogout>
                     <motion.div >
                         <StyledHide>
-                            <motion.h2 variants={titleAnim}>
+                            <motion.h2 >
                             To <span>sign out</span> of your account,
                             </motion.h2>
-                            <motion.h2 variants={titleAnim}>
+                            <motion.h2 >
                             please click the button
                             </motion.h2>
-                            <motion.h2 variants={titleAnim}>
+                            <motion.h2 >
                             located below.
                             </motion.h2>
                         </StyledHide>
@@ -80,6 +84,15 @@ const Library = () => {
                 </StyledLogout>
                 <WaveAbout />
             </StyledBase>
+            <StyledBaseTitle>
+                <StyledTitle>
+                    <motion.h2 >
+                            Your photo gallery
+                        </motion.h2>
+                        <motion.div  className="line"></motion.div>
+               </StyledTitle>
+                
+            </StyledBaseTitle>
             <Gallery />
         </motion.div>
 
@@ -97,18 +110,35 @@ export const StyledBase = styled(motion.div)`
     
 
     @media (max-width: 1300px) {
+        min-height: 75vh;
         display: block;
         padding: 2rem;
         text-align: center;
     }
 `
 
-export const StyledDescription = styled.div`
+export const StyledBaseTitle = styled(motion.div)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10%;
+    color: white;
+
+    @media (max-width: 1300px) {
+        display: block;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .line {
+        height: 0.5rem;
+        background: #800080;
+        margin-bottom: 1rem;
+    }
+`;
+export const StyledTitle = styled.div`
     flex: 1;
-    padding-right: 5rem;
     z-index: 2;
-
-
 
     @media (max-width: 1300px) {
         padding: 0;
@@ -121,22 +151,72 @@ export const StyledDescription = styled.div`
 
     }
 
-`
+
+    button {
+
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        padding: 1rem 2rem;
+
+        transition: all 0.6s ease;
+        font-family: 'Roboto', sans-serif;
+        margin-top: 3rem;
+        border-radius: 10px;
+        background: #148F40;
+            color: #fff;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:hover {
+
+            background: transparent;
+            border: 3px solid #148F40;
+            color: #148F40;
+        }
+
+        @media (max-width: 1300px) {
+            margin-top: 2rem;
+        }
+    }
+
+`;
+
+export const StyledDescription = styled.div`
+    flex: 1;
+    padding-right: 5rem;
+    z-index: 2;
+    @media (max-width: 1300px) {
+        padding: 0;
+    }
+
+    h2 {
+        font-weight: lighter;
+        margin: 0;
+        padding: 0;
+
+    }
+
+`;
 
 export const StyledLogout = styled.div`
     flex: 1;
-    margin: 5rem 5rem 15rem 25rem;
+    margin: 5rem 5rem 15rem 5rem;
     z-index: 2;
     text-align: center;
     color: black;
     background-color: rgba(250, 250, 250, 0.8);
     border-radius: 10px;
     padding: 2rem;
-    max-width: 20%;
+    max-width: 230px;
+    
+
 
     @media (max-width: 1300px) {
         padding-top: 2rem ;
-        margin: 0 ;
+        margin: 0 20% ;
         max-width: 100%;
     }
 
@@ -144,8 +224,12 @@ export const StyledLogout = styled.div`
         font-weight: lighter;
         margin: 0;
         padding: 0;
-        font-size: 30px;
+        font-size: 20px;
         font-weight: bold;
+
+        @media (max-width: 1300px) {
+        font-size: 15px;
+        }
 
     }
 
@@ -176,7 +260,7 @@ export const StyledLogout = styled.div`
             margin-top: 2rem;
         }
     }
-`
+`;
 
 export const StyledImage = styled.div`
     flex: 1;
@@ -192,7 +276,7 @@ export const StyledImage = styled.div`
 
 export const StyledHide = styled.div`
     overflow: hidden;
-`
+`;
 
 
 export default Library;

@@ -114,7 +114,6 @@ export const LeftContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: black;
-  align-items: center;
   justify-content: space-between;
   position: sticky;
   top: 0;
@@ -147,7 +146,16 @@ export const RightContainer = styled.div`
   top: 0;
   display: flex;
   justify-content: flex-end;
+  position: sticky;
   padding-right: 50px;
+  background-color: black;
+
+  top: 0;
+  z-index: 100;
+
+
+
+  
 `;
 
 export const NavbarInnerContainer = styled.div`

@@ -37,18 +37,23 @@ const Gallery = () => {
         : setSlideNumber(slideNumber + 1)
       }
 
+    const downloadZip = () => {
+      alert("download");
+    };
+
     return (
-        <div style={{background: "#E8DFC2"}}>
+        <div className='base'>
             {open && 
                 <div className='sliderWrap'>
                     <FontAwesomeIcon icon={faCircleXmark} className='btnClose' onClick={handleClose}  />
                     <FontAwesomeIcon icon={faLeftLong} className='btnPrev' onClick={prev} />
                     <FontAwesomeIcon icon={faRightLong} className='btnNext' onClick={next} />
                     <div className='fullScreenImage'>
-                        <img src={galleryImages[slideNumber].img} alt='' />
+                        <img src={galleryImages[slideNumber].img} alt=''  />
                     </div>
                 </div>
             } 
+            <button onClick={downloadZip}>DOWNLOAD</button>
             <div className='galleryWrap'>
               {
                 galleryImages && galleryImages.map((slide, index) => {
