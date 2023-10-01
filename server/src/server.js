@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 
+import { authRouter } from "./routes/auth.js"
 import { userRouter } from "./routes/users.js"
 import { customerPhotoRouter } from "./routes/customerPhotos.js"
 import { eventRouter } from "./routes/events.js"
@@ -25,9 +26,10 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/admin", adminRouter);
-app.use("/auth", userRouter);
+app.use("/admin/user", userRouter);
+app.use("/auth", authRouter);
 app.use("/cmedia", customerPhotoRouter);
-app.use("/event", eventRouter);
+app.use("/admin/event", eventRouter);
 app.use("/category", categoryRouter);
 
 

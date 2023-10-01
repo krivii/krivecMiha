@@ -1,40 +1,81 @@
 import  express  from "express";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import { UserModel } from "../models/Users.js";
+import { EventModel } from "../models/Events.js"; 
 
 const router = express.Router()
+// TODO SEARCH BY KEYWORD OPTION
 
-router.post("/register", async (req, res) => {
-    const {username, password} = req.body;
-    const user = await UserModel.findOne({username});
-
-    if(user){
-        return res.json({message: "User already exists!"})
+router.get("/", async (req, res) => {
+    try {
+        const response = await UserModel.find({});
+        res.status(200).json(response);
+    } catch (error) {
+        res.status(400).json(error);
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new UserModel({username, password: hashedPassword});
-    await newUser.save();
+  });
+  
+  router.get("/:userId", async (req, res) => {
+      try {
+          const userId = req.params.userId;
+  
+          const user = await UserModel.findById(userId);
     
-    res.json({message: "User registered successfully!"})
-});
+          if (!user) {
+              return res.status(404).json({ message: "User not found" });
+          }
+    
+          res.json({ message: "User retrieved successfully", user });
+      } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: "Internal Server Error" });
+      }
+  });
+  
+  // Update user route
 
-router.post("/login", async (req, res) => {
-    const {username, password} = req.body;
-    const user = await UserModel.findOne({username});
-
-    if(!user){
-        return res.json({message: "User doesn't exists!"})
+  //TODO PSW CHANGE
+  router.put("/:userId", async (req, res) => {
+    try {
+  
+      const userId = req.params.userId;
+      const updates = req.body; 
+  
+      const updatedUser = await UserModel.findByIdAndUpdate(userId, updates, { new: true });
+  
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      res.json({ message: "User updated successfully", updatedUser });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if(!isPasswordValid){
-        return res.json({message: "Incorrect password."});
+  });
+  
+  
+  
+  router.delete("/:userId", async (req, res) => {
+    try {
+        
+      const userId = req.params.userId;
+  
+      const deletedUser = await UserModel.findById(userId);
+  
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+    // Remove all events associated with this user
+    await EventModel.deleteMany({ _id: { $in: deletedUser.events } });
+
+    await deletedUser.deleteOne();
+
+    res.json({ message: "User deleted successfully", deletedUser });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
-    const token = jwt.sign({id: user._id}, "secret");
-    res.json({message: "Successfull login.", token, userID: user._id});
-
-});
-
+  });
 
 export {router as userRouter};
