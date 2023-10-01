@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { CustomerPhotoModel } from "./CustomerPhotos.js";
+
 
 const EventSchema = new mongoose.Schema({
     name:       {type: String, required: true},

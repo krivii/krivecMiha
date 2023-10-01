@@ -9,30 +9,16 @@ import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  try {
-      const response = await EventModel.find({});
-      res.status(200).json(response);
-  } catch (error) {
-      res.status(400).json(error);
-  }
-});
-
-
 router.post("/", async (req, res) => {
   const eventData = req.body; 
   const { eventOwner } = eventData; 
 
-
   try {
-
     const user = await UserModel.findOne({ _id: eventOwner });
-
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
-
 
     const event = new EventModel(req.body);
     await event.save();
@@ -47,6 +33,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+      const response = await EventModel.find({});
+      res.status(200).json(response);
+  } catch (error) {
+      res.status(400).json(error);
+  }
+});
 
   
   // get photos list
@@ -73,6 +67,33 @@ router.post("/", async (req, res) => {
     try {
       const eventId = req.params.eventId;
       const updates = req.body; 
+
+      const existingEvent = await EventModel.findById(eventId);
+
+      if ('eventOwner' in updates) {
+
+        const oldUserId = existingEvent.eventOwner;
+        const newUserId = updates.eventOwner;
+
+
+
+
+        // Find and update the old event
+        const oldUser = await UserModel.findById(oldUserId);
+        if (oldUser) {
+          // Remove the photoId from the old event's photos array
+          oldUser.events = oldUser.events.filter((p) => p.toString() !== eventId);
+          await oldUser.save();
+        }
+
+        const newUser = await UserModel.findById(newUserId);
+        if (!newUser) {
+          return res.status(404).json({ message: "New user not found" });
+        }
+
+        newUser.events.push(eventId);
+        await newUser.save();
+      }
   
       const updatedEvent = await EventModel.findByIdAndUpdate(eventId, updates, { new: true });
   

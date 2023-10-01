@@ -25,11 +25,14 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use(cors());
 
+app.use("/auth", authRouter);
+
 app.use("/admin", adminRouter);
 app.use("/admin/user", userRouter);
-app.use("/auth", authRouter);
-app.use("/cmedia", customerPhotoRouter);
+
 app.use("/admin/event", eventRouter);
+app.use("/admin/cphoto", customerPhotoRouter);
+
 app.use("/category", categoryRouter);
 
 
