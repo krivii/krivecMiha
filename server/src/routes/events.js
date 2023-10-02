@@ -81,7 +81,7 @@ router.get("/", async (req, res) => {
         // Find and update the old event
         const oldUser = await UserModel.findById(oldUserId);
         if (oldUser) {
-          // Remove the photoId from the old event's photos array
+          // Remove the eventId from the old event's photos array
           oldUser.events = oldUser.events.filter((p) => p.toString() !== eventId);
           await oldUser.save();
         }
@@ -108,29 +108,61 @@ router.get("/", async (req, res) => {
     }
   });
   
-  
-  router.delete("/:eventId", async (req, res) => {
+
+
+// Inside your router.delete method
+router.delete("/:eventId", async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+
+    // Call the deleteEvent function with eventId as a parameter
+    const result = await deleteEvent(eventId);
+
+    if (!result.success) {
+      return res.status(404).json({ message: result.message });
+    }
+
+    res.json({ message: result.message, eventToDelete: result.eventToDelete });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+  async function deleteEvent(eventId) {
     try {
-      const eventId = req.params.eventId;
       const eventToDelete = await EventModel.findById(eventId);
   
       if (!eventToDelete) {
-        return res.status(404).json({ message: "Event not found" });
+        return { success: false, message: "Event not found" };
+      }
+      
+      const oldUserId = eventToDelete.eventOwner;
+
+      const oldUser = await UserModel.findById(oldUserId);
+  
+      if (oldUser) {
+
+        oldUser.events = oldUser.events.filter((p) => p.toString() !== eventId);
+        await oldUser.save();
       }
   
-      // Remove all photos associated with this event
+  
       await CustomerPhotoModel.deleteMany({ _id: { $in: eventToDelete.photos } });
   
       await eventToDelete.deleteOne();
   
-      res.json({ message: "Event deleted successfully", eventToDelete });
+      return { success: true, message: "Event deleted successfully", eventToDelete };
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      return { success: false, message: "Internal Server Error" };
     }
-  });
+  }
 
+ 
 
 export {router as eventRouter};
+export { deleteEvent };
 
 

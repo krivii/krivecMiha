@@ -1,6 +1,7 @@
 import  express  from "express";
 import { UserModel } from "../models/Users.js";
-import { EventModel } from "../models/Events.js"; 
+import { EventModel  } from "../models/Events.js";
+import { deleteEvent } from "./events.js"; 
 
 const router = express.Router()
 // TODO SEARCH BY KEYWORD OPTION
@@ -66,8 +67,12 @@ router.get("/", async (req, res) => {
         return res.status(404).json({ message: "User not found" });
       }
 
-    // Remove all events associated with this user
-    await EventModel.deleteMany({ _id: { $in: deletedUser.events } });
+      for (const eventId of deletedUser.events) {
+        const result = await deleteEvent(eventId);
+        if (!result.success) {
+          console.error(`Failed to delete event with ID ${eventId}`);
+        }
+      }
 
     await deletedUser.deleteOne();
 

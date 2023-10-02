@@ -6,10 +6,10 @@ import dotenv from 'dotenv';
 import { authRouter } from "./routes/auth.js"
 import { userRouter } from "./routes/users.js"
 import { customerPhotoRouter } from "./routes/customerPhotos.js"
+import { PromoPhotoRouter } from "./routes/promoPhotos.js"
 import { eventRouter } from "./routes/events.js"
 import { categoryRouter } from "./routes/categories.js"
-import { adminRouter } from "./routes/admin.js"
-
+import { VideoRouter } from "./routes/videos.js"
 
 // Load environment variables from the specified path
 dotenv.config({ path: '../.env' });
@@ -27,13 +27,14 @@ app.use(cors());
 
 app.use("/auth", authRouter);
 
-app.use("/admin", adminRouter);
 app.use("/admin/user", userRouter);
 
 app.use("/admin/event", eventRouter);
 app.use("/admin/cphoto", customerPhotoRouter);
 
-app.use("/category", categoryRouter);
+app.use("/admin/category", categoryRouter);
+app.use("/admin/pphoto", PromoPhotoRouter);
+app.use("/admin/video", VideoRouter);
 
 
 mongoose.connect(

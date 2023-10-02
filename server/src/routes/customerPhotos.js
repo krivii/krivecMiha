@@ -87,7 +87,7 @@ router.put("/:photoId", async (req, res) => {
 
         newEvent.photos.push(photoId);
         await newEvent.save();
-      }
+    }
 
     const updatedPhoto = await CustomerPhotoModel.findByIdAndUpdate(photoId, updates, { new: true });
 
@@ -108,9 +108,17 @@ router.delete("/:photoId", async (req, res) => {
 
     const photoToDelete = await CustomerPhotoModel.findById(photoId);
 
-
     if (!photoToDelete) {
       return res.status(404).json({ message: "photo not found" });
+    }
+    
+    const oldEventId = photoToDelete.event;
+
+    const oldEvent = await EventModel.findById(oldEventId);
+    if (oldEvent) {
+     
+      oldEvent.photos = oldEvent.photos.filter((p) => p.toString() !== photoId);
+      await oldEvent.save();
     }
 
     await photoToDelete.deleteOne();
@@ -122,10 +130,6 @@ router.delete("/:photoId", async (req, res) => {
   }
 });
 
-
-const updateEvent = async function (){
-
-}
 
 
 export {router as customerPhotoRouter};
