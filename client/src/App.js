@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, useLocation  } from "react-router-dom";
-import Home from "./pages/home-pages/home"; 
+
 import About from "./pages/home-pages/about";
 import OurWork from "./pages/home-pages/ourWork";
 import Contact from "./pages/home-pages/contact";
@@ -8,6 +8,7 @@ import Photo from "./pages/home-pages/photo";
 import CategoryGallery from "./pages/home-pages/categoryGallery";
 import Video from "./pages/home-pages/video";
 import Register from "./pages/home-pages/register";
+import Login from "./pages/home-pages/login";
 import Library from "./pages/home-pages/library";
 import  Navbar  from "./components/Navbar";
 import { AnimatePresence } from "framer-motion";
@@ -43,6 +44,8 @@ function Inner() {
       <Route path="/work/video" element={<Video />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/library" element={<Library />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   )
 }

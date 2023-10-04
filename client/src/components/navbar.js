@@ -97,7 +97,9 @@ function Navbar() {
 
 
 
-export const NavbarContainer = styled.nav`
+export const NavbarContainer = styled.nav.attrs((props) => ({
+  extendNavbar: undefined, // Explicitly filter out 'extendNavbar' prop
+}))`
   width: 100%;
   height: ${(props) => (props.extendNavbar ? "100vh" : "80px")};
   background-color: black;
@@ -108,6 +110,7 @@ export const NavbarContainer = styled.nav`
     height: 80px;
   }
 `;
+
 
 export const LeftContainer = styled.div`
   flex: 70%;

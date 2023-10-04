@@ -5,12 +5,21 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
+const createJWT = (_id, username) => {
+    return jwt.sign({username, _id}, process.env.SECRET, {expiresIn: "3d"})
+}
+
 router.post("/register", async (req, res) => {
     const {name, email, password} = req.body;
+    console.log(req.body);
 
     try {
-        const user = await UserModel.register(name, email,password);
-        res.status(200).json({message: "User registered successfully!", user});
+        const user = await UserModel.register(name, email, password);
+        
+        const token = createJWT( user.name, user._id);
+
+        res.status(200).json({ email, token});
+
     } catch (error) {
         res.status(400).json({error: error.message});
     }
@@ -18,19 +27,18 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    const {username, password} = req.body;
-    const user = await UserModel.findOne({username});
+    const {email, password} = req.body;
 
-    if(!user){
-        return res.json({message: "User doesn't exists!"})
-    }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if(!isPasswordValid){
-        return res.json({message: "Incorrect password."});
-    }
-    const token = jwt.sign({id: user._id}, "secret");
-    res.json({message: "Successfull login.", token, userID: user._id});
+    try {
+        const user = await UserModel.login(email,password);
+        
+        const token = createJWT( user.name, user._id);
 
+        res.status(200).json({message: "User registered successfully!",  email, token});
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+ 
 });
 
 

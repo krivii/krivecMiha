@@ -25,16 +25,16 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use(cors());
 
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 
-app.use("/admin/user", userRouter);
+app.use("/api/admin/user", userRouter);
 
-app.use("/admin/event", eventRouter);
-app.use("/admin/cphoto", customerPhotoRouter);
+app.use("/api/admin/event", eventRouter);
+app.use("/api/admin/cphoto", customerPhotoRouter);
 
-app.use("/admin/category", categoryRouter);
-app.use("/admin/pphoto", PromoPhotoRouter);
-app.use("/admin/video", VideoRouter);
+app.use("/api/admin/category", categoryRouter);
+app.use("/api/admin/pphoto", PromoPhotoRouter);
+app.use("/api/admin/video", VideoRouter);
 
 
 mongoose.connect(

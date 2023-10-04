@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import styled from 'styled-components';
 
-const WaveAbout = () => {
+const Wave = () => {
     return (
         <StyledWaveSvg 
             viewBox="0 0 1000 726"  
@@ -28,4 +28,4 @@ const StyledWaveSvg = styled.svg`
     z-index: -1;
 `;
 
-export default WaveAbout;
+export default Wave;

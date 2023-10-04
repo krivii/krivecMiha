@@ -1,5 +1,5 @@
 import React from 'react'
-import WaveAbout from "./WaveAbout";
+import Wave from "./Wave";
 import styled from 'styled-components';
 
 import { motion } from "framer-motion";
@@ -45,7 +45,7 @@ const AboutSection = () => {
                     alt="The guy with cammera"
                 />
             </StyledImage>
-               <WaveAbout />
+               <Wave />
         </StyledBase>
     )
 }
@@ -59,6 +59,7 @@ export const StyledBase = styled(motion.div)`
     justify-content: center;
     padding: 5rem 10rem;
     color: white;
+    
 
     
 
