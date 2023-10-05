@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import LogoImg from '../assets/logo-white.png';
+import { useAuthContext } from "../hooks/useAuthContext";
 
 function Navbar() {
 	const [extendNavbar, setExtendNavbar] = useState(false);
-	const { pathname } = useLocation();
+	const { pathname } = useLocation(); 
+   const {user} = useAuthContext();
 
 	// Function to close the navbar
 	const closeNavbar = () => {
@@ -46,7 +48,13 @@ function Navbar() {
 								/>
 							</li>
 							<li>
-								<Link to='/library' onClick={closeNavbar}>My library</Link>
+                {user && (
+                  <Link to='/library' onClick={closeNavbar}>My library</Link>
+                )}
+                {!user && (
+                  <Link to='/login' onClick={closeNavbar}>Login</Link>
+                )}
+								
 								<StyledLine
 									transition={{ duration: 0.75 }}
 									initial={{ width: '0%' }}
@@ -75,7 +83,13 @@ function Navbar() {
 					<NavbarLinkExtended to="/" onClick={closeNavbar}> About</NavbarLinkExtended>
 					<NavbarLinkExtended to="/work" onClick={closeNavbar}> Our Work</NavbarLinkExtended>
 					<NavbarLinkExtended to="/contact" onClick={closeNavbar}>Contact</NavbarLinkExtended>
-					<NavbarLinkExtended to="/library" onClick={closeNavbar}> My library</NavbarLinkExtended>
+          {user && (
+            <NavbarLinkExtended to="/library" onClick={closeNavbar}> My library</NavbarLinkExtended>
+          )}
+          {!user && (
+            <NavbarLinkExtended to="/login" onClick={closeNavbar}>Login</NavbarLinkExtended>
+          )}
+					
 				</NavbarExtendedContainer>
 			)}
 		</NavbarContainer>
@@ -97,9 +111,7 @@ function Navbar() {
 
 
 
-export const NavbarContainer = styled.nav.attrs((props) => ({
-  extendNavbar: undefined, // Explicitly filter out 'extendNavbar' prop
-}))`
+export const NavbarContainer = styled.nav`
   width: 100%;
   height: ${(props) => (props.extendNavbar ? "100vh" : "80px")};
   background-color: black;
@@ -110,7 +122,6 @@ export const NavbarContainer = styled.nav.attrs((props) => ({
     height: 80px;
   }
 `;
-
 
 export const LeftContainer = styled.div`
   flex: 70%;

@@ -1,59 +1,31 @@
 import React, { useRef, useState } from 'react';
-import emailjs from 'emailjs-com';
+
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { fadeAnim, photoFromAboveAnim, photoAnim } from "../animation";
-import Wave from "./Wave";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { fadeAnim, photoFromAboveAnim,  } from "../animation";
+import { useLogin } from '../hooks/useLogin';
 
-
-import axios from "axios";
 
 
 const LoginForm = () => {
 
   const form = useRef();
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const {login, error, isLoading} = useLogin();
 
-  const notifySuccess = () => {
-    toast.success('Message sent!', {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
+  const handleLogin = async (event) => {
+      event.preventDefault();
+
+      await login(email, password);
   }
-  const notifyError = () => {
-    toast.error('Please fill in all fields!', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
-  }
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleRegister = async (event) => {
-        event.preventDefault();
-
-        console.log("sadfbuasdoufbuasbdf");
-    }
 
     
   return (
 
     <StyledBase>
-      <StyledForm ref={form} onSubmit={handleRegister}>
+      <StyledForm ref={form} onSubmit={handleLogin}>
         <motion.h2 >
           Log <span>in</span>. 
         </motion.h2>
@@ -69,12 +41,25 @@ const LoginForm = () => {
                    id="password" 
                    value={password}
                    onChange={(event)=> setPassword(event.target.value)} />    
-          <motion.button variants={fadeAnim} type="submit" value="login">
+          <motion.button disabled={isLoading} variants={fadeAnim} type="submit" value="login">
             Log in
           </motion.button>
+          {error && <div
+                        className='error'
+                        style={{
+                        border: '1px solid #ff6666',
+                        height: '40px',
+                        borderRadius: '5px',
+                        color: '#ff6666',
+                        display: 'flex',
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        }}
+                        >{error}
+                        </div>
+           }
         </motion.div>
       </StyledForm>
-      <ToastContainer />
     </StyledBase>
   );
 };

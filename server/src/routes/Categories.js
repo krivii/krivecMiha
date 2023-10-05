@@ -1,9 +1,12 @@
 import  express  from "express";
-
 import { CategoryModel } from "../models/Categories.js";
 import { PromoPhotoModel } from "../models/PromoPhotos.js";
+import {authorization} from "../middleware/authorization.js";
 
 const router = express.Router();
+
+router.use(authorization);
+
 
 // CATEGORY ROUTES
 

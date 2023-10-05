@@ -5,18 +5,18 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
-const createJWT = (_id, username) => {
-    return jwt.sign({username, _id}, process.env.SECRET, {expiresIn: "3d"})
+const createJWT = (_id) => {
+    return jwt.sign({ _id}, process.env.SECRET, {expiresIn: "3d"})
 }
 
 router.post("/register", async (req, res) => {
     const {name, email, password} = req.body;
-    console.log(req.body);
+
 
     try {
         const user = await UserModel.register(name, email, password);
         
-        const token = createJWT( user.name, user._id);
+        const token = createJWT( user._id);
 
         res.status(200).json({ email, token});
 
@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
     try {
         const user = await UserModel.login(email,password);
         
-        const token = createJWT( user.name, user._id);
+        const token = createJWT( user._id);
 
         res.status(200).json({message: "User registered successfully!",  email, token});
     } catch (error) {

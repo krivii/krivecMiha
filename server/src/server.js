@@ -10,6 +10,8 @@ import { PromoPhotoRouter } from "./routes/promoPhotos.js"
 import { eventRouter } from "./routes/events.js"
 import { categoryRouter } from "./routes/categories.js"
 import { VideoRouter } from "./routes/videos.js"
+import { authorization} from "./middleware/authorization.js";
+
 
 // Load environment variables from the specified path
 dotenv.config({ path: '../.env' });
@@ -27,14 +29,26 @@ app.use(cors());
 
 app.use("/api/auth", authRouter);
 
-app.use("/api/admin/user", userRouter);
+app.use(authorization);
 
-app.use("/api/admin/event", eventRouter);
-app.use("/api/admin/cphoto", customerPhotoRouter);
+// Middleware to check if the user is an admin
+const checkAdminAccess = (req, res, next) => {
+  // console.log(req.isAdmin)
+  if (req.isAdmin) {    
+    next();
+  } else {
+    res.status(403).json({ error: "Permission denied. Admin access required." });
+  }
+};
 
-app.use("/api/admin/category", categoryRouter);
-app.use("/api/admin/pphoto", PromoPhotoRouter);
-app.use("/api/admin/video", VideoRouter);
+// // Routes restricted to admin users
+app.use("/api/admin/user", checkAdminAccess, userRouter);
+app.use("/api/admin/event", checkAdminAccess, eventRouter);
+app.use("/api/admin/cphoto", checkAdminAccess, customerPhotoRouter);
+app.use("/api/admin/category", checkAdminAccess, categoryRouter);
+app.use("/api/admin/pphoto", checkAdminAccess, PromoPhotoRouter);
+app.use("/api/admin/video", checkAdminAccess, VideoRouter);
+
 
 
 mongoose.connect(

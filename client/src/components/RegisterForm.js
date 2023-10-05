@@ -1,46 +1,17 @@
 import React, { useRef, useState } from 'react';
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { fadeAnim, photoFromAboveAnim, photoAnim } from "../animation";
+import { fadeAnim, photoFromAboveAnim } from "../animation";
 
 import { useRegister } from '../hooks/useRegister';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-
-import axios from "axios";
 
 
 const RegisterForm = () => {
 
   const form = useRef();
   const {signup, isLoading, error} = useRegister();
-
-  const notifySuccess = () => {
-    toast.success('Message sent!', {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
-  }
-  const notifyError = () => {
-    toast.error('Please fill in all fields!', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
-  }
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -81,20 +52,21 @@ const RegisterForm = () => {
             Sign up
           </motion.button>
           {error && <div
-    className='error'
-    style={{
-      border: '1px solid #ff6666',
-      height: '40px',
-      borderRadius: '5px',
-      color: '#ff6666',
-      display: 'flex',
-      justifyContent: 'center', // Horizontally center
-      alignItems: 'center', // Vertically center
-    }}
-  >{error}</div>}
+                        className='error'
+                        style={{
+                        border: '1px solid #ff6666',
+                        height: '40px',
+                        borderRadius: '5px',
+                        color: '#ff6666',
+                        display: 'flex',
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        }}
+                        >{error}
+                        </div>
+           }
         </motion.div>
       </StyledForm>
-      <ToastContainer />
     </StyledBase>
   );
 };

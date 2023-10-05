@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { titleAnim, fadeAnim, pageAnimation, lineAnim} from "../../animation";
+import { useLogout } from '../../hooks/useLogout';
 
 
 const Library = () => {
@@ -14,6 +15,7 @@ const Library = () => {
     const username = "Luka";
 
     const navigate = useNavigate();
+    const {logout} = useLogout();
 
     const notify = () => {
         toast.success('Message sent!', {
@@ -29,7 +31,7 @@ const Library = () => {
     };
 
     const handleSignOut = () => {
-       navigate('/about', { state: { notifyReference: notify } });
+        logout();
     };
     
 
