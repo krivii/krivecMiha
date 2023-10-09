@@ -12,7 +12,6 @@ router.use(authorization);
 
 
 router.post("/", async (req, res) => {
-  const eventData = req.body; 
   try {
 
     const category = new CategoryModel(req.body);
@@ -83,7 +82,7 @@ router.delete("/:categoryId", async (req, res) => {
       return res.status(404).json({ message: "category not found" });
     }
 
-    // Remove all photos associated with this event
+    // Remove all photos associated with this category
     await PromoPhotoModel.deleteMany({ _id: { $in: categoryToDelete.photos } });
 
     await categoryToDelete.deleteOne();

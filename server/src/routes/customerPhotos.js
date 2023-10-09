@@ -1,5 +1,5 @@
 import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
-import { EventModel } from "../models/Events.js";
+import { OrderModel } from "../models/Order.js";
 
 import  express  from "express";
 
@@ -8,23 +8,23 @@ const router = express.Router()
 
 router.post("/", async (req, res) => {
     const photosData = req.body; 
-    const { event: eventId } = photosData; 
+    const { order: orderId } = photosData; 
 
     try {
-        if (!eventId) {
-            return res.status(400).json({ error: "Event ID is missing." });
+        if (!orderId) {
+            return res.status(400).json({ error: "order ID is missing." });
         }
 
-        const foundEvent = await EventModel.findById(eventId);
-        if (!foundEvent) {
-            return res.status(404).json({ error: "Event not found." });
+        const foundOrder = await OrderModel.findById(orderId);
+        if (!foundOrder) {
+            return res.status(404).json({ error: "Order not found." });
         }
 
         const photo = new CustomerPhotoModel(req.body);
         await photo.save();
 
-        foundEvent.photos.push(photo._id);
-        await foundEvent.save();
+        foundOrder.photos.push(photo._id);
+        await foundOrder.save();
         
         res.status(200).json(photo);
     } catch (error) {
@@ -67,26 +67,26 @@ router.put("/:photoId", async (req, res) => {
 
     const existingPhoto = await CustomerPhotoModel.findById(photoId);
     
-    if ('event' in updates) {
+    if ('order' in updates) {
 
-        const oldEventId = existingPhoto.event;
-        const newEventId = updates.event;
+        const oldOrderId = existingPhoto.order;
+        const newOrderId = updates.order;
 
 
-        const oldEvent = await EventModel.findById(oldEventId);
-        if (oldEvent) {
+        const oldOrder = await OrderModel.findById(oldOrderId);
+        if (oldOrder) {
          
-          oldEvent.photos = oldEvent.photos.filter((p) => p.toString() !== photoId);
-          await oldEvent.save();
+          oldOrder.photos = oldOrder.photos.filter((p) => p.toString() !== photoId);
+          await oldOrder.save();
         }
 
-        const newEvent = await EventModel.findById(newEventId);
-        if (!newEvent) {
-          return res.status(404).json({ message: "New Event not found" });
+        const newOrder = await OrderModel.findById(newOrderId);
+        if (!newOrder) {
+          return res.status(404).json({ message: "New order not found" });
         }
 
-        newEvent.photos.push(photoId);
-        await newEvent.save();
+        newOrder.photos.push(photoId);
+        await newOrder.save();
     }
 
     const updatedPhoto = await CustomerPhotoModel.findByIdAndUpdate(photoId, updates, { new: true });
@@ -112,13 +112,13 @@ router.delete("/:photoId", async (req, res) => {
       return res.status(404).json({ message: "photo not found" });
     }
     
-    const oldEventId = photoToDelete.event;
+    const oldOrderId = photoToDelete.order;
 
-    const oldEvent = await EventModel.findById(oldEventId);
-    if (oldEvent) {
+    const oldOrder = await OrderModel.findById(oldOrderId);
+    if (oldOrder) {
      
-      oldEvent.photos = oldEvent.photos.filter((p) => p.toString() !== photoId);
-      await oldEvent.save();
+      oldOrder.photos = oldOrder.photos.filter((p) => p.toString() !== photoId);
+      await oldOrder.save();
     }
 
     await photoToDelete.deleteOne();

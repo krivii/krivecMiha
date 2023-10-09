@@ -7,7 +7,7 @@ import { authRouter } from "./routes/auth.js"
 import { userRouter } from "./routes/users.js"
 import { customerPhotoRouter } from "./routes/customerPhotos.js"
 import { PromoPhotoRouter } from "./routes/promoPhotos.js"
-import { eventRouter } from "./routes/events.js"
+import { orderRouter } from "./routes/orders.js"
 import { categoryRouter } from "./routes/categories.js"
 import { VideoRouter } from "./routes/videos.js"
 import { authorization} from "./middleware/authorization.js";
@@ -43,7 +43,7 @@ app.use("/api/admin/user",  userRouter);
 
 // // // Routes restricted to admin users
 // app.use("/api/admin/user", checkAdminAccess, userRouter);
-// app.use("/api/admin/event", checkAdminAccess, eventRouter);
+// app.use("/api/admin/order", checkAdminAccess, orderRouter);
 // app.use("/api/admin/cphoto", checkAdminAccess, customerPhotoRouter);
 // app.use("/api/admin/category", checkAdminAccess, categoryRouter);
 // app.use("/api/admin/pphoto", checkAdminAccess, PromoPhotoRouter);

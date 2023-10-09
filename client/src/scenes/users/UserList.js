@@ -83,7 +83,7 @@ const UserList = () => {
         headerName: 'User orders',
         flex: 0.5,
         renderCell: (params) => (
-          <Link to={`/admin/events/`}>
+          <Link to={`/admin/orders/`}>
             <Button
               variant="contained"
               color="primary" 

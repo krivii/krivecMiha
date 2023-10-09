@@ -1,7 +1,7 @@
 import  express  from "express";
 import { UserModel } from "../models/Users.js";
-import { EventModel  } from "../models/Events.js";
-import { deleteEvent } from "./events.js"; 
+import { OrderModel  } from "../models/Order.js";
+import { deleteOrder } from "./orders.js"; 
 
 const router = express.Router()
 // TODO SEARCH BY KEYWORD OPTION
@@ -74,10 +74,10 @@ router.get("/", async (req, res) => {
         return res.status(404).json({ message: "User not found" });
       }
 
-      for (const eventId of deletedUser.events) {
-        const result = await deleteEvent(eventId);
+      for (const orderId of deletedUser.orders) {
+        const result = await deleteOrder(orderId);
         if (!result.success) {
-          console.error(`Failed to delete event with ID ${eventId}`);
+          console.error(`Failed to delete order with ID ${orderId}`);
         }
       }
 
