@@ -37,16 +37,23 @@ router.get("/", async (req, res) => {
   //TODO PSW CHANGE
   router.put("/:userId", async (req, res) => {
     try {
-  
+       
       const userId = req.params.userId;
-      const updates = req.body; 
-  
+      const userEmail = req.body.email;
+
+      const updates = req.body;
+
+      const exists = await UserModel.findOne({ email: userEmail });
+
+      if(exists && exists._id != userId){
+        return res.status(409).json({ message: "Email already exists." });
+      }
       const updatedUser = await UserModel.findByIdAndUpdate(userId, updates, { new: true });
-  
+
       if (!updatedUser) {
         return res.status(404).json({ message: "User not found" });
       }
-  
+
       res.json({ message: "User updated successfully", updatedUser });
     } catch (error) {
       console.error(error);

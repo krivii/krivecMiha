@@ -18,6 +18,8 @@ import Sidebar from "./scenes/global/Sidebar";
 import Topbar from "./scenes/global/Topbar";
 import Dashboard from "./scenes/dashboard";
 import UserList from "./scenes/users/UserList";
+import UserAdd from "./scenes/users/UserAdd";
+import UserEdit from "./scenes/users/UserEdit";
 
 
 
@@ -75,7 +77,9 @@ function AdminComponent() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/users" element={<UserList />} />
-            {/* Define other routes here */}
+            <Route path="/users/add" element={<UserAdd />} />
+            <Route path="/users/edit/:userId" element={<UserEdit />} />
+            
           </Routes>
         </main>
       </div>

@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/admin/Header';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button  } from '@mui/material';
 import { DataGrid, GridToolbar  } from '@mui/x-data-grid';
-import { format, isValid } from 'date-fns';
+import { format } from 'date-fns';
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import { Link } from 'react-router-dom';
 
 const UserList = () => {
     const [userRows, setUserRows] = useState([]);
     const [loading, setLoading] = useState(true);
     const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: 25,
-        page: 1,
+        pageSize: 10,
+        page: 0,
       });
 
     useEffect(() => {
@@ -31,7 +32,40 @@ const UserList = () => {
       field: '_id',
       headerName: 'ID',
       flex: 0.5, 
+      
     },
+    {
+        field: "role",
+        headerName: "Access Level",
+        flex: 1,
+        renderCell: ({ row: { role } }) => {
+          return (
+            <Box
+              width="60%"
+              m="0 auto"
+              p="10px"
+              display="flex"
+              justifyContent="center"
+              backgroundColor={
+                role === "admin"
+                  ? "brown"
+                  : role === "manager"
+                  ? "green"
+                  : "green"
+              }
+              borderRadius="4px"
+             
+            >
+              {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
+              {role === "manager" && <SecurityOutlinedIcon />}
+              {role === "customer" && <LockOpenOutlinedIcon />}
+              <Typography color="white" sx={{ ml: "1px" }}>
+                {role}
+              </Typography>
+            </Box>
+          );
+        },
+      },
     {
       field: 'name',
       headerName: 'Name',
@@ -44,7 +78,30 @@ const UserList = () => {
       flex: 1,
       
     },
-   {
+    {
+        field: 'orders',
+        headerName: 'User orders',
+        flex: 0.5,
+        renderCell: (params) => (
+          <Link to={`/admin/events/`}>
+            <Button
+              variant="contained"
+              color="primary" 
+              sx={{
+                textTransform: 'lowercase', 
+                backgroundColor: '#333', 
+                '&:hover': {
+                  backgroundColor: '#444', 
+                },
+              }}
+            >
+              Orders
+            </Button>
+          </Link>
+        ),
+      },
+      
+    {
         field: 'createdAt', 
         headerName: 'Created',
         flex: 1,
@@ -54,43 +111,22 @@ const UserList = () => {
          
             return format(createdAtDate, 'dd.MM.yyyy');
        },
-      },
+      },      
       {
-        field: "role",
-        headerName: "Access Level",
-        flex: 1,
-        renderCell: ({ row: { role } }) => {
-          return (
-            <Box
-              width="60%"
-              m="0 auto"
-              p="5px"
-              display="flex"
-              justifyContent="center"
-              backgroundColor={
-                role === "admin"
-                  ? "brown"
-                  : role === "manager"
-                  ? "green"
-                  : "green"
-              }
-              borderRadius="4px"
-            >
-              {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
-              {role === "manager" && <SecurityOutlinedIcon />}
-              {role === "customer" && <LockOpenOutlinedIcon />}
-              <Typography color="white" sx={{ ml: "5px" }}>
-                {role}
-              </Typography>
-            </Box>
-          );
-        },
+        headerName: 'Edit user',
+        flex: 0.5,
+        renderCell: (params) => (
+          <Link to={`/admin/users/edit/${params.row._id}`}>            
+            <Button variant="contained" color="primary">Edit</Button>
+          </Link>
+        ),
       },
   ];
 
   return (
     <Box m="20px">
-      <Header title="Users list" subtitle="Welcome to user list" />
+      <Header title="USER LIST" subtitle="Welcome to user list" buttonLabel="Add user" buttonLink="/admin/users/add" />
+      
       <Box 
         m="20px 0 0 0"
         height="70vh"

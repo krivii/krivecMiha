@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 // import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
@@ -120,9 +120,9 @@ const Sidebar = () => {
                         setSelected={setSelected}
                         />
                         <Item
-                        title="Contacts Information"
-                        to="/contacts"
-                        icon={<ContactsOutlinedIcon />}
+                        title="Add user"
+                        to="/admin/users/add"
+                        icon={<PersonAddAltIcon />}
                         selected={selected}
                         setSelected={setSelected}
                         />
