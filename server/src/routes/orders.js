@@ -10,28 +10,35 @@ import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const orderData = req.body; 
-  const { orderOwner } = orderData; 
+  const orderData = req.body;
+  const { orderOwner  } = orderData; 
+  console.log(orderOwner);
+
+
 
   try {
-    const user = await UserModel.findOne({ _id: orderOwner });
+    const user = await UserModel.findOne({ email: orderOwner });
+
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
 
     const order = new OrderModel(req.body);
-    await order.save();
 
+    await order.save();
+    // return res.status(666).json({ user });
     user.orders.push(order._id);
+
 
     await user.save();
 
     res.json(order);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error." });
+    res.status(500).json({ error: error });
   }
 });
+
 
 router.get("/", async (req, res) => {
   try {
@@ -41,6 +48,28 @@ router.get("/", async (req, res) => {
       res.status(400).json(error);
   }
 });
+
+router.get("/userOrders/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userEmail = user.email;
+
+    const orders = await OrderModel.find({ orderOwner: userEmail });
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
   
   // get photos list

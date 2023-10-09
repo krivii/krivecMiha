@@ -20,6 +20,9 @@ import Dashboard from "./scenes/dashboard";
 import UserList from "./scenes/users/UserList";
 import UserAdd from "./scenes/users/UserAdd";
 import UserEdit from "./scenes/users/UserEdit";
+import UserOrderList from "./scenes/orders/UserOrderList";
+import OrderList from "./scenes/orders/OrderList";
+import OrderAdd from "./scenes/orders/OrderAdd";
 
 
 
@@ -79,6 +82,9 @@ function AdminComponent() {
             <Route path="/users" element={<UserList />} />
             <Route path="/users/add" element={<UserAdd />} />
             <Route path="/users/edit/:userId" element={<UserEdit />} />
+            <Route path="/orders/:userId" element={<UserOrderList />} />
+            <Route path="/orders" element={<OrderList />} />
+            <Route path="/orders/add" element={<OrderAdd />} />
             
           </Routes>
         </main>

@@ -3,25 +3,29 @@ import Header from '../../components/admin/Header';
 import { Box, Typography, Button  } from '@mui/material';
 import { DataGrid, GridToolbar  } from '@mui/x-data-grid';
 import { format } from 'date-fns';
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import { Link } from 'react-router-dom';
 
-const UserList = () => {
+import { Link } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import CheckIcon from '@mui/icons-material/Check';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+
+const UserOrderList = () => {
+    const { userId } = useParams();
+
     const [userRows, setUserRows] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 10,
         page: 0,
       });
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/admin/user')
+        fetch(`http://localhost:3001/api/admin/order/userOrders/${userId}`)
           .then((response) => response.json())
           .then((data) => {
 
-            setUserRows(data);          })
+            console.log(data)
+            setUserRows(data); })
           .catch((error) => {
             console.error('Error fetching user data:', error);
           });
@@ -35,10 +39,10 @@ const UserList = () => {
       
     },
     {
-        field: "role",
-        headerName: "Access Level",
+        field: "status",
+        headerName: "Status",
         flex: 1,
-        renderCell: ({ row: { role } }) => {
+        renderCell: ({ row: { status } }) => {
           return (
             <Box
               width="60%"
@@ -47,20 +51,20 @@ const UserList = () => {
               display="flex"
               justifyContent="center"
               backgroundColor={
-                role === "admin"
-                  ? "brown"
-                  : role === "manager"
+                status === "pending"
+                  ? "yellow"
+                  : status === "active"
                   ? "green"
-                  : "green"
+                  : "grey"
               }
               borderRadius="4px"
              
             >
-              {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
-              {role === "manager" && <SecurityOutlinedIcon />}
-              {role === "customer" && <LockOpenOutlinedIcon />}
+              {status === "pending" && <AutorenewIcon />}
+              {status === "active" && <NotificationsIcon />}
+              {status === "completed" && <CheckIcon />}
               <Typography color="white" sx={{ ml: "1px" }}>
-                {role}
+                {status}
               </Typography>
             </Box>
           );
@@ -73,17 +77,17 @@ const UserList = () => {
       cellClassName: "name-column--cell" 
     },
     {
-      field: 'email',
-      headerName: 'Email',
+      field: 'orderOwner',
+      headerName: 'Owner',
       flex: 1,
       
     },
     {
-        field: 'orders',
-        headerName: 'User orders',
+        field: 'photos',
+        headerName: 'Photos',
         flex: 0.5,
         renderCell: (params) => (
-          <Link to={`/admin/orders/${params.row._id}`}>
+          <Link to={`/admin/photos/${params.row._id}`}>
             <Button
               variant="contained"
               color="primary" 
@@ -95,28 +99,28 @@ const UserList = () => {
                 },
               }}
             >
-              Orders
+              Photos
             </Button>
           </Link>
         ),
       },
       
     {
-        field: 'createdAt', 
-        headerName: 'Created',
+        field: 'date', 
+        headerName: 'Date',
         flex: 1,
         valueGetter: (params) => {
-          const createdAtDate = new Date(params.value);
+          const date = new Date(params.value);
     
          
-            return format(createdAtDate, 'dd.MM.yyyy');
+            return format(date, 'dd.MM.yyyy');
        },
       },      
       {
-        headerName: 'Edit user',
+        headerName: 'Edit order',
         flex: 0.5,
         renderCell: (params) => (
-          <Link to={`/admin/users/edit/${params.row._id}`}>            
+          <Link to={`/admin/orders/edit/${params.row._id}`}>            
             <Button variant="contained" color="primary">Edit</Button>
           </Link>
         ),
@@ -124,8 +128,9 @@ const UserList = () => {
   ];
 
   return (
+
     <Box m="20px">
-      <Header title="USER LIST" subtitle="Welcome to user list" buttonLabel="Add user" buttonLink="/admin/users/add" />
+      <Header title="USER ORDERS" subtitle={`This is the order list of user: ${userId}`}  />
       
       <Box 
         m="20px 0 0 0"
@@ -172,4 +177,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default UserOrderList;

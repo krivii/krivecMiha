@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema({
     password: {type: String, required: true},
     orders: [{type: mongoose.Schema.Types.ObjectId, ref: "orders"}],
     createdAt: {type: Date, required: true},
-    role: {type: String, default: "customer"} 
+    role: {type: String, enum: ["moderator", "admin", "customer"],default: "customer"} 
+
 });
 
 

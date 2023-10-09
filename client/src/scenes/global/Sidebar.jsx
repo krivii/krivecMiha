@@ -17,6 +17,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -41,7 +42,7 @@ const Sidebar = () => {
                 },
             }}
         >
-            <ProSidebar isCollapsed={isCollapsed}>
+            <ProSidebar >
                 <Menu iconShape="square">
                     {/* LOGO AND MENU ICON */}
                     <MenuItem
@@ -126,10 +127,11 @@ const Sidebar = () => {
                         selected={selected}
                         setSelected={setSelected}
                         />
+                        <hr style={{ margin: "5px 20px" }} />
                         <Item
-                        title="Invoices Balances"
-                        to="/invoices"
-                        icon={<ReceiptOutlinedIcon />}
+                        title="Orders"
+                        to="/admin/orders"
+                        icon={<ShoppingCartIcon />}
                         selected={selected}
                         setSelected={setSelected}
                         />

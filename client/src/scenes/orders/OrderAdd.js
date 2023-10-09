@@ -2,14 +2,14 @@ import { Box, Button, TextField, Select, MenuItem, FormControl, InputLabel } fro
 import { Formik } from "formik";
 import * as yup from "yup";
 import Header from "../../components/admin/Header";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const UserAdd = () => {
+const OrderAdd = () => {
 
     const notifySuccess = () => {
-        toast.success('User added!', {
+        toast.success('Order added!', {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -36,8 +36,8 @@ const UserAdd = () => {
 
 
       const handleFormSubmit = (values,  { resetForm }) => {
-        // Send the form data as a JSON body to the server
-        fetch("http://localhost:3001/api/auth/register", {
+        console.log(values);
+        fetch("http://localhost:3001/api/admin/order", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -57,20 +57,35 @@ const UserAdd = () => {
             }
           })
           .catch((error) => {
-            console.error("Error during registration:", error);
+            console.error("Error :", error);
           });
       };
+
+      const [users, setUsers] = useState([]);
+
+      useEffect(() => {
+
+        fetch("http://localhost:3001/api/admin/user")
+          .then((response) => response.json())
+          .then((data) => {
+            setUsers(data);          })
+          .catch((error) => {
+            console.error("Error fetching users:", error);
+            
+          });
+      }, []);
+      
       
 
   return (
 
     <Box m="20px">
-        <Header title="CREATE USER" subtitle="Create a new user profile" />
+        <Header title="CREATE ORDER" subtitle="Create a new order" />
         <Box m="30px 0 0 0">
             <Formik
             onSubmit={handleFormSubmit}
             initialValues={initialValues}
-            validationSchema={userSchema}
+            validationSchema={orderSchema}
             sx={{ marginTop: "50px" }}
         >
             {({
@@ -100,61 +115,53 @@ const UserAdd = () => {
                     helperText={touched.name && errors.name}
                     sx={{ gridColumn: "span 4" }}
                 />
-                <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label="Email"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.email}
-                    name="email"
-                    error={!!touched.email && !!errors.email}
-                    helperText={touched.email && errors.email}
-                    sx={{ gridColumn: "span 4" }}
-                />
-                <TextField
-                    fullWidth
-                    variant="filled"
-                    type="password" 
-                    label="Password"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.password}
-                    name="password" 
-                    error={!!touched.password && !!errors.password}
-                    helperText={touched.password && errors.password}
-                    sx={{ gridColumn: "span 4" }}
-                    />
-                    <TextField
-                    fullWidth
-                    variant="filled"
-                    type="password" 
-                    label="Repeat password"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.re_password}
-                    name="re_password" 
-                    error={!!touched.re_password && !!errors.re_password}
-                    helperText={touched.re_password && errors.re_password}
-                    sx={{ gridColumn: "span 4" }}
-                    />
-
-                 <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 4" }}>
-                  <InputLabel htmlFor="role">Role</InputLabel>
+                <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 4" }}>
+                  <InputLabel htmlFor="orderOwner">Customer</InputLabel>
                   <Select
-                    label="Role"
-                    value={values.role}
+                    label="orderOwner"
+                    value={values.orderOwner}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    name="role"
-                    error={!!touched.role && !!errors.role}
+                    name="orderOwner"
+                    
                   >
-                    <MenuItem value="admin">Admin</MenuItem>
-                    <MenuItem value="manager">Manager</MenuItem>
-                    <MenuItem value="customer">Customer</MenuItem>
+                    {users.map((user) => (
+                        <MenuItem value={user.email}>
+                            {user.email}
+                        </MenuItem>
+                    ))}
+
                   </Select>
                 </FormControl>
+                
+                <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 4" }}>
+                  <InputLabel htmlFor="status">Status</InputLabel>
+                  <Select
+                    label="Status"
+                    value={values.status}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="status"
+                    error={!!touched.status && !!errors.status}
+                  >
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="pending">Pending</MenuItem>
+                    <MenuItem value="completed">Completed</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField
+                    fullWidth
+                    variant="filled"
+                    type="date" 
+                    label="Date of the event"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.date}
+                    name="date"
+                    error={!!touched.date && !!errors.date}
+                    helperText={touched.date && errors.date}
+                    sx={{ gridColumn: "span 4" }}
+                    />
                 
                 </Box>
                 <Box display="flex" justifyContent="end" mt="20px">
@@ -164,7 +171,7 @@ const UserAdd = () => {
                   variant="contained"
                   onClick={handleSubmit}
                 >
-                  Create new user
+                  Create new order
                 </Button>
                 </Box>
             </form>
@@ -176,27 +183,23 @@ const UserAdd = () => {
   );
 };
 
-const userSchema = yup.object().shape({
-    name: yup.string().required("required").min(2, "Name must be at least 2 characters long"),
-    email: yup.string().email("invalid email").required("required"),
-    password: yup
+const orderSchema = yup.object().shape({
+    name: yup
       .string()
-      .required("required")
-      .min(8, "Password must be at least 8 characters long"),
-    re_password: yup
-      .string()
-      .required("required")
-      .oneOf([yup.ref("password"), null], "Passwords don't match"),
+      .required("Name is required")
+      .min(2, "Name must be at least 2 characters long"),
+    status: yup.string().required("Status is required"),
+    date: yup.date().required("Date is required")
   });
   
-const initialValues = {
-  name: "",
-  email: "",
-  password: "",
-  re_password: "",
-  role: "customer"
+  
+  
+  const initialValues = {
+    name: "",
+    status: "active", 
+    date: new Date(), 
+  };
+  
 
-};
-
-export default UserAdd;
+export default OrderAdd;
 
