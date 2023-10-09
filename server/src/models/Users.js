@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     events: [{type: mongoose.Schema.Types.ObjectId, ref: "events"}],
+    createdAt: {type: Date, required: true},
     role: {type: String, default: "customer"} 
 });
 
@@ -35,8 +36,10 @@ UserSchema.statics.register = async function(name, email, password) {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    
+    const currentDate = new Date();
 
-    const newUser = this.create({name, email, password: hashedPassword});
+    const newUser = this.create({name, email, password: hashedPassword, createdAt: currentDate,});
 
     return newUser;
 }

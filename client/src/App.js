@@ -14,7 +14,10 @@ import  Navbar  from "./components/Navbar";
 import { AnimatePresence } from "framer-motion";
 import GlobalStyle from './components/GlobalStyle'
 
-
+import Sidebar from "./scenes/global/Sidebar";
+import Topbar from "./scenes/global/Topbar";
+import Dashboard from "./scenes/dashboard";
+import UserList from "./scenes/users/UserList";
 
 
 
@@ -22,20 +25,32 @@ function App() {
   return (
     <div className="App">
       <Router>
-      <GlobalStyle />
-      <Navbar />
-      <AnimatePresence mode="wait">
-        <Inner/>
-      </AnimatePresence>
+        <Routes>
+            <Route path="*" element={<ClientComponentWithNavbar />} />            
+            <Route path="/admin/*" element={<AdminComponent />} />
+        </Routes>
       </Router>
     </div>
   );
 }
 
-function Inner() {
+
+function ClientComponentWithNavbar() {
+  return (
+    <>
+      <GlobalStyle />
+      <Navbar />
+      <AnimatePresence mode="wait">
+        <ClientComponent/>
+      </AnimatePresence>
+    </>
+  );
+}
+
+function ClientComponent() {
   const location = useLocation();
 
-  return(
+  return (
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<About />} />
       <Route path="/work" element={<OurWork />} />
@@ -47,7 +62,29 @@ function Inner() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
     </Routes>
-  )
+  );
 }
 
+function AdminComponent() {
+  return (
+    <div className="admin">
+      <Sidebar /> {/* Render the Sidebar component */}
+      <div className="admin-content">
+        <Topbar /> {/* Render the Topbar component */}
+        <main className="content">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/users" element={<UserList />} />
+            {/* Define other routes here */}
+          </Routes>
+        </main>
+      </div>
+    </div>
+
+
+  );
+}
+
+
 export default App;
+
