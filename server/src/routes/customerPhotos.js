@@ -1,35 +1,77 @@
 import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
 import { OrderModel } from "../models/Order.js";
-
+import multer from 'multer';
 import  express  from "express";
+import path from 'path'; 
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import dotenv from 'dotenv';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router()
 
-router.post("/", async (req, res) => {
-    const photosData = req.body; 
-    const { order: orderId } = photosData; 
+const ensureDirectoryExists = (directory) => {
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+};
 
-    try {
-        if (!orderId) {
-            return res.status(400).json({ error: "order ID is missing." });
-        }
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const orderId = req.body.order; 
+    const uploadPath = path.join(process.env.SRC_PATH,`/uploads/images/orderid=${orderId}`);
+    ensureDirectoryExists(uploadPath); 
+    cb(null, uploadPath); 
+  },
+  filename: (req, file, cb) => {
 
-        const foundOrder = await OrderModel.findById(orderId);
-        if (!foundOrder) {
-            return res.status(404).json({ error: "Order not found." });
-        }
 
-        const photo = new CustomerPhotoModel(req.body);
-        await photo.save();
+    cb(null, file.originalname);
+  },
+});
 
-        foundOrder.photos.push(photo._id);
-        await foundOrder.save();
-        
-        res.status(200).json(photo);
-    } catch (error) {
-        res.status(500).json({ error: "Internal server error." });
+const upload = multer({ storage });
+
+router.post("/", upload.array('photos', 100), async (req, res) => {
+  const orderId = req.body.order;
+  const files = req.files;
+
+  try {
+    const foundOrder = await OrderModel.findById(orderId);
+
+    if (!foundOrder) {
+      return res.status(404).json({ error: "Order not found." });
     }
+
+    for (const file of files) {
+      const path = file.path;
+      const photoData = {
+          path: path,
+          order: orderId,
+      };
+
+      try {
+         const photo = new CustomerPhotoModel(photoData);
+          await photo.save();
+          foundOrder.photos.push(photo._id);
+      } catch (error) {
+          if (error.code !== 11000) {
+
+              throw error;
+          }
+
+      }
+  }
+
+    await foundOrder.save();
+      
+      res.status(200).json({msg: "Soul goodman."});
+  } catch (error) {
+      res.status(500).json({ error: "Internal server error." });
+  }
 });
 
   router.get("/", async (req, res) => {
@@ -39,6 +81,26 @@ router.post("/", async (req, res) => {
     } catch (error) {
         res.json(error);
     }
+});
+
+router.get("/orderPhotos/:orderId", async (req, res) => {
+  const orderId = req.params.orderId;
+  
+  try {
+    const order = await OrderModel.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const photos = await CustomerPhotoModel.find({ order: orderId });
+    console.log(photos)
+    res.status(200).json(photos);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 router.get("/:photoId", async (req, res) => {

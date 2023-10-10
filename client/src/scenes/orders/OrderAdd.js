@@ -39,7 +39,7 @@ const OrderAdd = () => {
 
 
       const handleFormSubmit = (values,  { resetForm }) => {
-        console.log(values);
+
         fetch("http://localhost:3001/api/admin/order", {
           method: "POST",
           headers: {
@@ -71,7 +71,8 @@ const OrderAdd = () => {
         fetch("http://localhost:3001/api/admin/user")
           .then((response) => response.json())
           .then((data) => {
-            setUsers(data);          })
+            setUsers(data.reverse());
+          })
           .catch((error) => {
             console.error("Error fetching users:", error);
             

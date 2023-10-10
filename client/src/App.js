@@ -24,6 +24,8 @@ import UserOrderList from "./scenes/orders/UserOrderList";
 import OrderList from "./scenes/orders/OrderList";
 import OrderAdd from "./scenes/orders/OrderAdd";
 import OrderEdit from "./scenes/orders/OrderEdit";
+import CPhotosAdd from "./scenes/cphotos/CPhotosAdd";
+import OrderPhotoList from "./scenes/cphotos/OrderPhotoList";
 
 
 
@@ -74,9 +76,9 @@ function ClientComponent() {
 function AdminComponent() {
   return (
     <div className="admin">
-      <Sidebar /> {/* Render the Sidebar component */}
+      <Sidebar /> 
       <div className="admin-content">
-        <Topbar /> {/* Render the Topbar component */}
+        <Topbar /> 
         <main className="content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -87,7 +89,8 @@ function AdminComponent() {
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/add" element={<OrderAdd />} />
             <Route path="/orders/edit/:orderId" element={<OrderEdit />} />
-            
+            <Route path="/cphotos/add" element={<CPhotosAdd />} />
+            <Route path="/cphotos/:orderId" element={<OrderPhotoList />} />
           </Routes>
         </main>
       </div>

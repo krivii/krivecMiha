@@ -1,35 +1,66 @@
 import { PromoPhotoModel } from "../models/PromoPhotos.js";
 import { CategoryModel } from "../models/Categories.js";
+import multer from 'multer';
+
+// Your code here...
+
 
 import  express  from "express";
 
 
 const router = express.Router()
 
-router.post("/", async (req, res) => {
-    const photosData = req.body; 
-    const { category: categoryId } = photosData; 
-    
-    try {
-  
-        if (!categoryId) {
-            return res.status(400).json({ error: "Category ID is missing." });
-        }
-        
-        const foundCategory = await CategoryModel.findById(categoryId);            
-        const photo = new PromoPhotoModel(req.body);
-  
-        await photo.save();
-  
-        foundCategory.photos.push(photo._id);
-  
-        await foundCategory.save();
-        res.status(200).json(photo);
-  
-    } catch (error) {
-        res.status(500).json({ error: "Internal server error." });
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const orderId = req.body.order; // Assuming the order ID is included in the request body
+    const uploadPath = path.join(__dirname, `../uploads/images/orderid=${orderId}`);
+    cb(null, uploadPath); // Set the upload directory based on the order ID
+  },
+  filename: (req, file, cb) => {
+    // Use the original filename (you can modify this as needed)
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+router.post('/', upload.array('photos', 100), async (req, res) => {
+  const photosData = req.body;
+  const { category: categoryId } = photosData;
+
+  try {
+    if (!categoryId) {
+      return res.status(400).json({ error: 'Category ID is missing.' });
     }
-  });
+
+    // Find the category by ID (assuming you have a Category model)
+    const foundCategory = await CategoryModel.findById(categoryId);
+
+    if (!foundCategory) {
+      return res.status(404).json({ error: 'Category not found.' });
+    }
+
+    // Create and save a new PromoPhoto document (assuming you have a PromoPhoto model)
+    const photo = new PromoPhotoModel({
+      ...photosData,
+      path: req.files.map((file) => file.path), // Store file paths in the database
+    });
+
+    await photo.save();
+
+    // Add the photo to the category's photos array
+    foundCategory.photos.push(photo._id);
+
+    await foundCategory.save();
+
+    res.status(200).json(photo);
+  } catch (error) {
+    console.error('Error uploading photos:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
 
 
 

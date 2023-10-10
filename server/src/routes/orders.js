@@ -13,21 +13,18 @@ router.post("/", async (req, res) => {
   const orderData = req.body;
   const { orderOwner  } = orderData; 
  
-
-
-
   try {
     const user = await UserModel.findOne({ email: orderOwner });
-
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
 
     const order = new OrderModel(req.body);
-
+    console.log(order);
+    
     await order.save();
-    // return res.status(666).json({ user });
+
     user.orders.push(order._id);
 
 
@@ -35,9 +32,12 @@ router.post("/", async (req, res) => {
 
     res.json(order);
   } catch (error) {
-    res.status(500).json({ error: error });
+    console.log(error)
+    res.status(555).json({ error: error });
   }
 });
+
+
 
 
 router.get("/", async (req, res) => {
@@ -97,6 +97,7 @@ router.get("/userOrders/:userId", async (req, res) => {
       const orderId = req.params.orderId;
       const updates = req.body; 
 
+
       const existingOrder = await OrderModel.findById(orderId);     
 
       const exists = await OrderModel.findOne({ name: existingOrder.name });
@@ -115,7 +116,7 @@ router.get("/userOrders/:userId", async (req, res) => {
         const oldUser = await UserModel.findOne({ email: oldUserEmail });
 
         if (oldUser) {
-          // Remove the orderId from the old order's photos array
+
           oldUser.orders = oldUser.orders.filter((p) => p.toString() !== orderId);
           await oldUser.save();
         }

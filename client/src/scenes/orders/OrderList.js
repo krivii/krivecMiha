@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import CheckIcon from '@mui/icons-material/Check';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { DateSchema } from 'yup';
+
 
 const OrderList = () => {
     const { userId } = useParams();
@@ -88,7 +88,7 @@ const OrderList = () => {
         headerName: 'Photos',
         flex: 0.5,
         renderCell: (params) => (
-          <Link to={`/admin/photos/${params.row._id}`}>
+          <Link to={`/admin/cphotos/${params.row._id}`}>
             <Button
               variant="contained"
               color="primary" 

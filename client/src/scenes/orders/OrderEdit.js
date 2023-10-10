@@ -62,7 +62,7 @@ const OrderEdit = () => {
         const response = await fetch(`http://localhost:3001/api/admin/order/${orderId}`); 
       if (response.ok) {
         const data = await response.json();
-        setOrderData(data.order);
+        setOrderData(data.order.reverse());
         setLoading(false);
       } else {
         throw new Error('Failed to fetch order data');

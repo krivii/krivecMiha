@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
+import path from "path";
+import sharp from 'sharp'; // Import the sharp library for image optimization
+
 
 import { authRouter } from "./routes/auth.js"
 import { userRouter } from "./routes/users.js"
@@ -12,18 +15,29 @@ import { categoryRouter } from "./routes/categories.js"
 import { VideoRouter } from "./routes/videos.js"
 import { authorization} from "./middleware/authorization.js";
 
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 
 // Load environment variables from the specified path
 dotenv.config({ path: '../.env' });
-
 // express app
 const app = express();
+
+
 
 app.get('/', (req, res) => {
     res.json({ msg: "Welcome to the app" })
 })
 
 // middleware
+app.use(express.static('src/uploads'));
+// // app.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
+
+
 app.use(express.json());
 app.use(cors());
 
@@ -52,7 +66,16 @@ app.use("/api/admin/cphoto", customerPhotoRouter);
 // app.use("/api/admin/video", checkAdminAccess, VideoRouter);
 
 
-
+// Serve optimized images
+app.get('/optimized-images/:imagePath', (req, res) => {
+    const imagePath = `uploads/${req.params.imagePath}`;
+  
+    // Use sharp to resize and convert the image
+    sharp(imagePath)
+      .resize({ width: 300, height: 300 }) // Set the desired dimensions
+      .toFormat('webp') // Convert to WebP format for better compression
+      .pipe(res);
+  });
 
 
 mongoose.connect(
