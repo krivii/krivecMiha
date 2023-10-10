@@ -23,6 +23,7 @@ import UserEdit from "./scenes/users/UserEdit";
 import UserOrderList from "./scenes/orders/UserOrderList";
 import OrderList from "./scenes/orders/OrderList";
 import OrderAdd from "./scenes/orders/OrderAdd";
+import OrderEdit from "./scenes/orders/OrderEdit";
 
 
 
@@ -85,6 +86,7 @@ function AdminComponent() {
             <Route path="/orders/:userId" element={<UserOrderList />} />
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/add" element={<OrderAdd />} />
+            <Route path="/orders/edit/:orderId" element={<OrderEdit />} />
             
           </Routes>
         </main>

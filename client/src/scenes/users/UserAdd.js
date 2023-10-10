@@ -36,7 +36,7 @@ const UserAdd = () => {
 
 
       const handleFormSubmit = (values,  { resetForm }) => {
-        // Send the form data as a JSON body to the server
+
         fetch("http://localhost:3001/api/auth/register", {
           method: "POST",
           headers: {
@@ -64,7 +64,7 @@ const UserAdd = () => {
 
   return (
 
-    <Box m="20px">
+    <Box m="10px">
         <Header title="CREATE USER" subtitle="Create a new user profile" />
         <Box m="30px 0 0 0">
             <Formik

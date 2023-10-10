@@ -43,11 +43,11 @@ router.get("/", async (req, res) => {
 
       const updates = req.body;
 
-      const exists = await UserModel.findOne({ email: userEmail });
+                        const exists = await UserModel.findOne({ email: userEmail });
 
-      if(exists && exists._id != userId){
-        return res.status(409).json({ message: "Email already exists." });
-      }
+                        if(exists && exists._id != userId){
+                          return res.status(409).json({ message: "Email already exists." });
+                        }
       const updatedUser = await UserModel.findByIdAndUpdate(userId, updates, { new: true });
 
       if (!updatedUser) {

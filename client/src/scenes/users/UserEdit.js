@@ -40,10 +40,10 @@ const UserEdit = () => {
     });
   }
 
-  // Replace 'http://localhost:3001/api/admin/user/:userid' with the actual endpoint
+
   const fetchUserData = async () => {
     try {
-        const response = await fetch(`http://localhost:3001/api/admin/user/${userId}`); // Replace with the actual endpoint
+        const response = await fetch(`http://localhost:3001/api/admin/user/${userId}`); 
       if (response.ok) {
         const data = await response.json();
         setUserData(data.user);
@@ -70,9 +70,9 @@ const UserEdit = () => {
 
   const handleFormSubmit = async (values) => {
     try {
-      // Send the updated user data as a JSON body to the server
+     
       const response = await fetch(`http://localhost:3001/api/admin/user/${userId}`, {
-        method: "PUT", // Assuming you are using PUT to update the user
+        method: "PUT", 
         headers: {
           "Content-Type": "application/json",
         },
@@ -92,14 +92,14 @@ const UserEdit = () => {
   };
 
   return (
-    <Box m="20px">
+    <Box m="10px">
       <Header title="EDIT USER" subtitle="Edit user profile" />
       {loading ? (
         <div>Loading user data...</div>
       ) : (
         <Box m="30px 0 0 0">
           <Formik
-            enableReinitialize // Allows initialValues to be updated
+            enableReinitialize 
             onSubmit={handleFormSubmit}
             initialValues={initialValues}
             validationSchema={userSchema}

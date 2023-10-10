@@ -8,6 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const OrderAdd = () => {
 
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+
     const notifySuccess = () => {
         toast.success('Order added!', {
           position: "top-right",
@@ -74,6 +77,12 @@ const OrderAdd = () => {
             
           });
       }, []);
+
+      const initialValues = {
+        name: "",
+        status: "active",
+        date: formattedDate,
+      };
       
       
 
@@ -189,16 +198,13 @@ const orderSchema = yup.object().shape({
       .required("Name is required")
       .min(2, "Name must be at least 2 characters long"),
     status: yup.string().required("Status is required"),
+    orderOwner: yup.string().required("Customer is required"),
     date: yup.date().required("Date is required")
   });
   
   
   
-  const initialValues = {
-    name: "",
-    status: "active", 
-    date: new Date(), 
-  };
+
   
 
 export default OrderAdd;

@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const orderData = req.body;
   const { orderOwner  } = orderData; 
-  console.log(orderOwner);
+ 
 
 
 
@@ -97,25 +97,30 @@ router.get("/userOrders/:userId", async (req, res) => {
       const orderId = req.params.orderId;
       const updates = req.body; 
 
-      const existingOrder = await OrderModel.findById(orderId);
+      const existingOrder = await OrderModel.findById(orderId);     
+
+      const exists = await OrderModel.findOne({ name: existingOrder.name });
+
+      if(exists && exists._id != orderId){
+        return res.status(409).json({ message: "Order name already exists." });
+      }
 
       if ('orderOwner' in updates) {
 
-        const oldUserId = existingOrder.orderOwner;
-        const newUserId = updates.orderOwner;
-
-
-
+        const oldUserEmail = existingOrder.orderOwner;
+        const newUserEmail = updates.orderOwner;
 
         // Find and update the old order
-        const oldUser = await UserModel.findById(oldUserId);
+
+        const oldUser = await UserModel.findOne({ email: oldUserEmail });
+
         if (oldUser) {
           // Remove the orderId from the old order's photos array
           oldUser.orders = oldUser.orders.filter((p) => p.toString() !== orderId);
           await oldUser.save();
         }
 
-        const newUser = await UserModel.findById(newUserId);
+        const newUser = await UserModel.findOne({ email: newUserEmail });
         if (!newUser) {
           return res.status(404).json({ message: "New user not found" });
         }
@@ -123,6 +128,12 @@ router.get("/userOrders/:userId", async (req, res) => {
         newUser.orders.push(orderId);
         await newUser.save();
       }
+
+      if (updates.status === "completed") {
+
+        await CustomerPhotoModel.deleteMany({ _id: { $in: existingOrder.photos } });
+      }
+      
   
       const updatedOrder = await OrderModel.findByIdAndUpdate(orderId, updates, { new: true });
   
