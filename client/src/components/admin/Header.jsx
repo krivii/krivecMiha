@@ -7,10 +7,10 @@ const Header = ({ title, subtitle, buttonLabel, buttonLink }) => {
   return (
     <Box display="flex" alignItems="center">
       <Box flex="1">
-        <Typography variant="h4" color="grey" fontWeight="bold" sx={{ m: "0 0 5px 0" }}>
+        <Typography variant="h5" color="grey" fontWeight="bold" sx={{ m: "0 0 5px 0" }}>
           {title}
         </Typography>
-        <Typography variant="h6" color="green">
+        <Typography variant="h8" color="green">
           {subtitle}
         </Typography>
       </Box>

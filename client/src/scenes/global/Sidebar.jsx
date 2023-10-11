@@ -13,11 +13,12 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import CategoryIcon from '@mui/icons-material/Category';
+import AddHomeIcon from '@mui/icons-material/AddHome';
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -44,59 +45,26 @@ const Sidebar = () => {
         >
             <ProSidebar >
                 <Menu iconShape="square">
-                    {/* LOGO AND MENU ICON */}
-                    <MenuItem
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-                        style={{
-                        margin: "10px 0 20px 0",
-                        color: "grey",
-                        }}
-                    >
-                        {!isCollapsed && (
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            ml="15px"
-                        >
-                            <Typography  color="blue">
-                            ADMIN
-                            </Typography>
-                            <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                            <MenuOutlinedIcon />
-                            </IconButton>
-                        </Box>
-                        )}
-                    </MenuItem>
-
-                    {!isCollapsed && (
-                        <Box mb="25px">
-                        <Box display="flex" justifyContent="center" alignItems="center">
-                            <img
-                            alt="profile-user"
-                            width="100px"
-                            height="100px"
-                            src={`https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&q=70&fm=webp`}
-                            style={{ cursor: "pointer", borderRadius: "50%" }}
-                            />
-                        </Box>
-                            <Box textAlign="center">
-                                <Typography
-                                // variant="h2"
-                                color="grey"
-                                fontWeight="bold"
-                                sx={{ m: "10px 0 0 0" }}
-                                >
-                                Miha Zamorski
-                                </Typography>
-                                <Typography 
-                                 color="green">
-                                Admin
-                                </Typography>
-                            </Box>
-                        </Box>
-                    )}
+                <Box
+                textAlign="center"
+                sx={{
+                    m: "10px  20px ", // Added a bottom margin of 20px
+                    border: "2px solid #ccc", // Added a border with a light gray color
+                    padding: "20px", // Added some padding for spacing
+                    borderRadius: "8px", // Added rounded corners for a modern look
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Added a box shadow for depth
+                }}
+                >
+                <Typography
+                    color="grey"
+                    fontWeight="bold"
+                    sx={{ m: "10px 0 0 0" }}
+                >
+                    Miha Zamorski
+                </Typography>
+                <Typography color="green">Admin</Typography>
+                </Box>
+                   
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
                         <Item
                         title="Dashboard"
@@ -107,11 +75,11 @@ const Sidebar = () => {
                         />
 
                         <Typography
-                        // variant="h6"
+                        variant="h6"
                         color="grey"
                         sx={{ m: "15px 0 5px 20px" }}
                         >
-                        Data
+                        Clients
                         </Typography>
                         <Item
                         title="Users"
@@ -142,6 +110,7 @@ const Sidebar = () => {
                         selected={selected}
                         setSelected={setSelected}
                         />
+                        {/* <hr style={{ margin: "5px 20px" }} /> */}
                         <Item
                         title="Add photos"
                         to="/admin/cphotos/add"
@@ -151,23 +120,23 @@ const Sidebar = () => {
                         />
 
                         <Typography
-                        // variant="h6"
+                        variant="h6"
                         color="grey"
                         sx={{ m: "15px 0 5px 20px" }}
                         >
-                        Pages
+                        Views
                         </Typography>
                         <Item
-                        title="Profile Form"
-                        to="/form"
-                        icon={<PersonOutlinedIcon />}
+                        title="Categories"
+                        to="/admin/categories"
+                        icon={<CategoryIcon />}
                         selected={selected}
                         setSelected={setSelected}
                         />
                         <Item
-                        title="Calendar"
-                        to="/calendar"
-                        icon={<CalendarTodayOutlinedIcon />}
+                        title="Add category"
+                        to="/admin/categories/add"
+                        icon={<AddHomeIcon />}
                         selected={selected}
                         setSelected={setSelected}
                         />

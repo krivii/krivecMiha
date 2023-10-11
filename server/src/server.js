@@ -45,6 +45,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/user",  userRouter);
 app.use("/api/admin/order",  orderRouter);
 app.use("/api/admin/cphoto", customerPhotoRouter);
+app.use("/api/admin/category", categoryRouter);
 // app.use(authorization);
 
 // // Middleware to check if the user is an admin

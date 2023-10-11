@@ -12,8 +12,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 
 
 const OrderList = () => {
-    const { userId } = useParams();
-
+  
     const [userRows, setUserRows] = useState([]);
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 10,
