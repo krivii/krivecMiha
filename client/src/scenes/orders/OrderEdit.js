@@ -15,8 +15,11 @@ const OrderEdit = () => {
   const [loading, setLoading] = useState(true);
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
+  const [orderPhotos, setOrderPhotos] = useState([]);
 
   const [users, setUsers] = useState([]);
+
+  
 
   useEffect(() => {
 
@@ -62,7 +65,7 @@ const OrderEdit = () => {
         const response = await fetch(`http://localhost:3001/api/admin/order/${orderId}`); 
       if (response.ok) {
         const data = await response.json();
-        setOrderData(data.order.reverse());
+        setOrderData(data.order);
         setLoading(false);
       } else {
         throw new Error('Failed to fetch order data');
@@ -87,11 +90,40 @@ const OrderEdit = () => {
 
   const handleFormSubmit = async (values) => {
     try {
-
+      
       if (values.status === "completed") {
-        if (!confirm('Are you sure you want to change the order status to "Completed". By doing so, you will delete all photos related to this order.')) {
-          return;
-        }       
+        const selectedImages = orderData.photos;
+        if (selectedImages.length > 0) {
+
+          if (confirm('Are you sure you want to change the order status to "Completed". By doing so, you will delete all photos related to this order.')) {
+            const apiUrl = "http://localhost:3001/api/admin/cphoto/deleteMany";
+            console.log("Poslal fetch")
+            fetch(apiUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ photoIds: selectedImages }), // Send selected image IDs in the request body
+            })
+              .then((response) => {
+                if (response.ok) {
+                  return response.json();
+                } else {
+                  throw new Error("Failed to delete images");
+                }
+              })
+              .then((data) => {
+  
+                  window.location.reload();
+  
+              })
+              .catch((error) => {
+                console.error("Error while deleting images:", error);
+                toast.error('An error occurred while deleting images.');
+              });
+          }       
+        }
+        
       }
       
       const response = await fetch(`http://localhost:3001/api/admin/order/${orderId}`, {
@@ -116,7 +148,7 @@ const OrderEdit = () => {
 
   return (
     <Box m="20px">
-      <Header title="EDIT ORDER" subtitle="Edit order profile" />
+      <Header title="EDIT ORDER" subtitle="Edit order profile" buttonLabel="Add photos" buttonLink="/admin/cphotos/add" />
       {loading ? (
         <div>Loading order data...</div>
       ) : (
@@ -173,6 +205,20 @@ const OrderEdit = () => {
 
                   </Select>
                 </FormControl>
+
+                <TextField
+                    fullWidth
+                    variant="filled"
+                    type="date" 
+                    label="Date of the event"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.date}
+                    name="date"
+                    error={!!touched.date && !!errors.date}
+                    helperText={touched.date && errors.date}
+                    sx={{ gridColumn: "span 4" }}
+                    />
                 <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 4" }}>
                   <InputLabel htmlFor="status">Status</InputLabel>
                   <Select
@@ -188,19 +234,7 @@ const OrderEdit = () => {
                     <MenuItem value="completed">Completed</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField
-                    fullWidth
-                    variant="filled"
-                    type="date" 
-                    label="Date of the event"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.date}
-                    name="date"
-                    error={!!touched.date && !!errors.date}
-                    helperText={touched.date && errors.date}
-                    sx={{ gridColumn: "span 4" }}
-                    />
+
                 </Box>
                 <Box display="flex" justifyContent="end" mt="20px">
                   <Button

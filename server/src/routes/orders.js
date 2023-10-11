@@ -11,13 +11,19 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const orderData = req.body;
-  const { orderOwner  } = orderData; 
+  const { orderOwner, name  } = orderData; 
  
   try {
     const user = await UserModel.findOne({ email: orderOwner });
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
+    }
+
+    const existingOrder = await OrderModel.findOne({ name });
+
+    if (existingOrder) {
+      return res.status(400).json({ error: "Order name already in use." });
     }
 
     const order = new OrderModel(req.body);

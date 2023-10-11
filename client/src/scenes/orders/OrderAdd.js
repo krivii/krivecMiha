@@ -10,6 +10,7 @@ const OrderAdd = () => {
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
+    const [users, setUsers] = useState([]);
 
     const notifySuccess = () => {
         toast.success('Order added!', {
@@ -38,8 +39,7 @@ const OrderAdd = () => {
       }
 
 
-      const handleFormSubmit = (values,  { resetForm }) => {
-
+      const handleFormSubmit = (values, { resetForm }) => {
         fetch("http://localhost:3001/api/admin/order", {
           method: "POST",
           headers: {
@@ -47,24 +47,29 @@ const OrderAdd = () => {
           },
           body: JSON.stringify(values),
         })
-          .then((response) => {
+          .then(async (response) => {
             if (response.status === 200) {
-                resetForm();
+              resetForm();
               notifySuccess();
               return response.json();
-            } else {
-              
-              return response.json().then((data) => {
+            } 
+            else {
+              const data = await response.json();
+              if (response.status === 400) {
+                toast.error('Order with the same name already exists.');
+              } else {
                 notifyError(data.error);
-              });
+              }
+              return data;
             }
           })
           .catch((error) => {
-            console.error("Error :", error);
+            console.error("Error: ", error);
           });
       };
+      
 
-      const [users, setUsers] = useState([]);
+
 
       useEffect(() => {
 

@@ -20,17 +20,22 @@ const OrderList = () => {
         page: 0,
       });
 
-    useEffect(() => {
+      useEffect(() => {
         fetch(`http://localhost:3001/api/admin/order/`)
           .then((response) => response.json())
           .then((data) => {
-
-            console.log(data)
-            setUserRows(data); })
+            
+            data.sort((a, b) => {
+              const statusOrder = { active: 0, pending: 1, completed: 2 };
+              return statusOrder[a.status] - statusOrder[b.status];
+            });
+            setUserRows(data);
+          })
           .catch((error) => {
             console.error('Error fetching user data:', error);
           });
       }, []);
+      
       
   const columns = [
     {
