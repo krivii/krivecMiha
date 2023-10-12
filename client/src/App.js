@@ -29,6 +29,7 @@ import OrderPhotoList from "./scenes/cphotos/OrderPhotoList";
 import CategoryAdd from "./scenes/categories/CategoryAdd";
 import CategoryList from "./scenes/categories/CategoryList";
 import CategoryEdit from "./scenes/categories/CategoryEdit";
+import CategoryImageList from "./scenes/categories/CategoryImageList";
 
 
 
@@ -97,6 +98,7 @@ function AdminComponent() {
             <Route path="/categories" element={<CategoryList />} />
             <Route path="/categories/add" element={<CategoryAdd />} />
             <Route path="/categories/edit/:categoryId" element={<CategoryEdit />} />
+            <Route path="/categories/images/:categoryId" element={<CategoryImageList />} />
             
           </Routes>
         </main>

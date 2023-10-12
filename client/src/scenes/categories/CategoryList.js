@@ -64,7 +64,7 @@ const CategoryList = () => {
           headerName: 'Images',
           flex: 0.5,
           renderCell: (params) => (
-            <Link to={`/admin/cphotos/${params.row._id}`}>
+            <Link to={`/admin/categories/images/${params.row._id}`}>
               <Button
                 variant="contained"
                 color="primary"

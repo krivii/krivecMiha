@@ -136,6 +136,73 @@ router.put("/:categoryId", upload.array('images', 50), async (req, res) => {
   }
 });
 
+router.put("/changeCover/:categoryId", upload.array('images', 50), async (req, res) => {
+  const categoryId = req.params.categoryId;
+  const newCover = req.body.newCover;
+
+  try {
+    const existingCategory = await CategoryModel.findById(categoryId);
+
+    if (!existingCategory) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    existingCategory.cover = newCover; // Update the cover image
+
+    // Save the updated category
+    const updatedCategory = await existingCategory.save();
+
+    res.status(200).json({ message: "Cover updated successfully", updatedCategory });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.put("/imageEdit/:categoryId", async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const imagesToDelete = req.body.images;
+
+    const categoryToEdit = await CategoryModel.findById(categoryId);
+
+    if (!categoryToEdit) {
+      return res.status(404).json({ message: "category not found" });
+    }
+    const cover = categoryToEdit.cover;
+
+    if (imagesToDelete.includes(cover)) {
+      return res.status(403).json({ message: "Cannot delete the cover image" });
+    }
+
+    categoryToEdit.photos = categoryToEdit.photos.filter(
+      (image) => !imagesToDelete.includes(image)
+    );
+
+    imagesToDelete.map(async (image) => {
+      try {
+
+        await deletePath(image);
+        return;
+      } catch (error) {
+        if (error.code === 'EPERM') {
+          console.log(error)
+          return res.status(200);
+        } else {
+          console.error(`Error deleting image ${image}:`, error);
+          return { status: 500, message: "Internal Server Error" };
+        } 
+      }
+    });
+
+    await categoryToEdit.save();
+    res.status(200).json({ message: "Category updated successfully", categoryToEdit });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 
 router.delete("/:categoryId", async (req, res) => {
@@ -197,6 +264,12 @@ const deletePath = async (imagePath) => {
     throw error; 
   }
 };
+
+
+
+
+
+
 
 
 
