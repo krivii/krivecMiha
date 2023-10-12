@@ -1,67 +1,87 @@
 import { PromoPhotoModel } from "../models/PromoPhotos.js";
 import { CategoryModel } from "../models/Categories.js";
 import multer from 'multer';
-
-// Your code here...
-
-
 import  express  from "express";
-
+import path from 'path'; 
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import dotenv from 'dotenv';
 
 const router = express.Router()
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const orderId = req.body.order; // Assuming the order ID is included in the request body
-    const uploadPath = path.join(__dirname, `../uploads/images/orderid=${orderId}`);
-    cb(null, uploadPath); // Set the upload directory based on the order ID
+
+    const uploadPath = path.join(process.env.SRC_PATH,`/uploads/images/pagesImage`);
+    ensureDirectoryExists(uploadPath); 
+    cb(null, uploadPath); 
   },
   filename: (req, file, cb) => {
-    // Use the original filename (you can modify this as needed)
     cb(null, file.originalname);
   },
 });
 
+const ensureDirectoryExists = (directory) => {
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+};
+
 const upload = multer({ storage });
 
-router.post('/', upload.array('photos', 100), async (req, res) => {
-  const photosData = req.body;
-  const { category: categoryId } = photosData;
-
+router.put("/:photoId", upload.single('photo'), async (req, res) => {
   try {
-    if (!categoryId) {
-      return res.status(400).json({ error: 'Category ID is missing.' });
+    const photoId = req.params.photoId;
+    const newPath = req.file.path.replace(/\\/g, '/').split('uploads/')[1];
+
+    // Find the old path to delete it
+    const oldPhoto = await PromoPhotoModel.findById(photoId);
+    if (!oldPhoto) {
+      return res.status(404).json({ message: "Photo not found" });
     }
 
-    // Find the category by ID (assuming you have a Category model)
-    const foundCategory = await CategoryModel.findById(categoryId);
+    const oldPath = oldPhoto.path;
 
-    if (!foundCategory) {
-      return res.status(404).json({ error: 'Category not found.' });
+    // Update the photo's path in the database
+    const updatedPhoto = await PromoPhotoModel.findByIdAndUpdate(
+      photoId,
+      { path: newPath },
+      { new: true }
+    );
+
+    if (!updatedPhoto) {
+      return res.status(404).json({ message: "Photo not found" });
     }
 
-    // Create and save a new PromoPhoto document (assuming you have a PromoPhoto model)
-    const photo = new PromoPhotoModel({
-      ...photosData,
-      path: req.files.map((file) => file.path), // Store file paths in the database
-    });
+    res.status(200).json({ message: "Photo path updated successfully", updatedPhoto });
 
-    await photo.save();
-
-    // Add the photo to the category's photos array
-    foundCategory.photos.push(photo._id);
-
-    await foundCategory.save();
-
-    res.status(200).json(photo);
+    // Delete the old path
+    await deletePath(oldPath);
   } catch (error) {
-    console.error('Error uploading photos:', error);
-    res.status(500).json({ error: 'Internal server error.' });
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 
+
+
+router.post("/", async (req, res) => {
+  try { 
+      const promoPhoto = new PromoPhotoModel(req.body);
+      await promoPhoto.save();
+      res.status(200).json(promoPhoto);
+
+  } catch (error) {
+      res.status(500).json({ error: "Internal server error." });
+  }
+});
 
 
 router.get("/", async (req, res) => {
@@ -94,46 +114,9 @@ router.get("/", async (req, res) => {
   });
   
   
-  router.put("/:photoId", async (req, res) => {
-  try {
-    const photoId = req.params.photoId;
-    const updates = req.body; 
-
-    const existingPhoto = await PromoPhotoModel.findById(photoId);
-
-    if ('category' in updates) {
-
-        const oldCatId = existingPhoto.category;
-        const newCatId = updates.category;
-
-        const oldCat = await CategoryModel.findById(oldCatId);
-        if (oldCat) {
-         
-            oldCat.photos = oldCat.photos.filter((p) => p.toString() !== photoId);
-          await oldCat.save();
-        }
-
-        const newCat = await CategoryModel.findById(newCatId);
-        if (!newCat) {
-          return res.status(404).json({ message: "New category not found" });
-        }
-
-        newCat.photos.push(photoId);
-        await newCat.save();
-      }
   
-    const updatedPhoto = await PromoPhotoModel.findByIdAndUpdate(photoId, updates, { new: true });
-  
-    if (!updatedPhoto) {
-      return res.status(404).json({ message: "photo not found" });
-    }
-  
-    res.status(200).json({ message: "photo updated successfully", updatedPhoto });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-  });
+
+
   
   router.delete("/:photoId", async (req, res) => {
   try {
@@ -162,5 +145,32 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
   });
+
+  const deletePath = async (imagePath) => {
+    try {
+      const filePath = path.join(process.env.SRC_PATH, "/uploads/", imagePath);
+  
+      await fs.promises.unlink(filePath);
+  
+      const dirPath = path.dirname(filePath);
+      const files = await fs.promises.readdir(dirPath);
+  
+      if (files.length === 0) {
+        await fs.promises.rmdir(dirPath);
+      }
+  
+      return { message: "Path deleted successfully", imagePath };
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        // File doesn't exist, but we can continue.
+        return { message: "Path doesn't exist or has already been deleted", imagePath };
+      } else {
+        // Handle other errors.
+        console.error("Error deleting path:", error);
+        throw error;
+      }
+    }
+  };
+  
   
 export {router as PromoPhotoRouter};

@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
@@ -19,6 +17,8 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CategoryIcon from '@mui/icons-material/Category';
 import AddHomeIcon from '@mui/icons-material/AddHome';
+import PhotoIcon from '@mui/icons-material/Photo';
+import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -137,6 +137,21 @@ const Sidebar = () => {
                         title="Add category"
                         to="/admin/categories/add"
                         icon={<AddHomeIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                        />
+                        <hr style={{ margin: "5px 20px" }} />
+                        <Item
+                        title="Page images"
+                        to="/admin/pphotos"
+                        icon={<PhotoIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                        />
+                        <Item
+                        title="Videos"
+                        to="/admin/videos"
+                        icon={<VideoCameraBackIcon />}
                         selected={selected}
                         setSelected={setSelected}
                         />

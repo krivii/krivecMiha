@@ -30,6 +30,9 @@ import CategoryAdd from "./scenes/categories/CategoryAdd";
 import CategoryList from "./scenes/categories/CategoryList";
 import CategoryEdit from "./scenes/categories/CategoryEdit";
 import CategoryImageList from "./scenes/categories/CategoryImageList";
+import ImageList from "./scenes/pageElements/ImageList";
+import VideoAdd from "./scenes/categories/VideoAdd";
+import VideoList from "./scenes/categories/VideoList";
 
 
 
@@ -99,6 +102,9 @@ function AdminComponent() {
             <Route path="/categories/add" element={<CategoryAdd />} />
             <Route path="/categories/edit/:categoryId" element={<CategoryEdit />} />
             <Route path="/categories/images/:categoryId" element={<CategoryImageList />} />
+            <Route path="/pphotos" element={<ImageList />} />
+            <Route path="/videos" element={<VideoList />} />
+            <Route path="/videos/add" element={<VideoAdd />} />
             
           </Routes>
         </main>
