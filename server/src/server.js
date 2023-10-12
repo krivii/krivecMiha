@@ -17,6 +17,7 @@ import { authorization} from "./middleware/authorization.js";
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { FaqRouter } from "./routes/faqs.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -48,6 +49,7 @@ app.use("/api/admin/cphoto", customerPhotoRouter);
 app.use("/api/admin/category", categoryRouter);
 app.use("/api/admin/pphoto",  PromoPhotoRouter);
 app.use("/api/admin/video",VideoRouter);
+app.use("/api/admin/faq", FaqRouter);
 // app.use(authorization);
 
 // // Middleware to check if the user is an admin

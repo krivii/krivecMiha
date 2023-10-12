@@ -1,38 +1,36 @@
-import { Box, IconButton, useTheme } from "@mui/material";
-
-import InputBase from "@mui/material/InputBase";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchIcon from "@mui/icons-material/Search";
+import React from 'react';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const Topbar = () => {
-    return (
-        <Box display="flex" justifyContent="space-between" p={2}>
-            <Box
-                display="flex"
-                backgroundColor="red"
-                borderRadius="3px"
-            >
-                <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-                <IconButton type="button" sx={{ p: 1 }}>
-                <SearchIcon />
-                </IconButton>
-            </Box>
-            <Box display="flex">
-                <IconButton>
-                    <NotificationsOutlinedIcon />
-                </IconButton>
-                <IconButton>
-                    <SettingsOutlinedIcon />
-                </IconButton>
-                <IconButton>
-                    <PersonOutlinedIcon />
-                </IconButton>
-            </Box>            
-        </Box>
-        
-    );
-}
+    const handleReload = () => {
+      window.location.reload(); 
+    };
 
-export default Topbar;
+    const signOut = () => {
+        console.log("signout");
+    }
+  
+    return (
+      <Box p={1} display="flex" justifyContent="flex-end">
+        <Tooltip title="Reload">
+          <IconButton onClick={handleReload}>
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Logout">
+          <IconButton onClick={handleReload}>
+            <ExitToAppIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    );
+  };
+  
+  export default Topbar;

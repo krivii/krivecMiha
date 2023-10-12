@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
@@ -26,14 +22,15 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
+                overflowY: "hidden",
                 "& .pro-sidebar-inner": {
-                background: "Yellow !important",
+                background: "Yellow !important"
                 },
                 "& .pro-icon-wrapper": {
                 backgroundColor: "transparent !important",
                 },
                 "& .pro-inner-item": {
-                padding: "5px 35px 5px 20px !important",
+                padding: "1px 35px 1px 20px !important",
                 },
                 "& .pro-inner-item:hover": {
                 color: "#868dfb !important",
@@ -48,11 +45,11 @@ const Sidebar = () => {
                 <Box
                 textAlign="center"
                 sx={{
-                    m: "10px  20px ", // Added a bottom margin of 20px
-                    border: "2px solid #ccc", // Added a border with a light gray color
-                    padding: "20px", // Added some padding for spacing
-                    borderRadius: "8px", // Added rounded corners for a modern look
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Added a box shadow for depth
+                    m: "10px  20px ", 
+                    border: "2px solid #ccc", 
+                    padding: "10px", 
+                    borderRadius: "8px", 
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", 
                 }}
                 >
                 <Typography
@@ -95,7 +92,7 @@ const Sidebar = () => {
                         selected={selected}
                         setSelected={setSelected}
                         />
-                        <hr style={{ margin: "5px 20px" }} />
+                        <hr style={{ margin: "5px  50px  5px 10px" }} />
                         <Item
                         title="Orders"
                         to="/admin/orders"
@@ -140,7 +137,21 @@ const Sidebar = () => {
                         selected={selected}
                         setSelected={setSelected}
                         />
-                        <hr style={{ margin: "5px 20px" }} />
+                        <Item
+                        title="Videos"
+                        to="/admin/videos"
+                        icon={<VideoCameraBackIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                        />
+                        <Typography
+                        variant="h6"
+                        color="grey"
+                        sx={{ m: "15px 0 5px 20px" }}
+                        >
+                        Static pages
+                        </Typography>
+
                         <Item
                         title="Page images"
                         to="/admin/pphotos"
@@ -149,55 +160,12 @@ const Sidebar = () => {
                         setSelected={setSelected}
                         />
                         <Item
-                        title="Videos"
-                        to="/admin/videos"
-                        icon={<VideoCameraBackIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                        />
-                        <Item
-                        title="FAQ Page"
-                        to="/faq"
+                        title="FAQs"
+                        to="/admin/faq"
                         icon={<HelpOutlineOutlinedIcon />}
                         selected={selected}
                         setSelected={setSelected}
-                        />
-
-                        <Typography
-                        // variant="h6"
-                        color="grey"
-                        sx={{ m: "15px 0 5px 20px" }}
-                        >
-                        Charts
-                        </Typography>
-                        <Item
-                        title="Bar Chart"
-                        to="/bar"
-                        icon={<BarChartOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                        />
-                        <Item
-                        title="Pie Chart"
-                        to="/pie"
-                        icon={<PieChartOutlineOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                        />
-                        <Item
-                        title="Line Chart"
-                        to="/line"
-                        icon={<TimelineOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                        />
-                        <Item
-                        title="Geography Chart"
-                        to="/geography"
-                        icon={<MapOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                        />
+                        />                        
                     </Box>
                 </Menu>
             </ProSidebar>

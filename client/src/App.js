@@ -33,6 +33,7 @@ import CategoryImageList from "./scenes/categories/CategoryImageList";
 import ImageList from "./scenes/pageElements/ImageList";
 import VideoAdd from "./scenes/categories/VideoAdd";
 import VideoList from "./scenes/categories/VideoList";
+import FAQAdmin from "./scenes/faq/FaqList";
 
 
 
@@ -105,6 +106,8 @@ function AdminComponent() {
             <Route path="/pphotos" element={<ImageList />} />
             <Route path="/videos" element={<VideoList />} />
             <Route path="/videos/add" element={<VideoAdd />} />
+            <Route path="/faq" element={<FAQAdmin />} />
+
             
           </Routes>
         </main>
