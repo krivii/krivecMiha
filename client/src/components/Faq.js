@@ -1,43 +1,37 @@
-import React, { useState} from "react";
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from "framer-motion";
 
 
 
 const FaqSection = () => {
+  const [faqData, setFAQData] = useState([]);
 
-    return (
+  useEffect(() => {
+    fetch(`http://localhost:3001/api/admin/faq/`)
+      .then((response) => response.json())
+      .then((data) => {           
+        setFAQData(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+      });
+  }, []);
 
-        <StyledFaq >                     
-            <h2>Any Questions <span>FAQ</span> </h2>
-            <layout>
-                <Toggle title="Where are you positioned">
-                    <div className="answers">
-                        <p>Lorem ipsum dolor sit amet.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
-                    </div>
-                </Toggle>
-                <Toggle title="What products do you offer">
-                    <div className="answers">
-                        <p>Lorem ipsum dolor sit amet.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
-                    </div>
-                </Toggle>
-                <Toggle title="What is your pricing">
-                    <div className="answers">
-                        <p>Lorem ipsum dolor sit amet.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
-                    </div>
-                </Toggle>
-                <Toggle title="What is your availability">
-                    <div className="answers">
-                        <p>Lorem ipsum dolor sit amet.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corrupti!</p>
-                    </div>
-                </Toggle>
-            </layout>
-        </StyledFaq>
-    )
+  return (
+    <StyledFaq >                     
+      <h2>Any Questions <span>FAQ</span> </h2>
+      <layout>
+        {faqData.map((item, index) => (
+          <Toggle key={index} title={item.question}>
+            <div className="answers">
+              <p>{item.answer}</p>
+            </div>
+          </Toggle>
+        ))}
+      </layout>
+    </StyledFaq>
+  )
 }
 
 const Toggle = ({ children, title }) => {

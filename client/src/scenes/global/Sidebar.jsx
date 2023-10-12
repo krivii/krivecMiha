@@ -22,7 +22,7 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
-                overflowY: "hidden",
+
                 "& .pro-sidebar-inner": {
                 background: "Yellow !important"
                 },
