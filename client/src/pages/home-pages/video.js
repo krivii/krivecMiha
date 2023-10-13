@@ -69,7 +69,7 @@ const StyledCategory = styled(motion.div)`
 
   .line {
     height: 0.5rem;
-    background: #800080;
+    background: #A17800;
     margin-bottom: 3rem;
   }
 

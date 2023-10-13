@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
@@ -8,12 +8,34 @@ import { pageAnimation, fadeAnim, photoAnim, lineAnim, sliderAnim,sliderContaine
 
 const CategoryGallery = () => {
     const { categoryId } = useParams();
-    const selectedCategory = categoryData.find(category => category.categoryId === parseInt(categoryId, 10));
-
-
+   
     useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
+
+      const [category, setCategory] = useState([]);
+
+
+
+    useEffect(() => {
+        console.log("TETE SEM")
+        fetch(`http://localhost:3001/api/admin/category/${categoryId}`)
+            .then((response) => response.json())
+            .then((data) => {           
+            setCategory(data.category);
+           
+            })
+            .catch((error) => {
+            console.error('Error fetching user data:', error);
+            });
+    }, []);
+
+    
+
+    if (category.length === 0 ) {
+
+        return <div>Loading...</div>;
+      }
 
     return (
         <StyledWork 
@@ -31,54 +53,31 @@ const CategoryGallery = () => {
 
             </motion.div>
             <StyledCategory>
-        <motion.h2 variants={fadeAnim}>{selectedCategory.categoryName}</motion.h2>
+        <motion.h2 variants={fadeAnim}>{category.name}</motion.h2>
         <StyledHide>
           <motion.img 
             variants={photoAnim} 
-            src={selectedCategory.imagePath} 
-            alt={selectedCategory.categoryName}
+            src={"http://localhost:3001/" + category.cover} 
+            alt={category.name}
           />
         </StyledHide>
       </StyledCategory>
-            <h4>{selectedCategory.description}</h4>
+            <h4>{category.description}</h4>
             <motion.div className="line"></motion.div>
-            {categoryData.map((category) => (
-                <StyledImage>
-                    <img src={category.imagePath} 
-                    alt={category.categoryName} />
-                </StyledImage>
+            {category.photos.map((photo) => (
+                photo === category.cover ? null : (
+                    <StyledImage key={photo}>
+                    <img src={"http://localhost:3001/" + photo} alt={photo} />
+                    </StyledImage>
+                )
             ))}
         </StyledWork> 
 
     )
 }
 
-const categoryData = [
-    {
-      categoryName: "Cars",
-      categoryId: 1,
-      imagePath: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1883&q=80",
-      description: "Explore the world of fast cars and luxury vehicles."
-    },
-    {
-      categoryName: "Love",
-      categoryId: 2,
-      imagePath: "https://plus.unsplash.com/premium_photo-1671616724629-c2fa8455c28f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
-      description: "Capture the essence of love and affection in these images."
-    },
-    {
-        categoryName: "Animals",
-        categoryId: 3,
-        imagePath: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
-        description: "Witness the beauty and diversity of animals from around the world."
-    },
-    {
-        categoryName: "Sun",
-        categoryId: 4,
-        imagePath: "https://images.unsplash.com/photo-1549849171-09f62448709e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Chase the sun and capture its warm and vibrant moments."
-    },
-];
+
+
 
 
   const StyledImage = styled.div`
@@ -112,6 +111,11 @@ const categoryData = [
         margin: 0;
         padding: 2rem 1.5rem;
         color: white;
+        padding: 10% 30% 10% 10%;
+
+        @media (max-width: 1300px) {
+        padding: 10%;
+    }
     }
 
     .line {

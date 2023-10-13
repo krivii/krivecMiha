@@ -54,7 +54,7 @@ const OurWork = () => {
 
             <StyledMedia>
                 <motion.h2 variants={fadeAnim}>Photographs</motion.h2>
-                <motion.div variants={lineAnim} className="line"></motion.div>
+                <motion.div variants={lineAnim} className="lineP"></motion.div>
                 <Link to="/work/photo">
                     <StyledHide>
                         <motion.img 
@@ -67,7 +67,7 @@ const OurWork = () => {
             </StyledMedia>
             <StyledMedia>
                 <motion.h2 variants={fadeAnim}>Videos</motion.h2>
-                <motion.div variants={lineAnim} className="line"></motion.div>
+                <motion.div variants={lineAnim} className="lineV"></motion.div>
                 <Link to="/work/video">
                 <StyledHide>
                         <motion.img 
@@ -105,12 +105,17 @@ const StyledMedia = styled(motion.div)`
     padding: 0rem 3rem; 
 
 
-    .line {
+    .lineP {
         height: 0.5rem;
         background: #800080;
         margin-bottom: 3rem;
     }
-
+    .lineV {
+        height: 0.5rem;
+        background: #A17800;
+        margin-bottom: 3rem;
+    }
+    
     img {
         width: 100%;
         height: 50vh;
