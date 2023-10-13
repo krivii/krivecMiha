@@ -48,7 +48,7 @@ app.use("/api/admin/order",  orderRouter);
 app.use("/api/admin/cphoto", customerPhotoRouter);
 app.use("/api/admin/category", categoryRouter);
 app.use("/api/admin/pphoto",  PromoPhotoRouter);
-app.use("/api/admin/video",VideoRouter);
+app.use("/api/admin/video", VideoRouter);
 app.use("/api/admin/faq", FaqRouter);
 // app.use(authorization);
 
