@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import Wave from "./Wave";
 import styled from 'styled-components';
 
@@ -6,6 +6,20 @@ import { motion } from "framer-motion";
 import { titleAnim, fadeAnim, photoAnim } from "../animation";
 
 const AboutSection = () => {
+
+const [aboutImage, setAboutImage] = useState([]);
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/admin/pphoto/About`)
+            .then((response) => response.json())
+            .then((data) => {           
+            setAboutImage(data);
+            })
+            .catch((error) => {
+            console.error('Error fetching user data:', error);
+            });
+    }, []);
+
 
     return (
         
@@ -41,8 +55,8 @@ const AboutSection = () => {
             <StyledImage>
                 <motion.img 
                     variants={photoAnim} 
-                    src={"https://www.researchgate.net/profile/Paul-Rodriguez-5/publication/265988128/figure/fig1/AS:459614656438273@1486592081799/Input-test-images-a-Cameraman-grayscale-b-grayscale-Lena-and-c-color-Lena-All.png"} 
-                    alt="The guy with cammera"
+                    src={aboutImage.path} 
+                    alt={aboutImage.name}
                 />
             </StyledImage>
                <Wave />

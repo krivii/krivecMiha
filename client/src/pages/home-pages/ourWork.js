@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
@@ -9,6 +9,31 @@ import { pageAnimation, fadeAnim, photoAnim, lineAnim, sliderAnim,sliderContaine
 
 
 const OurWork = () => { 
+    const [photoImage, setPhotoImage] = useState([]);
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/admin/pphoto/Photographs`)
+            .then((response) => response.json())
+            .then((data) => {           
+            setPhotoImage(data);
+            })
+            .catch((error) => {
+            console.error('Error fetching user data:', error);
+            });
+    }, []);
+
+    const [videoImage, setVideoImage] = useState([]);
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/admin/pphoto/Videos`)
+            .then((response) => response.json())
+            .then((data) => {           
+            setVideoImage(data);
+            })
+            .catch((error) => {
+            console.error('Error fetching user data:', error);
+            });
+    }, []);
 
     return (
 
@@ -34,8 +59,8 @@ const OurWork = () => {
                     <StyledHide>
                         <motion.img 
                             variants={photoAnim} 
-                            src={"https://cdn.pixabay.com/photo/2023/07/14/10/30/de-havilland-tiger-moth-8126721_1280.jpg"} 
-                            alt="Photos"
+                            src={photoImage.path}
+                            alt={photoImage.name}
                         />
                     </StyledHide>
                 </Link>
@@ -47,8 +72,8 @@ const OurWork = () => {
                 <StyledHide>
                         <motion.img 
                             variants={photoAnim} 
-                            src={"https://cdn.pixabay.com/photo/2022/11/09/14/22/youtube-icon-7580719_1280.jpg"} 
-                            alt="Videos"
+                            src={videoImage.path}
+                            alt={videoImage.name}
                         />
                     </StyledHide>
                 </Link>

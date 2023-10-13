@@ -93,6 +93,19 @@ router.get("/", async (req, res) => {
     }
   });
   
+router.get("/:name", async (req, res) => {
+  const name = req.params.name;
+  try {
+      const response = await PromoPhotoModel.findOne({ name: name });
+      if (response) {
+          res.status(200).json(response);
+      } else {
+          res.status(404).json({ message: "Document not found" });
+      }
+  } catch (error) {
+      res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+});
  
   
   router.get("/:photoId", async (req, res) => {
