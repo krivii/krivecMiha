@@ -62,7 +62,7 @@ const ImageList = () => {
           {photoRows.map((row) => (
             <Grid item key={row._id} xs={12} sm={12} md={6} lg={6} xl={4}>
               <Card style={{ width: '300px', height: '85%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', margin: '10px' }}>
-                <CardContent style={{ background: 'yellow', height: '60px' }}>
+                <CardContent style={{  background: '#800080', color: "white" , height: '60px' }}>
                   <Box
                     style={{
                       display: 'flex',

@@ -24,7 +24,7 @@ const Sidebar = () => {
             sx={{
 
                 "& .pro-sidebar-inner": {
-                background: "Yellow !important"
+                background: "#800080  !important"
                 },
                 "& .pro-icon-wrapper": {
                 backgroundColor: "transparent !important",
@@ -33,10 +33,10 @@ const Sidebar = () => {
                 padding: "1px 35px 1px 20px !important",
                 },
                 "& .pro-inner-item:hover": {
-                color: "#868dfb !important",
+                color: "#AAAAAA  !important",
                 },
                 "& .pro-menu-item.active": {
-                color: "#6870fa !important",
+                color: "#AAAAAA  !important",
                 },
             }}
         >
@@ -53,13 +53,13 @@ const Sidebar = () => {
                 }}
                 >
                 <Typography
-                    color="grey"
+                    color="#FFFFFF"
                     fontWeight="bold"
                     sx={{ m: "10px 0 0 0" }}
                 >
                     Miha Zamorski
                 </Typography>
-                <Typography color="green">Admin</Typography>
+                <Typography  color="#FBF014">Admin</Typography>
                 </Box>
                    
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
@@ -73,7 +73,8 @@ const Sidebar = () => {
 
                         <Typography
                         variant="h6"
-                        color="grey"
+                        fontWeight="bold"
+                        color="#FFFFFF"
                         sx={{ m: "15px 0 5px 20px" }}
                         >
                         Clients
@@ -118,7 +119,8 @@ const Sidebar = () => {
 
                         <Typography
                         variant="h6"
-                        color="grey"
+                        fontWeight="bold"
+                        color="#FFFFFF"
                         sx={{ m: "15px 0 5px 20px" }}
                         >
                         Views
@@ -146,7 +148,8 @@ const Sidebar = () => {
                         />
                         <Typography
                         variant="h6"
-                        color="grey"
+                        fontWeight="bold"
+                        color="#FFFFFF"
                         sx={{ m: "15px 0 5px 20px" }}
                         >
                         Static pages
@@ -179,7 +182,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       <MenuItem
         active={selected === title}
         style={{
-          color: "grey",
+          color: "#FFFFFF",
         }}
         onClick={() => setSelected(title)}
         icon={icon}

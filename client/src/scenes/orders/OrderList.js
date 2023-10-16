@@ -9,15 +9,13 @@ import { useParams } from "react-router-dom";
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import CheckIcon from '@mui/icons-material/Check';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import EditIcon from '@mui/icons-material/Edit';
 
 
 const OrderList = () => {
   
     const [userRows, setUserRows] = useState([]);
-    const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: 10,
-        page: 0,
-      });
+
 
       useEffect(() => {
         fetch(`http://localhost:3001/api/admin/order/`)
@@ -40,7 +38,7 @@ const OrderList = () => {
     {
       field: '_id',
       headerName: 'ID',
-      flex: 0.5, 
+      flex: 1, 
       
     },
     {
@@ -51,24 +49,23 @@ const OrderList = () => {
           return (
             <Box
               width="60%"
-              m="0 auto"
-              p="10px"
+              m="20px"
+              p="5px"
               display="flex"
               justifyContent="center"
               backgroundColor={
                 status === "pending"
-                  ? "yellow"
+                  ? "#EADF91"
                   : status === "active"
-                  ? "green"
-                  : "grey"
+                  ? "#D2EBD3"
+                  : "#F5D0CD"
               }
-              borderRadius="4px"
-             
+              borderRadius="25px"             
             >
               {status === "pending" && <AutorenewIcon />}
               {status === "active" && <NotificationsIcon />}
               {status === "completed" && <CheckIcon />}
-              <Typography color="white" sx={{ ml: "1px" }}>
+              <Typography color="black" sx={{ ml: "1px" }}>
                 {status}
               </Typography>
             </Box>
@@ -98,9 +95,9 @@ const OrderList = () => {
               color="primary" 
               sx={{
                 textTransform: 'lowercase', 
-                backgroundColor: '#333', 
+                backgroundColor: '#800080', 
                 '&:hover': {
-                  backgroundColor: '#444', 
+                  backgroundColor: 'black', 
                 },
               }}
             >
@@ -130,7 +127,8 @@ const OrderList = () => {
         flex: 0.5,
         renderCell: (params) => (
           <Link to={`/admin/orders/edit/${params.row._id}`}>            
-            <Button variant="contained" color="primary">Edit</Button>
+
+                  <EditIcon sx={{ color: '#800080' }} />
           </Link>
         ),
       },
@@ -143,40 +141,41 @@ const OrderList = () => {
       
       <Box 
         m="20px 0 0 0"
-        height="70vh"
+        height="100%"
         sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              
-            },
-            "& .name-column--cell": {
-              color: "green",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "blue",
-              borderBottom: "none",
-            },
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            
+          },
+          "& .name-column--cell": {
+            color: "#800080 ",
+            fontWeight: "bold",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "transparent",
+            color: "#AAAAAA ",     
 
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: "blue",
+          },
+
+          "& .MuiDataGrid-footerContainer": {   
+            backgroundColor: "transparent",
+            color: "#AAAAAA ",  
+          },
+          "& .MuiCheckbox-root": {
+            color: `green !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `black !important`,
             },
-            "& .MuiCheckbox-root": {
-              color: `green !important`,
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `black !important`,
-              },
-          }}
+        }}
       >
       <DataGrid
             rows={userRows}
             columns={columns}
             getRowId={(row) => row._id}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
+
             components={{ Toolbar: GridToolbar }}
             
 

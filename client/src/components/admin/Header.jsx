@@ -10,7 +10,7 @@ const Header = ({ title, subtitle, buttonLabel, buttonLink }) => {
         <Typography variant="h5" color="grey" fontWeight="bold" sx={{ m: "0 0 5px 0" }}>
           {title}
         </Typography>
-        <Typography variant="h8" color="green">
+        <Typography variant="h8" color="#800080">
           {subtitle}
         </Typography>
       </Box>
@@ -27,7 +27,7 @@ const Header = ({ title, subtitle, buttonLabel, buttonLink }) => {
                   fontSize: "18px", 
                 },
                 "&:hover": {
-                  backgroundColor: "#4CAF50", 
+                  backgroundColor: "#4cb54f", 
                 },
               }}
             >

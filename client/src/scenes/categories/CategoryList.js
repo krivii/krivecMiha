@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../components/admin/Header';
 import { Box, Typography, Button  } from '@mui/material';
 import { DataGrid, GridToolbar  } from '@mui/x-data-grid';
-import { format } from 'date-fns';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,10 +14,7 @@ const CategoryList = () => {
 
 
     const [userRows, setUserRows] = useState([]);
-    const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: 10,
-        page: 0,
-      });
+
 
       useEffect(() => {
         fetch(`http://localhost:3001/api/admin/category/`)
@@ -55,11 +53,6 @@ const CategoryList = () => {
       
       const columns = [
         {
-          field: '_id',
-          headerName: 'ID',
-          flex: 0.3,
-        },
-        {
           field: 'photos',
           headerName: 'Images',
           flex: 0.5,
@@ -69,10 +62,10 @@ const CategoryList = () => {
                 variant="contained"
                 color="primary"
                 sx={{
-                  textTransform: 'lowercase',
-                  backgroundColor: '#333',
+                  textTransform: 'lowercase', 
+                  backgroundColor: '#800080', 
                   '&:hover': {
-                    backgroundColor: '#444',
+                    backgroundColor: 'black', 
                   },
                 }}
               >
@@ -82,6 +75,12 @@ const CategoryList = () => {
           ),
         },
         {
+          field: '_id',
+          headerName: 'ID',
+          flex: 1,
+        },
+       
+        {
           field: 'name',
           headerName: 'Name',
           flex: 1,
@@ -90,23 +89,22 @@ const CategoryList = () => {
         {
           field: 'description',
           headerName: 'Description',
-          flex: 1.5,
+          flex: 2,
         },
         {
-            flex: 0.7,
+            flex: 0.55,
+            headerName: 'Operations',
             renderCell: (params) => (
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                 <Link to={`/admin/categories/edit/${params.row._id}`}>
-                  <Button variant="contained" color="primary">
-                    Edit
-                  </Button>
+                  <EditIcon sx={{ color: '#800080', marginRight: '10px' }} />
                 </Link>
                 <Button
                   variant="contained"
                   color="error"
                   onClick={() => handleDeleteCategory(params.row._id)}
                 >
-                  Delete
+                  <DeleteOutlineIcon /> 
                 </Button>
               </div>
             ),
@@ -122,40 +120,41 @@ const CategoryList = () => {
       
       <Box 
         m="20px 0 0 0"
-        height="70vh"
+        height="100%"
         sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              
-            },
-            "& .name-column--cell": {
-              color: "green",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "blue",
-              borderBottom: "none",
-            },
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            
+          },
+          "& .name-column--cell": {
+            color: "#800080 ",
+            fontWeight: "bold",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "transparent",
+            color: "#AAAAAA ",     
 
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: "blue",
+          },
+
+          "& .MuiDataGrid-footerContainer": {   
+            backgroundColor: "transparent",
+            color: "#AAAAAA ",  
+          },
+          "& .MuiCheckbox-root": {
+            color: `green !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `black !important`,
             },
-            "& .MuiCheckbox-root": {
-              color: `green !important`,
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `black !important`,
-              },
-          }}
+        }}
       >
       <DataGrid
             rows={userRows}
             columns={columns}
             getRowId={(row) => row._id}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
+
             components={{ Toolbar: GridToolbar }}
             
 

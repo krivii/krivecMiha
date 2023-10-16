@@ -146,7 +146,7 @@ const CategoryImageList = () => {
                         image={`http://localhost:3001/${categoryCover}`}
                         alt={categoryCover}
                       />
-                     <CardContent style={{ background: 'yellow' }}>
+                     <CardContent style={{ background: '#800080', color: "white" }}>
                       <Box
                         style={{
                           display: 'flex',

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../components/admin/Header';
 import { Box, Typography, Button  } from '@mui/material';
 import { DataGrid, GridToolbar  } from '@mui/x-data-grid';
-import { format } from 'date-fns';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -54,29 +54,31 @@ const VideoList = () => {
         {
           field: '_id',
           headerName: 'ID',
-          flex: 0.5,
+          flex: 1,
         },
         {
           field: 'name',
           headerName: 'Name',
-          flex: 1,
+          flex: 2,
           cellClassName: 'name-column--cell',
         },
         {
           field: 'iframe',
-          headerName: 'Link',
-          flex: 1,
+          headerName: 'Source',
+
+          flex: 2,
         },
         {
-            flex: 0.7,
+            flex: 0.5,
+            field: 'Delete user',
             renderCell: (params) => (
               <div style={{ display: 'flex', gap: '8px' }}>
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => handleDeleteVideo(params.row._id)}
+                  onClick={() => handleDeleteCategory(params.row._id)}
                 >
-                  Delete
+                  <DeleteOutlineIcon /> 
                 </Button>
               </div>
             ),
@@ -92,33 +94,35 @@ const VideoList = () => {
       
       <Box 
         m="20px 0 0 0"
-        height="70vh"
+        height="100%"
         sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              
-            },
-            "& .name-column--cell": {
-              color: "green",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "blue",
-              borderBottom: "none",
-            },
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            
+          },
+          "& .name-column--cell": {
+            color: "#800080 ",
+            fontWeight: "bold",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "transparent",
+            color: "#AAAAAA ",     
 
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: "blue",
+          },
+
+          "& .MuiDataGrid-footerContainer": {   
+            backgroundColor: "transparent",
+            color: "#AAAAAA ",  
+          },
+          "& .MuiCheckbox-root": {
+            color: `green !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `black !important`,
             },
-            "& .MuiCheckbox-root": {
-              color: `green !important`,
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `black !important`,
-              },
-          }}
+        }}
       >
       <DataGrid
             rows={userRows}

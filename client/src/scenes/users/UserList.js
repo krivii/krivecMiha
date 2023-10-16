@@ -7,6 +7,7 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import { Link } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
 
 const UserList = () => {
     const [userRows, setUserRows] = useState([]);
@@ -31,7 +32,7 @@ const UserList = () => {
     {
       field: '_id',
       headerName: 'ID',
-      flex: 0.5, 
+      flex: 1, 
       
     },
     {
@@ -42,25 +43,26 @@ const UserList = () => {
           return (
             <Box
               width="60%"
-              m="0 auto"
-              p="10px"
+              m="20px"
+              p="5px"
+
               display="flex"
               justifyContent="center"
               backgroundColor={
                 role === "admin"
-                  ? "brown"
+                  ? "#E0CF5B"
                   : role === "manager"
-                  ? "green"
-                  : "green"
+                  ? "#B4F1CA"
+                  : "#B4F1CA"
               }
-              borderRadius="4px"
+              borderRadius="25px"
              
             >
               {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
               {role === "manager" && <SecurityOutlinedIcon />}
               {role === "customer" && <LockOpenOutlinedIcon />}
-              <Typography color="white" sx={{ ml: "1px" }}>
-                {role}
+              <Typography color="black" sx={{ ml: "1px" }}>
+                { role}
               </Typography>
             </Box>
           );
@@ -89,9 +91,9 @@ const UserList = () => {
               color="primary" 
               sx={{
                 textTransform: 'lowercase', 
-                backgroundColor: '#333', 
+                backgroundColor: '#800080', 
                 '&:hover': {
-                  backgroundColor: '#444', 
+                  backgroundColor: 'black', 
                 },
               }}
             >
@@ -117,7 +119,7 @@ const UserList = () => {
         flex: 0.5,
         renderCell: (params) => (
           <Link to={`/admin/users/edit/${params.row._id}`}>            
-            <Button variant="contained" color="primary">Edit</Button>
+                  <EditIcon sx={{ color: '#800080' }} />
           </Link>
         ),
       },
@@ -129,7 +131,7 @@ const UserList = () => {
       
       <Box 
         m="20px 0 0 0"
-        height="70vh"
+        height="100%"
         sx={{
             "& .MuiDataGrid-root": {
               border: "none",
@@ -138,16 +140,18 @@ const UserList = () => {
               
             },
             "& .name-column--cell": {
-              color: "green",
+              color: "#800080 ",
+              fontWeight: "bold",
             },
             "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "blue",
-              borderBottom: "none",
+              backgroundColor: "transparent",
+              color: "#AAAAAA ",     
+
             },
 
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: "blue",
+            "& .MuiDataGrid-footerContainer": {   
+              backgroundColor: "transparent",
+              color: "#AAAAAA ",  
             },
             "& .MuiCheckbox-root": {
               color: `green !important`,

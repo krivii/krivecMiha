@@ -8,7 +8,7 @@ import {
   Typography,
   IconButton,
   Input,
-  Button, // Add Button from Material-UI
+  Button, // Add Button from Material-UI 
 } from "@mui/material";
 import Header from "../../components/admin/Header";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -21,7 +21,7 @@ const FAQAdmin = () => {
   useEffect(() => {
     fetch(`http://localhost:3001/api/admin/faq/`)
       .then((response) => response.json())
-      .then((data) => {           
+      .then((data) => {
         setFAQData(data);
       })
       .catch((error) => {
@@ -66,7 +66,7 @@ const FAQAdmin = () => {
   };
 
   const addNewAccordion = () => {
-    const newId = Date.now(); 
+    const newId = Date.now();
     setFAQData([...faqData, { id: newId, ...newFAQItem }]);
     setNewFAQItem({
       question: "",
@@ -76,32 +76,32 @@ const FAQAdmin = () => {
 
   const handleSaveUpdates = async () => {
     const isInvalid = faqData.some((item) => !item.question || !item.answer);
-  
+
     if (isInvalid) {
       toast.error("Some FAQ items have empty questions or answers.");
     } else {
       try {
         const response = await fetch('http://localhost:3001/api/admin/faq', {
-          method: 'PUT', 
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(faqData), 
+          body: JSON.stringify(faqData),
         });
-  
+
         if (!response.ok) {
           throw new Error('Failed to update FAQ data');
         }
-  
+
         toast.success("Updates saved!");
       } catch (error) {
         console.error('Error updating FAQ data', error);
       }
     }
   };
-  
-       
-  
+
+
+
   return (
     <Box m="20px" display="flex" flexDirection="column">
       <Header title="FAQ manager" subtitle="Add, edit and delete Frequently Asked Questions" />
@@ -118,9 +118,9 @@ const FAQAdmin = () => {
             onClick={handleSaveUpdates}>
             Save Updates
         </Button>
-      </Box>
+</Box>
 
-  
+
       {faqData.map((item) => (
         <Accordion
             key={item.id}
@@ -145,7 +145,7 @@ const FAQAdmin = () => {
                 value={editedQuestion}
                 onChange={(e) => setEditedQuestion(e.target.value)}
                 autoFocus
-                sx={{
+sx={{
                     padding: "0 10px",
                     fontStyle: "oblique",
                     width: "40%", color: "white"                
@@ -174,7 +174,7 @@ const FAQAdmin = () => {
                 fullWidth
                 value={editedAnswer}
                 onChange={(e) => setEditedAnswer(e.target.value)}
-                style={{color: "white"}}
+style={{color: "white"}}
               />
             ) : (
               <Typography >{item.answer}</Typography>
@@ -188,9 +188,9 @@ const FAQAdmin = () => {
           <IconButton style={{ color: '#D30C04' }} onClick={() => deleteQuestion(item.id)}>Delete</IconButton>
         </Accordion>
       ))}
-  
-    
-    <label style={{color: "grey", fontSize: "20px", margin: "8px"}} htmlFor="">Add new FAQ</label>
+
+
+      <label style={{color: "grey", fontSize: "20px", margin: "8px"}} htmlFor="">Add new FAQ</label>
       <Accordion
         sx={{
             border: "none", 
@@ -200,7 +200,7 @@ const FAQAdmin = () => {
 
             }}
       >
-        
+
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Input
             value={newFAQItem.question}
@@ -221,27 +221,22 @@ const FAQAdmin = () => {
           />
         </AccordionDetails>
       </Accordion>
-      <Box mt={2} alignSelf="flex-end">
       <Button
-            onClick={addNewAccordion}
-            variant="contained" 
-            sx={{
-                backgroundColor: 'rgb(33, 150, 243)', 
-                color: 'white', 
-                '&:hover': {
-                backgroundColor: 'rgb(21, 101, 192)', 
-                },
-            }}
-            >
-            Add FAQ
-        </Button>
-        </Box>
-        <ToastContainer />
+        onClick={addNewAccordion}
+        variant="contained" // Add a contained style
+        sx={{
+          backgroundColor: 'rgb(33, 150, 243)', // Customize the background color
+          color: 'white', // Set the text color to white
+          '&:hover': {
+            backgroundColor: 'rgb(21, 101, 192)', // Change background color on hover
+          },
+        }}
+      >
+        Add FAQ
+      </Button>
+
     </Box>
   );
-  };
-  
-  export default FAQAdmin;
-  
+};
 
- 
+export default FAQAdmin;
