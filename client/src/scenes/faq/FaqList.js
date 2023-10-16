@@ -22,7 +22,9 @@ const FAQAdmin = () => {
     fetch(`http://localhost:3001/api/admin/faq/`)
       .then((response) => response.json())
       .then((data) => {
+
         setFAQData(data);
+        console.log(faqData)
       })
       .catch((error) => {
         console.error('Error fetching user data:', error);
@@ -43,19 +45,20 @@ const FAQAdmin = () => {
 
   const editQuestion = (id, newQuestion, newAnswer) => {
     const updatedFAQ = faqData.map((item) =>
-      item.id === id ? { ...item, question: newQuestion, answer: newAnswer } : item
+      item._id === id ? { ...item, question: newQuestion, answer: newAnswer } : item
     );
     setFAQData(updatedFAQ);
   };
 
   const deleteQuestion = (id) => {
-    const updatedFAQ = faqData.filter((item) => item.id !== id);
-    setFAQData(updatedFAQ);
+    const updatedFAQ = faqData.filter((item) => item._id !== id);
+
+        setFAQData(updatedFAQ);
   };
 
   const toggleEdit = (id) => {
     setEditingItem(id);
-    const selectedItem = faqData.find((item) => item.id === id);
+    const selectedItem = faqData.find((item) => item._id === id);
     setEditedQuestion(selectedItem.question);
     setEditedAnswer(selectedItem.answer);
   };
@@ -75,8 +78,9 @@ const FAQAdmin = () => {
   };
 
   const handleSaveUpdates = async () => {
-    const isInvalid = faqData.some((item) => !item.question || !item.answer);
 
+    const isInvalid = faqData.some((item) => !item.question || !item.answer);
+    console.log(isInvalid)
     if (isInvalid) {
       toast.error("Some FAQ items have empty questions or answers.");
     } else {
@@ -104,31 +108,16 @@ const FAQAdmin = () => {
 
   return (
     <Box m="20px" display="flex" flexDirection="column">
-      <Header title="FAQ manager" subtitle="Add, edit and delete Frequently Asked Questions" />
-      <Box mt={2} alignSelf="flex-end" margin={"10px 0"}>
-        <Button 
-            variant="contained" 
-            sx={{
-                backgroundColor: 'rgb(200, 150, 243)', 
-                color: 'white', 
-                '&:hover': {
-                backgroundColor: 'rgb(180, 101, 192)', 
-                },
-            }}
-            onClick={handleSaveUpdates}>
-            Save Updates
-        </Button>
-</Box>
-
-
+      <Header  title="FAQ manager" subtitle="Add, edit and delete Frequently Asked Questions" />
+      <div style={{margin: "15px"}}></div>
       {faqData.map((item) => (
         <Accordion
-            key={item.id}
+            key={item._id}
             sx={{
             border: "none", 
             boxShadow: "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)", 
             borderRadius: "8px", 
-            marginBottom: "16px",
+            marginTop: "10px",
             color: "white",
             background: "#484848" 
             }}
@@ -140,16 +129,16 @@ const FAQAdmin = () => {
                 borderBottom: "1px solid white", 
             }}
           >
-            {editingItem === item.id ? (
+            {editingItem === item._id ? (
               <Input
                 value={editedQuestion}
                 onChange={(e) => setEditedQuestion(e.target.value)}
                 autoFocus
-sx={{
+                sx={{
                     padding: "0 10px",
                     fontStyle: "oblique",
                     width: "40%", color: "white"                
-                    }}
+                  }}
               />
             ) : (
               <Typography 
@@ -168,27 +157,26 @@ sx={{
             borderBottom: "1px solid white"
           }}
           >
-            {editingItem === item.id ? (
+            {editingItem === item._id ? (
               <Input
                 multiline
                 fullWidth
                 value={editedAnswer}
                 onChange={(e) => setEditedAnswer(e.target.value)}
-style={{color: "white"}}
+                style={{color: "white"}}
               />
             ) : (
               <Typography >{item.answer}</Typography>
             )}
           </AccordionDetails>
-          {editingItem === item.id ? (
-            <IconButton style={{ color: '#089B02' }} onClick={() => saveQuestion(item.id)}>Save</IconButton>
+          {editingItem === item._id ? (
+            <IconButton style={{ color: '#089B02' }} onClick={() => saveQuestion(item._id)}>Save</IconButton>
           ) : (
-            <IconButton style={{ color: '#B5B5B5' }}  onClick={() => toggleEdit(item.id)}>Edit</IconButton>
+            <IconButton style={{ color: '#B5B5B5' }}  onClick={() => toggleEdit(item._id)}>Edit</IconButton>
           )}
-          <IconButton style={{ color: '#D30C04' }} onClick={() => deleteQuestion(item.id)}>Delete</IconButton>
+          <IconButton style={{ color: '#D30C04' }} onClick={() => deleteQuestion(item._id)}>Delete</IconButton>
         </Accordion>
       ))}
-
 
       <label style={{color: "grey", fontSize: "20px", margin: "8px"}} htmlFor="">Add new FAQ</label>
       <Accordion
@@ -223,18 +211,28 @@ style={{color: "white"}}
       </Accordion>
       <Button
         onClick={addNewAccordion}
-        variant="contained" // Add a contained style
+        variant="contained" 
         sx={{
-          backgroundColor: 'rgb(33, 150, 243)', // Customize the background color
-          color: 'white', // Set the text color to white
+          backgroundColor: 'rgb(33, 150, 243)', 
+          color: 'white', 
           '&:hover': {
-            backgroundColor: 'rgb(21, 101, 192)', // Change background color on hover
+            backgroundColor: 'rgb(21, 101, 192)', 
           },
         }}
       >
         Add FAQ
       </Button>
 
+      <Box display="flex" justifyContent="end" mt="20px">
+          <Button
+            type="submit"
+            color="secondary"
+            variant="contained"
+            onClick={handleSaveUpdates}>
+            Save Updates
+          </Button>
+      </Box>
+      <ToastContainer />
     </Box>
   );
 };
