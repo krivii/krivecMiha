@@ -178,7 +178,7 @@ const FAQAdmin = () => {
         </Accordion>
       ))}
 
-      <label style={{color: "grey", fontSize: "20px", margin: "8px"}} htmlFor="">Add new FAQ</label>
+      <label style={{color: "grey", fontSize: "20px", margin: "8px"}} htmlFor="">Fill out new FAQ</label>
       <Accordion
         sx={{
             border: "none", 
@@ -211,12 +211,14 @@ const FAQAdmin = () => {
       </Accordion>
       <Button
         onClick={addNewAccordion}
-        variant="contained" 
+        color="success"
+        variant="contained"
+
         sx={{
-          backgroundColor: 'rgb(33, 150, 243)', 
-          color: 'white', 
-          '&:hover': {
-            backgroundColor: 'rgb(21, 101, 192)', 
+
+ 
+          "&:hover": {
+            backgroundColor: "#4cb54f", 
           },
         }}
       >
