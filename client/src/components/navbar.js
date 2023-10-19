@@ -50,11 +50,11 @@ function Navbar() {
 							
               {user && (
                   <li>
-                  <Link to='/library' onClick={closeNavbar}>Profile</Link>
+                  <Link to='/library' onClick={closeNavbar}>Your account</Link>
                   <StyledLine
                   transition={{ duration: 0.75 }}
                   initial={{ width: '0%' }}
-                  animate={{ width: pathname === '/library' ? '70%' : '0%' }}
+                  animate={{ width: pathname === '/library' ? '80%' : '0%' }}
                 />
                 </li>
                 )}
@@ -104,7 +104,7 @@ function Navbar() {
 					<NavbarLinkExtended to="/work" onClick={closeNavbar}> Our Work</NavbarLinkExtended>
 					<NavbarLinkExtended to="/contact" onClick={closeNavbar}>Contact</NavbarLinkExtended>
           {user && (
-            <NavbarLinkExtended to="/library" onClick={closeNavbar}> Your profile</NavbarLinkExtended>
+            <NavbarLinkExtended to="/library" onClick={closeNavbar}> Your account</NavbarLinkExtended>
           )}
           {!user && (
             <NavbarLinkExtended to="/login" onClick={closeNavbar}>Login</NavbarLinkExtended>           

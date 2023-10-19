@@ -58,11 +58,11 @@ const Library = () => {
                     </StyledHide>
                     <StyledHide>
                         <motion.h2 variants={titleAnim}>
-                            personal <span>Gallery</span> Library.
+                            personal  <span>account</span>.
                         </motion.h2>
                     </StyledHide>
                     <motion.p variants={fadeAnim}>
-                        In your art Library you can explore the custom-made photo gallery we create for you. All your orders allow us to transform your precious memories into a beautiful collection you can find right here. 
+                        In your account you can explore the custom-made photo galleries we create for you. All your orders allow us to transform your precious memories into a beautiful collection you can find right here. 
                     </motion.p>                    
                 </motion.div>
                 </StyledDescription>
