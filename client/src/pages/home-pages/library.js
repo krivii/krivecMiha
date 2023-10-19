@@ -58,7 +58,7 @@ const Library = () => {
                     </StyledHide>
                     <StyledHide>
                         <motion.h2 variants={titleAnim}>
-                            personal <span>art</span> Library.
+                            personal <span>Gallery</span> Library.
                         </motion.h2>
                     </StyledHide>
                     <motion.p variants={fadeAnim}>
