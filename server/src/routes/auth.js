@@ -27,14 +27,14 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    const {email, password} = req.body;
+    const {email, password, role} = req.body;
 
     try {
         const user = await UserModel.login(email,password);
         
         const token = createJWT( user._id);
 
-        res.status(200).json({message: "User registered successfully!",  email, token});
+        res.status(200).json({message: "User registered successfully!",  email, role, token});
     } catch (error) {
         res.status(400).json({error: error.message});
     }

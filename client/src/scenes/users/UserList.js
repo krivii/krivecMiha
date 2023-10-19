@@ -21,8 +21,13 @@ const UserList = () => {
         fetch('http://localhost:3001/api/admin/user')
           .then((response) => response.json())
           .then((data) => {
+             data.sort((a, b) => {
+              const usersOrder = { admin: 0, manager: 1, customer: 2 };
+              return usersOrder[a.role] - usersOrder[b.role];
+            });
 
-            setUserRows(data);          })
+            setUserRows(data);     
+          })
           .catch((error) => {
             console.error('Error fetching user data:', error);
           });

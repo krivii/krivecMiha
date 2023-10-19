@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 import { UserModel } from "../models/Users.js";
 
-const authorization = async (req, res, next) => {
+const adminAuthorisation = async (req, res, next) => {
     const { authorization } = req.headers;
 
 
@@ -18,20 +18,21 @@ const authorization = async (req, res, next) => {
         const { _id } = jwt.verify(token, process.env.SECRET);
 
         req.user = await UserModel.findOne({ _id }).select('_id');
-        // const user = await UserModel.findOne({ _id });
+        const user = await UserModel.findOne({ _id });
 
 
-    //    if (user.role === "admin") {
-    //         req.isAdmin = true;
-    //     } else {
-    //         req.isAdmin = false;
-    //     }
+        if (user.role === "customer") {
+            return res.status(403).json({ error: "Permission denied. Admin access required." });
+        } else {
+            next();
+        }
+        
 
-        next();
+
     } catch (error) {
         console.log(error);
         return res.status(401).json({ error: "Request not authorized." });
     }
 }
 
-export { authorization };
+export { adminAuthorisation };

@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { fadeAnim, photoFromAboveAnim,  } from "../animation";
 import { useLogin } from '../hooks/useLogin';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const LoginForm = () => {
@@ -13,13 +14,24 @@ const LoginForm = () => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [key, setKey] = useState("");
   const {login, error, isLoading} = useLogin();
+  const adminKey = "adminlogin";
 
   const handleLogin = async (event) => {
-      event.preventDefault();
+    console.log("key", key);
+    console.log("ADMIN_KEY", adminKey);
+    event.preventDefault();
+    if (adminKey === key) {
+      // Submit the form data
+      await login(email, password, "admin");
+    } else {
+      // Prevent the default form submission when the condition is not met
 
-      await login(email, password, "customer");
+      toast.error('Wrong security key.');
+    }
   }
+  
 
     
   return (
@@ -27,7 +39,7 @@ const LoginForm = () => {
     <StyledBase>
       <StyledForm ref={form} onSubmit={handleLogin}>
         <motion.h2 >
-          Log <span>in</span>. 
+          Admin login
         </motion.h2>
         <motion.div variants={photoFromAboveAnim}>
           
@@ -41,6 +53,11 @@ const LoginForm = () => {
                    id="password" 
                    value={password}
                    onChange={(event)=> setPassword(event.target.value)} />    
+            <label>Security key</label>
+            <input type="key" 
+                   id="key" 
+                   value={key}
+                   onChange={(event)=> setKey(event.target.value)} />    
           <motion.button disabled={isLoading} variants={fadeAnim} type="submit" value="login">
             Log in
           </motion.button>
@@ -60,6 +77,7 @@ const LoginForm = () => {
            }
         </motion.div>
       </StyledForm>
+      <ToastContainer/>
     </StyledBase>
   );
 };
@@ -87,6 +105,7 @@ const StyledForm = styled.form`
   display: inline-block;
   flex-direction: column;
   font-size: 16px;
+  color: black;
   
 
   input {
@@ -97,7 +116,7 @@ const StyledForm = styled.form`
     background-color: transparent;
     font-family: 'Roboto', sans-serif;
     border: 3px solid grey;
-    color: white;
+    color: black;
     text-indent: 5px;
     font-size: 20px;
     flex: 1;
@@ -135,7 +154,7 @@ const StyledForm = styled.form`
     padding: 1rem 2rem;
     border: 3px solid #800080;
     background: transparent;
-    color: #fff;
+    color: #800080;
     transition: all 1s ease;
     font-family: 'Roboto', sans-serif;
     margin-top: 1rem;
@@ -157,8 +176,8 @@ const StyledForm = styled.form`
 
 const StyledBase = styled(motion.div)`
   min-height: 10vh;
+  color: black;
 
-  color: white;
   display: block;
     padding: 2rem;
     text-align: center;

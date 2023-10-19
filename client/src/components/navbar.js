@@ -9,7 +9,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 function Navbar() {
 	const [extendNavbar, setExtendNavbar] = useState(false);
 	const { pathname } = useLocation(); 
-   const {user} = useAuthContext();
+  const {user} = useAuthContext();
 
 	// Function to close the navbar
 	const closeNavbar = () => {
@@ -47,20 +47,40 @@ function Navbar() {
 									animate={{ width: pathname === '/contact' ? '70%' : '0%' }}
 								/>
 							</li>
-							<li>
-                {user && (
-                  <Link to='/library' onClick={closeNavbar}>My library</Link>
+							
+              {user && (
+                  <li>
+                  <Link to='/library' onClick={closeNavbar}>Profile</Link>
+                  <StyledLine
+                  transition={{ duration: 0.75 }}
+                  initial={{ width: '0%' }}
+                  animate={{ width: pathname === '/library' ? '70%' : '0%' }}
+                />
+                </li>
                 )}
-                {!user && (
-                  <Link to='/login' onClick={closeNavbar}>Login</Link>
+              {!user && (
+                  <li>
+                    <Link to='/login' onClick={closeNavbar}>Login</Link>
+                    <StyledLine
+                    transition={{ duration: 0.75 }}
+                    initial={{ width: '0%' }}
+                    animate={{ width: pathname === '/login' ? '70%' : '0%' }}
+                  />
+                  </li>
+                  
                 )}
-								
-								<StyledLine
-									transition={{ duration: 0.75 }}
-									initial={{ width: '0%' }}
-									animate={{ width: pathname === '/library' ? '70%' : '0%' }}
-								/>
-							</li>
+
+              {!user && (
+                  <li>
+                    <Link to='/register' onClick={closeNavbar}>Sign up</Link>
+                    <StyledLine
+                    transition={{ duration: 0.75 }}
+                    initial={{ width: '0%' }}
+                    animate={{ width: pathname === '/register' ? '70%' : '0%' }}
+                  />
+                  </li>
+                  
+                )}
 							<OpenLinksButton 
                 className="burger-button"
 								onClick={() => {
@@ -84,10 +104,14 @@ function Navbar() {
 					<NavbarLinkExtended to="/work" onClick={closeNavbar}> Our Work</NavbarLinkExtended>
 					<NavbarLinkExtended to="/contact" onClick={closeNavbar}>Contact</NavbarLinkExtended>
           {user && (
-            <NavbarLinkExtended to="/library" onClick={closeNavbar}> My library</NavbarLinkExtended>
+            <NavbarLinkExtended to="/library" onClick={closeNavbar}> Your profile</NavbarLinkExtended>
           )}
           {!user && (
-            <NavbarLinkExtended to="/login" onClick={closeNavbar}>Login</NavbarLinkExtended>
+            <NavbarLinkExtended to="/login" onClick={closeNavbar}>Login</NavbarLinkExtended>           
+          )}
+          {!user && (
+            <NavbarLinkExtended to="/register" onClick={closeNavbar}>Sign up</NavbarLinkExtended>
+
           )}
 					
 				</NavbarExtendedContainer>

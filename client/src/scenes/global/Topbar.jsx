@@ -7,15 +7,18 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { useLogout } from '../../hooks/useLogout';
 
 const Topbar = () => {
+  const {logout} = useLogout();
+
     const handleReload = () => {
       window.location.reload(); 
     };
 
-    const signOut = () => {
-        console.log("signout");
-    }
+    const handleSignOut = () => {
+      logout();
+  };
   
     return (
       <Box p={1} display="flex" justifyContent="flex-end">
@@ -25,7 +28,7 @@ const Topbar = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Logout">
-          <IconButton onClick={handleReload}>
+          <IconButton onClick={handleSignOut}>
             <ExitToAppIcon />
           </IconButton>
         </Tooltip>

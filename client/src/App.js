@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useLocation  } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate  } from "react-router-dom";
+import  Navbar  from "./components/Navbar";
+import { AnimatePresence } from "framer-motion";
+import GlobalStyle from './components/GlobalStyle'
+import { useAuthContext } from "./hooks/useAuthContext";
 
 import About from "./pages/home-pages/about";
 import OurWork from "./pages/home-pages/ourWork";
@@ -10,9 +15,8 @@ import Video from "./pages/home-pages/video";
 import Register from "./pages/home-pages/register";
 import Login from "./pages/home-pages/login";
 import Library from "./pages/home-pages/library";
-import  Navbar  from "./components/Navbar";
-import { AnimatePresence } from "framer-motion";
-import GlobalStyle from './components/GlobalStyle'
+import AdminLogin from "./pages/admin-pages/AdminLogin";
+
 
 import Sidebar from "./scenes/global/Sidebar";
 import Topbar from "./scenes/global/Topbar";
@@ -38,12 +42,31 @@ import FAQAdmin from "./scenes/faq/FaqList";
 
 
 function App() {
+  
+  const {user} = useAuthContext();
+
+  let isAdmin = false; 
+
+  if (user && user.role === "admin") {
+    isAdmin = true; 
+  }
+  
+
   return (
+    
     <div className="App">
       <Router>
         <Routes>
-            <Route path="*" element={<ClientComponentWithNavbar />} />            
-            <Route path="/admin/*" element={<AdminComponent />} />
+            <Route path="*" element={<ClientComponentWithNavbar />} />  
+            <Route 
+              path="/admin/*" 
+              element={isAdmin ? <AdminComponent /> : <Navigate to="/adminLogin" />} 
+            />      
+            <Route 
+              path="/adminLogin" 
+              element={!isAdmin ? <AdminLogin /> : <Navigate to="/admin/" />} 
+            />     
+            {/* <Route path="/admin/*" element={<AdminComponent />} /> */}
         </Routes>
       </Router>
     </div>
@@ -65,7 +88,7 @@ function ClientComponentWithNavbar() {
 
 function ClientComponent() {
   const location = useLocation();
-
+  const {user} = useAuthContext();
   return (
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<About />} />
@@ -74,14 +97,26 @@ function ClientComponent() {
       <Route path="/work/photo/:categoryId" element={<CategoryGallery />} />
       <Route path="/work/video" element={<Video />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/library" element={<Library />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+      <Route 
+        path="/library" 
+        element={user ? <Library /> : <Navigate to="/login" />} 
+      />
+      <Route 
+        path="/register" 
+        element={!user ? <Register /> : <Navigate to="/library" />} 
+      />
+      <Route 
+        path="/login" 
+        element={!user ? <Login /> : <Navigate to="/library" />} 
+      />
+
     </Routes>
   );
 }
 
 function AdminComponent() {
+
+
   return (
     <div className="admin">
       <Sidebar /> 
@@ -107,6 +142,9 @@ function AdminComponent() {
             <Route path="/videos" element={<VideoList />} />
             <Route path="/videos/add" element={<VideoAdd />} />
             <Route path="/faq" element={<FAQAdmin />} />
+            
+
+              
 
             
           </Routes>
