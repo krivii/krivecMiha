@@ -5,11 +5,13 @@ import { Formik } from "formik";
 import Header from "../../components/admin/Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'  
 
 const CategoryAdd = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [fileSelected, setFileSelected] = useState(false);
     const [loading, setLoading] = useState(false);
+    const {user} = useAuthContext();
 
     const handleFileChange = (event) => {
         const files = Array.from(event.currentTarget.files);
@@ -38,6 +40,9 @@ const CategoryAdd = () => {
             const response = await fetch("http://localhost:3001/api/admin/category", {
                 method: "POST",
                 body: formData,
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                  },
             });
     
             if (response.status === 200) {

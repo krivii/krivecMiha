@@ -5,9 +5,10 @@ import { Formik } from "formik";
 import Header from "../../components/admin/Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const VideoAdd = () => {
-
+    const {user} = useAuthContext();
 
     const handleFormSubmit = async (values, { resetForm }) => {
 
@@ -16,6 +17,7 @@ const VideoAdd = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
             },
             body: JSON.stringify(values),
           })

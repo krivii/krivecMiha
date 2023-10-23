@@ -6,11 +6,12 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const UserEdit = () => {
 
   const { userId } = useParams();
-  
+  const {user} = useAuthContext();
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -42,8 +43,13 @@ const UserEdit = () => {
 
 
   const fetchUserData = async () => {
+
     try {
-        const response = await fetch(`http://localhost:3001/api/admin/user/${userId}`); 
+        const response = await fetch(`http://localhost:3001/api/admin/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }) 
       if (response.ok) {
         const data = await response.json();
         setUserData(data.user);
@@ -75,6 +81,7 @@ const UserEdit = () => {
         method: "PUT", 
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify(values),
       });

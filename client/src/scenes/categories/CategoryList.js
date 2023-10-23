@@ -4,50 +4,64 @@ import { Box, Typography, Button  } from '@mui/material';
 import { DataGrid, GridToolbar  } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'
 
 
 const CategoryList = () => {
 
 
     const [userRows, setUserRows] = useState([]);
+    const {user} = useAuthContext();
 
+    useEffect(() => {
+      fetchCatData();
+    }, []);
 
-      useEffect(() => {
-        fetch(`http://localhost:3001/api/admin/category/`)
+    const fetchCatData = async () => {
+      if (user && user.token) {
+        fetch('http://localhost:3001/api/admin/category/', {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
           .then((response) => response.json())
-          .then((data) => {           
-           setUserRows(data);
+          .then((data) => {
+            setUserRows(data);
           })
           .catch((error) => {
             console.error('Error fetching user data:', error);
           });
-      }, []);
+      } else {
+        console.error('User is not authenticated.');
+      }
+    };
 
-      const handleDeleteCategory = (categoryId) => {
-        if (confirm('Are you sure you want to delete the category? All category data will be lost.')) {
-            fetch(`http://localhost:3001/api/admin/category/${categoryId}`, {
-                method: 'DELETE',
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        
-                        window.location.reload();
-                    } else {
-                        console.error("Error while deleting category:", error);
-                        toast.error('An error occurred while deleting category.');
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error while deleting category:", error);
-                toast.error('An error occurred while deleting category.');
-                });
-        }
-        
-      };
+    const handleDeleteCategory = (categoryId) => {
+      if (confirm('Are you sure you want to delete the category? All category data will be lost.')) {
+        fetch(`http://localhost:3001/api/admin/category/${categoryId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${user.token}`, 
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+                toast.success('Category deleted successfully');
+                fetchCatData();
+            } else {
+              console.error("Error while deleting category:", error);
+              toast.error('An error occurred while deleting category.');
+            }
+          })
+          .catch((error) => {
+            console.error("Error while deleting category:", error);
+            toast.error('An error occurred while deleting category.');
+          });
+      }
+    };
       
       
       

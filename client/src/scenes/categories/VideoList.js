@@ -7,16 +7,23 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const VideoList = () => {
-
+    const {user} = useAuthContext();
 
     const [userRows, setUserRows] = useState([]);
 
+    useEffect(() => {
+      fetchVideoData();
+    }, []);
 
-      useEffect(() => {
-        fetch(`http://localhost:3001/api/admin/video/`)
+    const fetchVideoData = async () => {
+        fetch(`http://localhost:3001/api/admin/video/`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
           .then((response) => response.json())
           .then((data) => {           
            setUserRows(data);
@@ -24,17 +31,20 @@ const VideoList = () => {
           .catch((error) => {
             console.error('Error fetching user data:', error);
           });
-      }, []);
+      };
 
       const handleDeleteVideo = (videoId) => {
         if (confirm('Are you sure you want to delete the video? ')) {
             fetch(`http://localhost:3001/api/admin/video/${videoId}`, {
                 method: 'DELETE',
+                headers: {
+                  Authorization: `Bearer ${user.token}`,
+                },
                 })
                 .then((response) => {
                     if (response.ok) {
-                        
-                        window.location.reload();
+                        toast.success('Video deleted!');
+                        fetchVideoData();
                     } else {
                         console.error("Error while deleting v:", error);
                         toast.error('An error occurred while deleting video.');
@@ -76,7 +86,7 @@ const VideoList = () => {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => handleDeleteCategory(params.row._id)}
+                  onClick={() => handleDeleteVideo(params.row._id)}
                 >
                   <DeleteOutlineIcon /> 
                 </Button>

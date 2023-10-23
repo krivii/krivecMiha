@@ -5,15 +5,21 @@ import * as yup from "yup";
 import Header from "../../components/admin/Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const CPhotosAdd = () => {
   const [orders, setOrders] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileSelected, setFileSelected] = useState(false);
   const [loading, setLoading] = useState(false);
+  const {user} = useAuthContext();
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/admin/order")
+    fetch("http://localhost:3001/api/admin/order", {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {        
         setOrders(data.reverse());
@@ -46,6 +52,9 @@ const CPhotosAdd = () => {
 
     try {
       const response = await fetch("http://localhost:3001/api/admin/cphoto", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
         method: "POST",
         body: formData,
       });

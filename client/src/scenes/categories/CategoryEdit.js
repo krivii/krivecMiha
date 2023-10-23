@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const CategoryEdit = () => {
   const { categoryId } = useParams();
@@ -13,12 +14,17 @@ const CategoryEdit = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileSelected, setFileSelected] = useState(false);
   const [loading, setLoading] = useState(true); 
+  const {user} = useAuthContext();
 
 
   useEffect(() => {
     const fetchCatData = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/admin/category/${categoryId}`);
+        const response = await fetch(`http://localhost:3001/api/admin/category/${categoryId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         if (response.ok) {
           const data = await response.json();
           setCatData(data.category);
@@ -62,6 +68,9 @@ const CategoryEdit = () => {
       const response = await fetch(`http://localhost:3001/api/admin/category/${categoryId}`, {
         method: "PUT",
         body: formData,
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       });
 
       if (response.status === 200) {

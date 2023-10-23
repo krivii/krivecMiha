@@ -3,21 +3,31 @@ import Header from '../../components/admin/Header';
 import { Box, Typography, Grid, Card, CardMedia, CardContent, Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const ImageList = () => {
 
 
     const [photoRows, setphotoRows] = useState([]);
+    const {user} = useAuthContext();
 
+    const fetchImages = async () => {
+      fetch(`http://localhost:3001/api/admin/pphoto/`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {           
+          setphotoRows(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching user data:', error);
+        });
+    }
+      
     useEffect(() => {
-        fetch(`http://localhost:3001/api/admin/pphoto/`)
-          .then((response) => response.json())
-          .then((data) => {           
-            setphotoRows(data);
-          })
-          .catch((error) => {
-            console.error('Error fetching user data:', error);
-          });
+        fetchImages();
       }, []);
 
 
@@ -36,11 +46,14 @@ const ImageList = () => {
         const response = await fetch(`http://localhost:3001/api/admin/pphoto/${photoId}`, {
             method: 'PUT',
             body: formData,
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
         });
 
         if (response.status === 200) {
             toast.success('Image changed!');
-            window.location.reload();
+            fetchImages();
         } else {
             toast.error('Error uploading image');
             console.error(`Error uploading image `);
@@ -101,6 +114,7 @@ const ImageList = () => {
           ))}
         </Grid>
       </Box>
+      <ToastContainer />
     </Box>
   );
 };

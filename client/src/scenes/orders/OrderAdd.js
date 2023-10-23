@@ -5,12 +5,14 @@ import Header from "../../components/admin/Header";
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const OrderAdd = () => {
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
     const [users, setUsers] = useState([]);
+    const {user} = useAuthContext();
 
     const notifySuccess = () => {
         toast.success('Order added!', {
@@ -44,6 +46,7 @@ const OrderAdd = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify(values),
         })
@@ -73,7 +76,11 @@ const OrderAdd = () => {
 
       useEffect(() => {
 
-        fetch("http://localhost:3001/api/admin/user")
+        fetch("http://localhost:3001/api/admin/user", {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
             setUsers(data.reverse());

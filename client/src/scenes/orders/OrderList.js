@@ -10,15 +10,20 @@ import AutorenewIcon from '@mui/icons-material/Autorenew';
 import CheckIcon from '@mui/icons-material/Check';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EditIcon from '@mui/icons-material/Edit';
+import {useAuthContext} from '../../hooks/useAuthContext'  
 
 
 const OrderList = () => {
   
     const [userRows, setUserRows] = useState([]);
-
+    const {user} = useAuthContext();
 
       useEffect(() => {
-        fetch(`http://localhost:3001/api/admin/order/`)
+        fetch(`http://localhost:3001/api/admin/order/`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
             

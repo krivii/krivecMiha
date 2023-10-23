@@ -55,31 +55,6 @@ app.use(adminAuthorisation);
 app.use("/api/admin/user",  userRouter); 
 app.use("/api/admin/order",  orderRouter);
 
-
-
-
-// app.use(authorization);
-
-// Middleware to check if the user is an admin
-const checkAdminAccess = (req, res, next) => { 
-  // console.log(req.isAdmin)
-  if (req.isAdmin) {    
-    next();
-  } else {
-    res.status(403).json({ error: "Permission denied. Admin access required." });
-  }
-};
-
-// // // Routes restricted to admin users
-app.use("/api/admin/user", checkAdminAccess, userRouter);
-app.use("/api/admin/order", checkAdminAccess, orderRouter);
-// app.use("/api/admin/cphoto", checkAdminAccess, customerPhotoRouter);
-// app.use("/api/admin/category", checkAdminAccess, categoryRouter);
-// app.use("/api/admin/pphoto", checkAdminAccess, PromoPhotoRouter);
-// app.use("/api/admin/video", checkAdminAccess, VideoRouter);
-
-
-
 mongoose.connect(
     process.env.MONGO_URI,
     {

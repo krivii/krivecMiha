@@ -14,10 +14,11 @@ import {
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'  
 
 const CategoryImageList = () => {
   const { categoryId } = useParams();
-
+  const {user} = useAuthContext();
   const [categoryImages, setCatImages] = useState([]);
   const [categoryName, setCatName] = useState();
   const [categoryCover, setCatCover] = useState();
@@ -25,7 +26,15 @@ const CategoryImageList = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/admin/category/${categoryId}`)
+    fetchCatData();
+  }, []);
+
+  const fetchCatData = async () => {
+    fetch(`http://localhost:3001/api/admin/category/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Data", data);
@@ -37,7 +46,7 @@ const CategoryImageList = () => {
       .catch((error) => {
         console.error('Error fetching category data:', error);
       });
-  }, []);
+    };
 
   const toggleSelectAll = () => {
     if (selectedImages.length === categoryImages.length) {
@@ -65,6 +74,9 @@ const CategoryImageList = () => {
     fetch(`http://localhost:3001/api/admin/category/changeCover/${categoryId}`, {
       method: 'PUT',
       body: data,
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
     })
       .then((response) => {
         if (response.ok) {
@@ -74,9 +86,8 @@ const CategoryImageList = () => {
         }
       })
       .then((data) => {
-
-        console.log('Cover image updated successfully', data.message);
-        window.location.reload();
+        toast.success('Cover image updated successfully');
+        fetchCatData();
       })
       .catch((error) => {
         console.error('Error while deleting images:', error);
@@ -100,6 +111,7 @@ const CategoryImageList = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({ images: selectedImages, categoryId: categoryId }),
       })
@@ -112,7 +124,7 @@ const CategoryImageList = () => {
         })
         .then((data) => {
           toast.success('Images deleted successfully');
-          window.location.reload();
+          fetchCatData();
         })
         .catch((error) => {
           console.error('Error while deleting images:', error);

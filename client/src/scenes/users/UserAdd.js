@@ -5,9 +5,11 @@ import Header from "../../components/admin/Header";
 import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
+
 
 const UserAdd = () => {
-
+  const {user} = useAuthContext();
     const notifySuccess = () => {
         toast.success('User added!', {
           position: "top-right",
@@ -41,6 +43,7 @@ const UserAdd = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify(values),
         })

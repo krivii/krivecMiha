@@ -8,17 +8,19 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const UserList = () => {
     const [userRows, setUserRows] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: 10,
-        page: 0,
-      });
+    const {user} = useAuthContext();
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/admin/user')
+        fetch('http://localhost:3001/api/admin/user', {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
              data.sort((a, b) => {
@@ -171,8 +173,7 @@ const UserList = () => {
             rows={userRows}
             columns={columns}
             getRowId={(row) => row._id}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
+
             components={{ Toolbar: GridToolbar }}
             
 

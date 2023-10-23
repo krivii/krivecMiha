@@ -14,16 +14,26 @@ import {
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'  
 
 const OrderPhotoList = () => {
   const { orderId } = useParams();
+  const {user} = useAuthContext();
 
   const [orderRows, setOrderRows] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/admin/cphoto/orderPhotos/${orderId}`)
+    fetchOrderData();
+  }, []);
+
+  const fetchOrderData = async () => {
+    fetch(`http://localhost:3001/api/admin/cphoto/orderPhotos/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -33,7 +43,7 @@ const OrderPhotoList = () => {
       .catch((error) => {
         console.error('Error fetching order data:', error);
       });
-  }, []);
+    };
 
   const toggleSelectAll = () => {
     if (selectedImages.length === orderRows.length) {
@@ -60,14 +70,15 @@ const OrderPhotoList = () => {
     const confirmDelete = window.confirm('Are you sure you want to delete these images?');
   
     if (confirmDelete) {
-      const apiUrl = "http://localhost:3001/api/admin/cphoto/deleteMany"; // Endpoint to delete multiple images
+      const apiUrl = "http://localhost:3001/api/admin/cphoto/deleteMany"; 
   
       fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ photoIds: selectedImages }), // Send selected image IDs in the request body
+        body: JSON.stringify({ photoIds: selectedImages }), 
       })
         .then((response) => {
           if (response.ok) {
@@ -80,7 +91,7 @@ const OrderPhotoList = () => {
 
             toast.success('Images deleted successfully.');
 
-            window.location.reload();
+            fetchOrderData();
 
         })
         .catch((error) => {

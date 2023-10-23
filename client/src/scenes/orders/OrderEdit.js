@@ -6,10 +6,12 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'  
 
 const OrderEdit = () => {
 
   const { orderId } = useParams();
+  const {user} = useAuthContext();
   
   const [orderData, setOrderData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -23,7 +25,11 @@ const OrderEdit = () => {
 
   useEffect(() => {
 
-    fetch("http://localhost:3001/api/admin/user")
+    fetch("http://localhost:3001/api/admin/user", {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setUsers(data);          })
@@ -62,7 +68,11 @@ const OrderEdit = () => {
 
   const fetchOrderData = async () => {
     try {
-        const response = await fetch(`http://localhost:3001/api/admin/order/${orderId}`); 
+        const response = await fetch(`http://localhost:3001/api/admin/order/${orderId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }); 
       if (response.ok) {
         const data = await response.json();
         setOrderData(data.order);
@@ -97,13 +107,14 @@ const OrderEdit = () => {
 
           if (confirm('Are you sure you want to change the order status to "Completed". By doing so, you will delete all photos related to this order.')) {
             const apiUrl = "http://localhost:3001/api/admin/cphoto/deleteMany";
-            console.log("Poslal fetch")
+
             fetch(apiUrl, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${user.token}`,
               },
-              body: JSON.stringify({ photoIds: selectedImages }), // Send selected image IDs in the request body
+              body: JSON.stringify({ photoIds: selectedImages }), 
             })
               .then((response) => {
                 if (response.ok) {
@@ -113,8 +124,8 @@ const OrderEdit = () => {
                 }
               })
               .then((data) => {
-  
-                  window.location.reload();
+                toast.success('Status changed');
+                fetchOrderData();
   
               })
               .catch((error) => {
@@ -130,6 +141,7 @@ const OrderEdit = () => {
         method: "PUT", 
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify(values),
       });

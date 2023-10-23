@@ -44,14 +44,16 @@ router.post("/login", async (req, res) => {
 
 router.post("/adminLogin", async (req, res) => {
     const { email, password, securityKey } = req.body;
+
   
     try {
       const user = await UserModel.loginadmin(email, password, securityKey);
-  
+
       const token = createJWT(user._id, user.role);
   
       res.status(200).json({ message: "Admin logged in successfully!", email, role: user.role, token });
     } catch (error) {
+
       res.status(400).json({ error: error.message });
     }
 });

@@ -28,9 +28,9 @@ UserSchema.statics.register = async function(name, email, password) {
     if (!validator.isEmail(email)){
         throw Error('Email not valid.');
     }
-    if (!validator.isStrongPassword(password)){
-        throw Error('Password must be stronger.');
-    }
+    // if (!validator.isStrongPassword(password)){
+    //     throw Error('Password must be stronger.');
+    // }
 
     const exists = await this.findOne({email});
 
@@ -79,7 +79,7 @@ UserSchema.statics.loginadmin = async function (email, password, securityKey) {
     }
 
     const user = await this.findOne({ email });
-    con
+   
     if (!user) {
       throw new Error('Incorrect email.');
     }

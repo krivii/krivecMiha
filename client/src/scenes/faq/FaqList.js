@@ -14,12 +14,17 @@ import Header from "../../components/admin/Header";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const FAQAdmin = () => {
   const [faqData, setFAQData] = useState([]);
-
+  const {user} = useAuthContext();
   useEffect(() => {
-    fetch(`http://localhost:3001/api/admin/faq/`)
+    fetch(`http://localhost:3001/api/admin/faq/`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
 
@@ -89,6 +94,7 @@ const FAQAdmin = () => {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify(faqData),
         });
