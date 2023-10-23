@@ -3,11 +3,39 @@ import  express  from "express";
 import { OrderModel } from "../models/Order.js";
 import { UserModel } from "../models/Users.js"; 
 import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
+import { adminAuthorisation } from "../middleware/adminAuthorisation.js";
+import { authorization } from "../middleware/authorization.js";
+
 
 
 const router = express.Router();
 
+router.use(authorization);
 
+router.get("/userOrders", async (req, res) => {
+  
+  const userId = req.user._id;
+  
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userEmail = user.email;
+
+    const orders = await OrderModel.find({ orderOwner: userEmail });
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+router.use(adminAuthorisation);
 
 router.post("/", async (req, res) => {
   const orderData = req.body;

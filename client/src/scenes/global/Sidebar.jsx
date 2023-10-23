@@ -15,10 +15,15 @@ import CategoryIcon from '@mui/icons-material/Category';
 import AddHomeIcon from '@mui/icons-material/AddHome';
 import PhotoIcon from '@mui/icons-material/Photo';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
+import {useAuthContext} from '../../hooks/useAuthContext'   
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
+    const {user} = useAuthContext();
+
+    
+
     return (
         <Box
             sx={{
@@ -57,7 +62,7 @@ const Sidebar = () => {
                     fontWeight="bold"
                     sx={{ m: "10px 0 0 0" }}
                 >
-                    Luka
+                    {user.name}
                 </Typography>
                 <Typography  color="#FBF014">Admin</Typography>
                 </Box>

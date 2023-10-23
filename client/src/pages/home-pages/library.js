@@ -8,31 +8,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { titleAnim, fadeAnim, pageAnimation, lineAnim} from "../../animation";
 import { useLogout } from '../../hooks/useLogout';
+import {useAuthContext} from '../../hooks/useAuthContext'  
 
 
 const Library = () => {
 
-    const username = "Luka";
 
+    const {user} = useAuthContext();
     const navigate = useNavigate();
     const {logout} = useLogout();
 
-    const notify = () => {
-        toast.success('Message sent!', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            });
-    };
 
     const handleSignOut = () => {
         logout();
     };
+
+
     
 
 
@@ -48,12 +39,12 @@ const Library = () => {
                 <motion.div >
                     <StyledHide>
                         <motion.h2 variants={titleAnim}>
-                            Hello <span>{username}</span>,
+                            Hello, <span>{user.name}</span>!
                         </motion.h2>
                     </StyledHide>
                     <StyledHide>
                         <motion.h2 variants={titleAnim}>
-                            welcome to your 
+                            Welcome to your 
                         </motion.h2>
                     </StyledHide>
                     <StyledHide>

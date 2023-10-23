@@ -20,6 +20,7 @@ export const useLoginAdmin = () => {
         });
   
         const json = await response.json();
+        console.log(json)
   
         if (!response.ok) {
           setIsLoading(false);

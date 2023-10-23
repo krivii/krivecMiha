@@ -45,6 +45,7 @@ app.use("/api/admin/pphoto",  PromoPhotoRouter);
 app.use("/api/admin/category", categoryRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/admin/video", VideoRouter);
+app.use("/api/admin/order",  orderRouter);
 
 app.use(authorization);
 
@@ -53,7 +54,7 @@ app.use("/api/admin/cphoto", customerPhotoRouter);
 app.use(adminAuthorisation);
 
 app.use("/api/admin/user",  userRouter); 
-app.use("/api/admin/order",  orderRouter);
+
 
 mongoose.connect(
     process.env.MONGO_URI,

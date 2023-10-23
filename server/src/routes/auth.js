@@ -32,10 +32,11 @@ router.post("/login", async (req, res) => {
 
     try {
         const user = await UserModel.login(email,password);
-        
+        const name = user.name;
+
         const token = createJWT(user._id, user.role);
 
-        res.status(200).json({message: "User registered successfully!",  email, role, token});
+        res.status(200).json({ message: "Admin logged in successfully!", role: user.role, token, name });
     } catch (error) {
         res.status(400).json({error: error.message});
     }
@@ -48,10 +49,11 @@ router.post("/adminLogin", async (req, res) => {
   
     try {
       const user = await UserModel.loginadmin(email, password, securityKey);
-
+      const name = user.name;
+      const userId = user._id;
       const token = createJWT(user._id, user.role);
   
-      res.status(200).json({ message: "Admin logged in successfully!", email, role: user.role, token });
+      res.status(200).json({ message: "Admin logged in successfully!", role: user.role, token, name });
     } catch (error) {
 
       res.status(400).json({ error: error.message });

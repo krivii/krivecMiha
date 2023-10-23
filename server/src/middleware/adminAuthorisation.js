@@ -19,6 +19,7 @@ const adminAuthorisation = async (req, res, next) => {
 
 
         req.user = await UserModel.findOne({ _id }).select('_id');
+        // console.log(userId)
         const user = await UserModel.findOne({ _id });
 
 
