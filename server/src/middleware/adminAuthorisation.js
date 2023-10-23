@@ -15,13 +15,14 @@ const adminAuthorisation = async (req, res, next) => {
 
     try {
 
-        const { _id } = jwt.verify(token, process.env.SECRET);
+        const { _id, role } = jwt.verify(token, process.env.SECRET);
+
 
         req.user = await UserModel.findOne({ _id }).select('_id');
         const user = await UserModel.findOne({ _id });
 
 
-        if (user.role === "customer") {
+        if (user.role !== "admin") {
             return res.status(403).json({ error: "Permission denied. Admin access required." });
         } else {
             next();

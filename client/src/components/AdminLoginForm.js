@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { fadeAnim, photoFromAboveAnim,  } from "../animation";
-import { useLogin } from '../hooks/useLogin';
+import { useLoginAdmin } from '../hooks/useLoginAdmin';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,22 +15,14 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [key, setKey] = useState("");
-  const {login, error, isLoading} = useLogin();
-  const adminKey = "adminlogin";
+  const {loginAdmin, error, isLoading} = useLoginAdmin();
 
-  const handleLogin = async (event) => {
-    console.log("key", key);
-    console.log("ADMIN_KEY", adminKey);
-    event.preventDefault();
-    if (adminKey === key) {
-      // Submit the form data
-      await login(email, password, "admin");
-    } else {
-      // Prevent the default form submission when the condition is not met
 
-      toast.error('Wrong security key.');
+
+    const handleLogin = async (event) => {
+      event.preventDefault();
+      await loginAdmin(email, password, "admin", key); 
     }
-  }
   
 
     
@@ -54,7 +46,7 @@ const LoginForm = () => {
                    value={password}
                    onChange={(event)=> setPassword(event.target.value)} />    
             <label>Security key</label>
-            <input type="key" 
+            <input type="password" 
                    id="key" 
                    value={key}
                    onChange={(event)=> setKey(event.target.value)} />    

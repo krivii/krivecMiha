@@ -141,8 +141,7 @@ const OrderList = () => {
       
       <Box 
         m="20px 0 0 0"
-        minHeight="20%"
-        height="100%"
+        height="70vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",

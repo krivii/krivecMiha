@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '../.env' });
 
 const UserSchema = new mongoose.Schema({
     name: {type: String, required: true},
@@ -25,9 +28,9 @@ UserSchema.statics.register = async function(name, email, password) {
     if (!validator.isEmail(email)){
         throw Error('Email not valid.');
     }
-    // if (!validator.isStrongPassword(password)){
-    //     throw Error('Password must be stronger.');
-    // }
+    if (!validator.isStrongPassword(password)){
+        throw Error('Password must be stronger.');
+    }
 
     const exists = await this.findOne({email});
 
@@ -68,6 +71,35 @@ UserSchema.statics.login = async function(email, password) {
     return user;
 
 }
+
+UserSchema.statics.loginadmin = async function (email, password, securityKey) {
+    // Validation
+    if (!email || !password || !securityKey) {
+      throw new Error('All fields must be filled.');
+    }
+
+    const user = await this.findOne({ email });
+    con
+    if (!user) {
+      throw new Error('Incorrect email.');
+    }
+  
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+  
+    if (!isPasswordMatch) {
+      throw new Error('Incorrect password.');
+    }
+  
+    if (user.role !== 'admin') {
+      throw new Error('Access denied. User is not an admin.');
+    }
+  
+    if (securityKey !== process.env.ADMIN_LOGIN) {
+      throw new Error('Access denied. Invalid security key.');
+    }
+  
+    return user;
+  };
 
 
 export const UserModel = mongoose.model("users", UserSchema);
