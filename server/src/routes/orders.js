@@ -3,14 +3,11 @@ import  express  from "express";
 import { OrderModel } from "../models/Order.js";
 import { UserModel } from "../models/Users.js"; 
 import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
-import { adminAuthorisation } from "../middleware/adminAuthorisation.js";
-
-
 
 
 const router = express.Router();
 
-router.use(adminAuthorisation);
+
 
 router.post("/", async (req, res) => {
   const orderData = req.body;

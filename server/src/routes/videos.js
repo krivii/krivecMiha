@@ -1,23 +1,12 @@
 import  express  from "express";
 
 import { VideoModel } from "../models/Videos.js";
-
+import { adminAuthorisation } from "../middleware/adminAuthorisation.js";
 
 
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-    try { 
-        const video = new VideoModel(req.body);
-        await video.save();
-        res.status(200).json(video);
-  
-    } catch (error) {
-        res.status(500).json({ error: "Internal server error." });
-    }
-  });
-  
 
 router.get("/", async (req, res) => {
   try {
@@ -27,8 +16,6 @@ router.get("/", async (req, res) => {
       res.json(error);
   }
 });
-
-
 
 
 
@@ -49,6 +36,22 @@ try {
     res.status(500).json({ message: "Internal Server Error" });
 }
 });
+
+router.use(adminAuthorisation);
+
+router.post("/", async (req, res) => {
+    try { 
+        const video = new VideoModel(req.body);
+        await video.save();
+        res.status(200).json(video);
+  
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error." });
+    }
+  });
+  
+
+
 
 
 router.put("/:videoId", async (req, res) => {

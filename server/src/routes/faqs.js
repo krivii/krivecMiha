@@ -1,8 +1,22 @@
 import  express  from "express";
 
 import { FaqModel } from "../models/FAQs.js";
+import { adminAuthorisation } from "../middleware/adminAuthorisation.js";
+
+
 
 const router = express.Router();
+
+router.get("/", async (req, res) => {
+  try {
+      const response = await FaqModel.find({});
+      res.status(200).json(response);
+  } catch (error) {
+      res.json(error);
+  }
+});
+
+router.use(adminAuthorisation);
 
 router.put("/", async (req, res) => {
     const newBatch = req.body;
@@ -29,13 +43,6 @@ router.put("/", async (req, res) => {
   
 
   
-  router.get("/", async (req, res) => {
-    try {
-        const response = await FaqModel.find({});
-        res.status(200).json(response);
-    } catch (error) {
-        res.json(error);
-    }
-  });
+
 
   export { router as FaqRouter };

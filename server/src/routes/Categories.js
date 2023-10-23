@@ -1,18 +1,48 @@
 import  express  from "express";
 import { CategoryModel } from "../models/Categories.js";
 import { PromoPhotoModel } from "../models/PromoPhotos.js";
-import {authorization} from "../middleware/authorization.js";
+
 import multer from 'multer';
 import path from 'path'; 
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { adminAuthorisation } from "../middleware/adminAuthorisation.js";
+
+
 
 
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+  try {
+      const response = await CategoryModel.find({});
+      res.status(200).json(response);
+  } catch (error) {
+      res.json(error);
+  }
+});
 
-// router.use(authorization);
+// get photos list
+router.get("/:categoryId", async (req, res) => {
+  try {
+      const categoryId = req.params.categoryId;
+
+      const category = await CategoryModel.findById(categoryId);
+      
+      if (!category) {
+          return res.status(404).json({ message: "category not found" });
+      }
+
+      res.status(200).json({ message: "category retrieved successfully",  category});
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.use(adminAuthorisation);
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -75,36 +105,10 @@ router.post("/", upload.array('images', 50), async (req, res) => {
   
 });
 
-router.get("/", async (req, res) => {
-  try {
-      const response = await CategoryModel.find({});
-      res.status(200).json(response);
-  } catch (error) {
-      res.json(error);
-  }
-});
 
 
 
 
-// get photos list
-router.get("/:categoryId", async (req, res) => {
-  try {
-      const categoryId = req.params.categoryId;
-
-      const category = await CategoryModel.findById(categoryId);
-      
-      if (!category) {
-          return res.status(404).json({ message: "category not found" });
-      }
-
-      res.status(200).json({ message: "category retrieved successfully",  category});
-
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
-  }
-});
 
 
 router.put("/:categoryId", upload.array('images', 50), async (req, res) => {

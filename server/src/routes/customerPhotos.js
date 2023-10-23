@@ -6,11 +6,25 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { adminAuthorisation } from "../middleware/adminAuthorisation.js";
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = express.Router()
+
+router.get("/", async (req, res) => {
+  try {
+      const response = await CustomerPhotoModel.find({});
+      res.json(response);
+  } catch (error) {
+      res.json(error);
+  }
+});
+
+router.use(adminAuthorisation);
 
 const ensureDirectoryExists = (directory) => {
   if (!fs.existsSync(directory)) {
@@ -72,14 +86,7 @@ router.post("/", upload.array('photos', 100), async (req, res) => {
   }
 });
 
-  router.get("/", async (req, res) => {
-    try {
-        const response = await CustomerPhotoModel.find({});
-        res.json(response);
-    } catch (error) {
-        res.json(error);
-    }
-});
+
 
 router.get("/orderPhotos/:orderId", async (req, res) => {
   const orderId = req.params.orderId;

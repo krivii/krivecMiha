@@ -6,8 +6,54 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { adminAuthorisation } from "../middleware/adminAuthorisation.js";
+
 
 const router = express.Router()
+
+router.get("/", async (req, res) => {
+  try {
+      const response = await PromoPhotoModel.find({});
+      res.status(200).json(response);
+  } catch (error) {
+      res.json(error);
+  }
+});
+
+router.get("/:name", async (req, res) => {
+const name = req.params.name;
+try {
+    const response = await PromoPhotoModel.findOne({ name: name });
+    if (response) {
+        res.status(200).json(response);
+    } else {
+        res.status(404).json({ message: "Document not found" });
+    }
+} catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+}
+});
+
+
+router.get("/:photoId", async (req, res) => {
+try {
+    const photoId = req.params.photoId;
+
+    const photo = await PromoPhotoModel.findById(photoId);
+    
+    if (!photo) {
+        return res.status(404).json({ message: "Photo not found" });
+    }
+
+    res.status(200).json({ message: "photo retrieved successfully", photos: photo });
+
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+}
+});
+
+router.use(adminAuthorisation);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +80,8 @@ const ensureDirectoryExists = (directory) => {
 };
 
 const upload = multer({ storage });
+
+
 
 router.put("/:photoId", upload.single('photo'), async (req, res) => {
   try {
@@ -84,47 +132,7 @@ router.post("/", async (req, res) => {
 });
 
 
-router.get("/", async (req, res) => {
-    try {
-        const response = await PromoPhotoModel.find({});
-        res.status(200).json(response);
-    } catch (error) {
-        res.json(error);
-    }
-  });
-  
-router.get("/:name", async (req, res) => {
-  const name = req.params.name;
-  try {
-      const response = await PromoPhotoModel.findOne({ name: name });
-      if (response) {
-          res.status(200).json(response);
-      } else {
-          res.status(404).json({ message: "Document not found" });
-      }
-  } catch (error) {
-      res.status(500).json({ message: "Internal server error", error: error.message });
-  }
-});
- 
-  
-  router.get("/:photoId", async (req, res) => {
-  try {
-      const photoId = req.params.photoId;
-  
-      const photo = await PromoPhotoModel.findById(photoId);
-      
-      if (!photo) {
-          return res.status(404).json({ message: "Photo not found" });
-      }
-  
-      res.status(200).json({ message: "photo retrieved successfully", photos: photo });
-  
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
-  }
-  });
+
   
   
   
