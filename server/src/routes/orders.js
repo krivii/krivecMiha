@@ -1,5 +1,10 @@
 import  express  from "express";
-
+import path from 'path'; 
+import { fileURLToPath } from 'url';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import dotenv from 'dotenv';
+import multer from 'multer';
 import { OrderModel } from "../models/Order.js";
 import { UserModel } from "../models/Users.js"; 
 import { CustomerPhotoModel } from "../models/CustomerPhotos.js";
@@ -10,7 +15,27 @@ import { authorization } from "../middleware/authorization.js";
 
 const router = express.Router();
 
+
 router.use(authorization);
+
+router.get('/zip', (req, res) => {
+
+  const filePath = path.join(process.env.SRC_PATH,'uploads/zips/sample.zip');
+  const fileName = 'sampleDOWNLOAD.zip';
+  // path.join(process.env.SRC_PATH, "/uploads/", photoToDelete.path);
+  // const filePath = path.join(__dirname, 'uploads/zip/something.zip'); // Adjust the file path as needed
+
+  res.download(filePath, fileName, (err) => {
+      if (err) {
+          console.error('Error downloading file:', err);
+          res.status(500).send('Error downloading the file.');
+      }
+  });
+
+  // console.log("Prisel v klic GET")
+});
+
+
 
 router.get("/userOrders", async (req, res) => {
   
@@ -36,6 +61,87 @@ router.get("/userOrders", async (req, res) => {
 
 
 router.use(adminAuthorisation);
+
+
+
+const ensureDirectoryExists = (directory) => {
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+};
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const orderId = req.body.order;
+    const uploadPath = path.join(process.env.SRC_PATH, `/uploads/zips/orderid=${orderId}`);
+    ensureDirectoryExists(uploadPath);
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const zipName = req.body.zipName;
+    // const uniqueId = uuidv4(); // Generate a unique identifier
+    const Filename = `${zipName}.zip`;
+    
+    cb(null, Filename);
+  },
+});
+
+const upload = multer({ storage });
+
+router.put('/zip', upload.array('zip', 1), async (req, res) => {
+
+  const orderId = req.body.order;
+  const zipName = req.body.zipName;
+  const zipFile = req.files[0]; // Assuming only one zip file is uploaded
+
+  try {
+    const foundOrder = await OrderModel.findById(orderId);
+
+    if (!foundOrder) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    // Save the zip file to the specified directory with the custom filename
+    const zipFilePath = zipFile.path.replace(/\\/g, '/').split('uploads/')[1];
+
+    // Check if the found order already has a zip and delete it
+    if (foundOrder.zip) {
+      const zipFilePathToDelete = path.join(process.env.SRC_PATH, 'uploads', foundOrder.zip);
+      deleteExistingZipFile(zipFilePathToDelete);
+    }
+
+    // Update the order's 'zip' attribute to store the path of the saved zip file
+    foundOrder.zip = zipFilePath;
+    await foundOrder.save();
+
+    res.status(200).json({ msg: "Zip folder uploaded successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+const deleteExistingZipFile = (zipFilePath) => {
+  fs.unlink(zipFilePath, (err) => {
+    if (err) {
+      console.error("Error deleting existing zip file:", err);
+    } else {
+      const directoryPath = path.dirname(zipFilePath);
+      fs.readdir(directoryPath, (error, files) => {
+        if (!error && files.length === 0) {
+          fs.rmdir(directoryPath, (rmdirError) => {
+            if (rmdirError) {
+              console.error("Error deleting empty directory:", rmdirError);
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
+
+
 
 router.post("/", async (req, res) => {
   const orderData = req.body;

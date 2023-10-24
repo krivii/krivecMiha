@@ -3,8 +3,6 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 
-
-
 import { authRouter } from "./routes/auth.js"
 import { userRouter } from "./routes/users.js"
 import { customerPhotoRouter } from "./routes/customerPhotos.js"

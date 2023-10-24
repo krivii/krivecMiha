@@ -106,7 +106,7 @@ const OrderPhotoList = () => {
 
   return (
     <Box m="20px">
-      <Header title="ORDER PHOTOS" subtitle={`This is the photo list from order: ${orderId}`} buttonLabel="Edit order" buttonLink={`/admin/orders/edit/${orderId}`} />
+      <Header title="ORDER PHOTOS" subtitle={`This is the photo list from Order: ${orderId}`} buttonLabel="Edit order" buttonLink={`/admin/orders/edit/${orderId}`} />
       <Box m="20px 0 0 0" height="70vh">
         {isLoading ? ( 
           <CircularProgress />

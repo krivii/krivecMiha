@@ -12,6 +12,7 @@ const OrderSchema = new mongoose.Schema({
       default: "active",
     },
     date: { type: Date, required: true },
+    zip: { type: String},
   });
   
 

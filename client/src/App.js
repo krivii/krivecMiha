@@ -38,6 +38,7 @@ import ImageList from "./scenes/pageElements/ImageList";
 import VideoAdd from "./scenes/categories/VideoAdd";
 import VideoList from "./scenes/categories/VideoList";
 import FAQAdmin from "./scenes/faq/FaqList";
+import OrderZipAdd from "./scenes/orders/OrderZipEdit";
 
 
 
@@ -132,6 +133,7 @@ function AdminComponent() {
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/add" element={<OrderAdd />} />
             <Route path="/orders/edit/:orderId" element={<OrderEdit />} />
+            <Route path="/orders/editZip/:orderId" element={<OrderZipAdd />} />            
             <Route path="/cphotos/add" element={<CPhotosAdd />} />
             <Route path="/cphotos/:orderId" element={<OrderPhotoList />} />
             <Route path="/categories" element={<CategoryList />} />

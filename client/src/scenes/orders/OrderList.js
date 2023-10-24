@@ -11,6 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EditIcon from '@mui/icons-material/Edit';
 import {useAuthContext} from '../../hooks/useAuthContext'  
+import FolderZipIcon from '@mui/icons-material/FolderZip';
 
 
 const OrderList = () => {
@@ -111,7 +112,48 @@ const OrderList = () => {
           </Link>
         ),
       },
-      
+      {
+        field: 'zip',
+        headerName: 'Zip folder',
+        flex: 0.8,
+        renderCell: (params) => (
+          <Link to={`/admin/orders/editZip/${params.row._id}`}>
+            {params.value ? ( // Check if the zip value is not empty
+            
+                <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  backgroundColor: '#EADF91',
+                  borderRadius: '20px', 
+                  '&:hover': {
+                    backgroundColor: '#FFD767',
+                  },
+                }}
+              >
+                <FolderZipIcon sx={{ color: '#333', marginRight: '0.4rem' }} /> 
+                <span style={{ color: '#333' }}>edit</span>
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  backgroundColor: '#D2EBD3',
+                  borderRadius: '20px', 
+                  '&:hover': {
+                    backgroundColor: '#83CB86',
+                  },
+                }}
+              >
+                <FolderZipIcon sx={{ color: '#333', marginRight: '0.4rem' }} /> 
+                <span style={{ color: '#333' }}>Add</span>
+              </Button>
+
+            )}
+          </Link>
+        ),
+      },   
     {
         field: 'date', 
         headerName: 'date',
@@ -126,7 +168,8 @@ const OrderList = () => {
         }
             
        },
-      },      
+      },  
+      
       {
         headerName: 'Edit order',
         flex: 0.5,

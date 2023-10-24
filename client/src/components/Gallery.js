@@ -7,7 +7,7 @@ import {
   faRightLong, 
   faCircleXmark
 } from '@fortawesome/free-solid-svg-icons';
-
+import {useAuthContext} from '../hooks/useAuthContext'  
 import './Gallery.css';
 
 
@@ -15,6 +15,7 @@ import './Gallery.css';
 const Gallery = () => {
     const [slideNumber, setSlideNumber] = useState(0);
     const [open, setOpen] = useState(false);
+    const {user} = useAuthContext();
 
     const handleOpen = (index) => {
         setSlideNumber(index);
@@ -37,9 +38,34 @@ const Gallery = () => {
         : setSlideNumber(slideNumber + 1)
       }
 
-    const downloadZip = () => {
-      alert("download");
+      const downloadZip = () => {
+        fetch('http://localhost:3001/api/admin/order/zip', {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.blob();
+                } else {
+                    console.error('Error downloading the file.');
+                }
+            })
+            .then((blob) => {
+                // Create a Blob URL for the downloaded file
+                const url = window.URL.createObjectURL(blob);
+                // Create an anchor element for triggering the download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'sampleDOWNLOAD.zip'; // Replace with the desired file name
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch((error) => {
+                console.error('Error downloading the file:', error);
+            });
     };
+    
 
     return (
         <div className='base'>
