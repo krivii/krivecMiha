@@ -1,3 +1,0 @@
-MongoDB miha_web database
-Username: krivecluka
-Password: 6g8Ag6iYxpmFsQh3
