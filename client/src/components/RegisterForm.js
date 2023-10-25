@@ -2,7 +2,8 @@ import React, { useRef, useState } from 'react';
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { fadeAnim, photoFromAboveAnim } from "../animation";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useRegister } from '../hooks/useRegister';
 
 
@@ -16,10 +17,27 @@ const RegisterForm = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordRepeat, setPasswordRepeat] = useState("");
+
+    const notifyError = (error) => {
+      toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+        });
+    }
 
     const handleRegister = async (event) => {
         event.preventDefault();
-
+        if (password !== passwordRepeat) {
+          notifyError("Passwords don't match");
+          return;
+        }
         await signup(name, email, password);
     }
 
@@ -47,7 +65,15 @@ const RegisterForm = () => {
             <input type="password" 
                    id="password" 
                    value={password}
-                   onChange={(event)=> setPassword(event.target.value)} />    
+                   onChange={(event)=> setPassword(event.target.value)} />  
+            <label>Repeat Password</label>
+            <input
+              type="password"
+              id="passwordRepeat"
+              value={passwordRepeat}
+              onChange={(event) => setPasswordRepeat(event.target.value)}
+            />
+    
           <motion.button disabled={isLoading} variants={fadeAnim} type="submit" >
             Sign up
           </motion.button>
@@ -61,12 +87,17 @@ const RegisterForm = () => {
                         display: 'flex',
                         justifyContent: 'center', 
                         alignItems: 'center', 
+                        marginTop: '20px'
                         }}
                         >{error}
                         </div>
            }
+          <p>
+          Already have an account? <a href="/login" style={{fontSize: '25px' ,color: '#800080' }}>Login</a>.
+          </p>
         </motion.div>
       </StyledForm>
+      <ToastContainer />
     </StyledBase>
   );
 };

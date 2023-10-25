@@ -100,10 +100,11 @@ const OrderEdit = () => {
 
   const handleFormSubmit = async (values) => {
     try {
-      
+      console.log(values.status)
       if (values.status === "completed") {
         const selectedImages = orderData.photos;
-        if (selectedImages.length > 0) {
+        const zip = orderData.zip;
+        if (selectedImages.length > 0 || zip!== null) {
 
           if (confirm('Are you sure you want to change the order status to "Completed". By doing so, you will delete all photos related to this order.')) {
             const apiUrl = "http://localhost:3001/api/admin/cphoto/deleteMany";
@@ -114,7 +115,7 @@ const OrderEdit = () => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${user.token}`,
               },
-              body: JSON.stringify({ photoIds: selectedImages }), 
+              body: JSON.stringify({ photoIds: selectedImages, orderId }), 
             })
               .then((response) => {
                 if (response.ok) {

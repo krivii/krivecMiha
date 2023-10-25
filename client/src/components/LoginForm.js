@@ -22,42 +22,49 @@ const LoginForm = () => {
   }
 
     
-  return (
-
+return (
     <StyledBase>
       <StyledForm ref={form} onSubmit={handleLogin}>
-        <motion.h2 >
-          Log <span>in</span>. 
+        <motion.h2>
+          Log <span>in</span>.
         </motion.h2>
         <motion.div variants={photoFromAboveAnim}>
-          
-            <label>Email</label>
-            <input type="email" 
-                   id="email" 
-                   value={email}
-                   onChange={(event)=> setEmail(event.target.value)} />             
-            <label>Password</label>
-            <input type="password" 
-                   id="password" 
-                   value={password}
-                   onChange={(event)=> setPassword(event.target.value)} />    
+          <label>Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <label>Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
           <motion.button disabled={isLoading} variants={fadeAnim} type="submit" value="login">
             Log in
           </motion.button>
-          {error && <div
-                        className='error'
-                        style={{
-                        border: '1px solid #ff6666',
-                        height: '40px',
-                        borderRadius: '5px',
-                        color: '#ff6666',
-                        display: 'flex',
-                        justifyContent: 'center', 
-                        alignItems: 'center', 
-                        }}
-                        >{error}
-                        </div>
-           }
+          {error && (
+            <div
+              className='error'
+              style={{
+                border: '1px solid #ff6666',
+                height: '40px',
+                borderRadius: '5px',
+                color: '#ff6666',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {error}
+            </div>
+          )}
+          <p>
+            Don't have an account yet? <a href="/register" style={{ fontSize: '25px' ,color: '#800080' }}>Sign up</a>.
+          </p>
         </motion.div>
       </StyledForm>
     </StyledBase>

@@ -1,170 +1,157 @@
-
-import { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Button  } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faLeftLong, 
   faRightLong, 
   faCircleXmark
 } from '@fortawesome/free-solid-svg-icons';
-import {useAuthContext} from '../hooks/useAuthContext'  
+import { useAuthContext } from '../hooks/useAuthContext';  
 import './Gallery.css';
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Gallery = () => {
     const [slideNumber, setSlideNumber] = useState(0);
     const [open, setOpen] = useState(false);
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
+    const [photos, setPhotos] = useState([]);
+    const [zip, setZip] = useState();
+    const [loading, setLoading] = useState(true);
 
     const handleOpen = (index) => {
         setSlideNumber(index);
         setOpen(true);
-      }
+    }
 
     const handleClose = () => {
-        setOpen(false)
+        setOpen(false);
     }
 
     const prev = () => {
         slideNumber === 0 
-        ? setSlideNumber( galleryImages.length -1 ) 
-        : setSlideNumber( slideNumber - 1 )
+        ? setSlideNumber(galleryImages.length - 1) 
+        : setSlideNumber(slideNumber - 1);
     }
 
     const next = () => {
         slideNumber + 1 === galleryImages.length 
         ? setSlideNumber(0) 
-        : setSlideNumber(slideNumber + 1)
-      }
+        : setSlideNumber(slideNumber + 1);
+    }
 
-      const downloadZip = () => {
-        fetch('http://localhost:3001/api/admin/order/zip', {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        })
-            .then((response) => {
-                if (response.status === 200) {
-                    return response.blob();
-                } else {
-                    console.error('Error downloading the file.');
-                }
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        if (user && user.token) {
+            fetch('http://localhost:3001/api/admin/order/gallery', {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
             })
-            .then((blob) => {
-                // Create a Blob URL for the downloaded file
-                const url = window.URL.createObjectURL(blob);
-                // Create an anchor element for triggering the download
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'sampleDOWNLOAD.zip'; // Replace with the desired file name
-                a.click();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch((error) => {
-                console.error('Error downloading the file:', error);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    setPhotos(data.allphotos);
+                    setZip(data.firstzip);
+                    setLoading(false);
+
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                    setLoading(false);
+                });
+        } else {
+            console.error('User is not authenticated.');
+            setLoading(false);
+        }
     };
-    
+
+    const downloadZip = () => {
+        if (zip !== null) {
+            fetch('http://localhost:3001/api/admin/order/zip', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json', 
+                Authorization: `Bearer ${user.token}`,
+              },
+              body: JSON.stringify({ zip }),
+            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        return response.blob();
+                    } else {
+                        console.error('Error downloading the file.');
+                    }
+                })
+                .then((blob) => {
+                    if (blob) {
+                        // Create a Blob URL for the downloaded file
+                        const url = window.URL.createObjectURL(blob);
+                        // Create an anchor element for triggering the download
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = zip.split('/').pop(); // Replace with the desired file name
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error downloading the file:', error);
+                });
+        } else {
+            toast.error('Download folder not available. Please contact admin.');
+        }
+    };
 
     return (
-        <div className='base'>
-            {open && 
-                <div className='sliderWrap'>
-                    <FontAwesomeIcon icon={faCircleXmark} className='btnClose' onClick={handleClose}  />
-                    <FontAwesomeIcon icon={faLeftLong} className='btnPrev' onClick={prev} />
-                    <FontAwesomeIcon icon={faRightLong} className='btnNext' onClick={next} />
-                    <div className='fullScreenImage'>
-                        <img src={galleryImages[slideNumber].img} alt=''  />
-                    </div>
-                </div>
-            } 
-            <button onClick={downloadZip}>DOWNLOAD</button>
-            <div className='galleryWrap'>
-              {
-                galleryImages && galleryImages.map((slide, index) => {
-                    return(
-                    <div 
-                        className='single' 
-                        key={index}
-                        onClick={ () => handleOpen(index) }
-                    >
-                        <img src={slide.img} alt='' />
-                    </div>
-                    )
-                })
-              }
-            </div>                                                                         
-        </div>
-       
-    )
-}
+        <Box>
+            <div className='base'>
+                {loading ? (
+                    // Display a loading message or spinner while fetching data
+                    <p>Loading...</p>
+                ) : photos.length > 0 ? (
+                    // Display the gallery if photos are available
+                    <>
+                        {open && 
+                            <div className='sliderWrap'>
+                                <FontAwesomeIcon icon={faCircleXmark} className='btnClose' onClick={handleClose}  />
+                                <FontAwesomeIcon icon={faLeftLong} className='btnPrev' onClick={prev} />
+                                <FontAwesomeIcon icon={faRightLong} className='btnNext' onClick={next} />
+                                <div className='fullScreenImage'>
+                                    <img src={galleryImages[slideNumber].img} alt=''  />
+                                </div>
+                            </div>
+                        } 
+                        <button onClick={downloadZip}>DOWNLOAD</button>
+                        <div className='galleryWrap'>
+                            {photos.map((photo, index) => (
+                                <div 
+                                    className='single' 
+                                    key={index}
+                                    onClick={() => handleOpen(index)}
+                                >
+                                    <img src={photo} alt='' />
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                ) : (
+                  <p style={{ color: 'grey' }}>
+                  Don't see enough photos for your liking... or any at all?{' '}
+                  <a href="/contact" >
+                    Get in touch to order.
+                  </a>
+                </p>
+                
+                )}
+            </div>
+            <ToastContainer /> 
+        </Box>
+    );
+};
 
 
 
-
-
-const galleryImages = [
-    {
-      img: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-    },
-    {
-      img: "https://images.pexels.com/photos/3861458/pexels-photo-3861458.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-    },
-    {
-      img: "https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-    },
-    {
-      img: "https://images.pexels.com/photos/1194713/pexels-photo-1194713.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-    },
-    {
-      img: "https://images.pexels.com/photos/39284/macbook-apple-imac-computer-39284.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-    },
-    {
-      img: "https://images.pexels.com/photos/1712/sunglasses-apple-iphone-desk.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-    },
-    {
-    img: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1883&q=80"
-    },
-    {
-    img: "https://plus.unsplash.com/premium_photo-1671616724629-c2fa8455c28f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-    },
-    {
-    img: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80"
-    },
-    {
-    img: "https://images.unsplash.com/photo-1549849171-09f62448709e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-    },
-    {
-        img: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-      },
-      {
-        img: "https://images.pexels.com/photos/3861458/pexels-photo-3861458.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      },
-      {
-        img: "https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      },
-      {
-        img: "https://images.pexels.com/photos/1194713/pexels-photo-1194713.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      },
-      {
-        img: "https://images.pexels.com/photos/39284/macbook-apple-imac-computer-39284.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      },
-      {
-        img: "https://images.pexels.com/photos/1712/sunglasses-apple-iphone-desk.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      },
-      {
-      img: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1883&q=80"
-      },
-      {
-      img: "https://plus.unsplash.com/premium_photo-1671616724629-c2fa8455c28f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-      },
-      {
-      img: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80"
-      },
-      {
-      img: "https://images.unsplash.com/photo-1549849171-09f62448709e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-      }
-  ]
-
-  export default Gallery;
+export default Gallery;

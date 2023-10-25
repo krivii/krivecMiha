@@ -65,7 +65,7 @@ function App() {
             />      
             <Route 
               path="/adminLogin" 
-              element={!isAdmin ? <AdminLogin /> : <Navigate to="/admin/" />} 
+              element={!isAdmin ? <AdminLogin /> : <AdminComponent /> } 
             />     
             {/* <Route path="/admin/*" element={<AdminComponent />} /> */}
         </Routes>
@@ -125,7 +125,8 @@ function AdminComponent() {
         <Topbar /> 
         <main className="content">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            {/* <Route path="/" element={<Dashboard />} /> */}
+            <Route path="/" element={<UserList />} />
             <Route path="/users" element={<UserList />} />
             <Route path="/users/add" element={<UserAdd />} />
             <Route path="/users/edit/:userId" element={<UserEdit />} />

@@ -11,23 +11,12 @@ const Topbar = () => {
   const {logout} = useLogout();
   const currentURL = window.location.href;
 
-    const handleReload = () => {
-
-      window.location.reload(); 
-
-    };
-
     const handleSignOut = () => {
       logout();
   };
   
     return (
       <Box p={1} display="flex" justifyContent="flex-end">
-        <Tooltip title="Reload">
-          <IconButton onClick={handleReload}>
-            <RefreshIcon />
-          </IconButton>
-        </Tooltip>
         <Tooltip title="Logout">
           <IconButton onClick={handleSignOut}>
             <ExitToAppIcon />

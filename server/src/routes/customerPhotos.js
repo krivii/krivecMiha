@@ -218,6 +218,7 @@ const deletePath = async (photoId) => {
 
 router.post("/deleteMany", async (req, res) => {
   const { photoIds } = req.body;
+  const { orderId } = req.body;
   try {
     if (!Array.isArray(photoIds) || photoIds.length === 0) {
 
@@ -246,14 +247,24 @@ router.post("/deleteMany", async (req, res) => {
       return null; 
     }
 
-    const oldOrderId = photoToDelete.order;
 
-    const oldOrder = await OrderModel.findById(oldOrderId);
+
+    const oldOrder = await OrderModel.findById(orderId);
 
     if (oldOrder) {
       oldOrder.photos = oldOrder.photos.filter((p) => !photoIds.includes(p.toString()));
-      await oldOrder.save();
+      
     }
+
+    if (oldOrder.zip) {
+  
+      const zipFilePathToDelete = path.join(process.env.SRC_PATH, 'uploads', oldOrder.zip);
+      oldOrder.zip = '';
+      deleteExistingZipFile(zipFilePathToDelete);
+      
+    }
+
+    await oldOrder.save();
 
     try {
       await CustomerPhotoModel.deleteMany({ _id: { $in: photoIds } });
@@ -268,6 +279,26 @@ router.post("/deleteMany", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+const deleteExistingZipFile = (zipFilePath) => {
+
+  fs.unlink(zipFilePath, (err) => {
+    if (err) {
+      console.error("Error deleting existing zip file:", err);
+    } else {
+      const directoryPath = path.dirname(zipFilePath);
+      fs.readdir(directoryPath, (error, files) => {
+        if (!error && files.length === 0) {
+          fs.rmdir(directoryPath, (rmdirError) => {
+            if (rmdirError) {
+              console.error("Error deleting empty directory:", rmdirError);
+            }
+          });
+        }
+      });
+    }
+  });
+};
 
 
 

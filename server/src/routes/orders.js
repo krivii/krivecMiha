@@ -18,22 +18,79 @@ const router = express.Router();
 
 router.use(authorization);
 
-router.get('/zip', (req, res) => {
 
-  const filePath = path.join(process.env.SRC_PATH,'uploads/zips/sample.zip');
-  const fileName = 'sampleDOWNLOAD.zip';
-  // path.join(process.env.SRC_PATH, "/uploads/", photoToDelete.path);
-  // const filePath = path.join(__dirname, 'uploads/zip/something.zip'); // Adjust the file path as needed
+
+router.get("/gallery", async (req, res) => {
+
+  const userId = req.user._id;
+
+  
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userEmail = user.email;
+
+    const orders = await OrderModel.find({ orderOwner: userEmail });
+
+    const allphotos = [];
+    let firstzip = null;
+
+    for (const order of orders) {
+
+      if (order.status !== "completed") {
+
+    
+        const orderPhotos = await CustomerPhotoModel.find({ order: order._id });
+    
+  
+        const photoPaths = [];
+    
+        for (const photo of orderPhotos) {
+          const photoPath = photo.path;
+          photoPaths.push(photoPath);
+        }
+    
+     
+        allphotos.push(...photoPaths);
+    
+     
+        if (order.zip) {
+          firstzip = order.zip;
+        }
+      }
+    }
+
+    res.status(200).json({ allphotos, firstzip });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post('/zip', (req, res) => {
+
+  const { zip } = req.body;
+
+  if (!zip) {
+    return res.status(400).json({ error: 'zip is required in the request body' });
+  }
+
+
+  const filePath = path.join(process.env.SRC_PATH, 'uploads/',zip);
+  const fileName = zip.split('/').pop();
 
   res.download(filePath, fileName, (err) => {
-      if (err) {
-          console.error('Error downloading file:', err);
-          res.status(500).send('Error downloading the file.');
-      }
+    if (err) {
+      console.error('Error downloading file:', err);
+      res.status(500).send('Error downloading the file.');
+    }
   });
-
-  // console.log("Prisel v klic GET")
 });
+
 
 
 
@@ -93,7 +150,7 @@ router.put('/zip', upload.array('zip', 1), async (req, res) => {
 
   const orderId = req.body.order;
   const zipName = req.body.zipName;
-  const zipFile = req.files[0]; // Assuming only one zip file is uploaded
+  const zipFile = req.files[0]; 
 
   try {
     const foundOrder = await OrderModel.findById(orderId);
@@ -102,16 +159,16 @@ router.put('/zip', upload.array('zip', 1), async (req, res) => {
       return res.status(404).json({ error: "Order not found." });
     }
 
-    // Save the zip file to the specified directory with the custom filename
+    
     const zipFilePath = zipFile.path.replace(/\\/g, '/').split('uploads/')[1];
 
-    // Check if the found order already has a zip and delete it
+    
     if (foundOrder.zip) {
       const zipFilePathToDelete = path.join(process.env.SRC_PATH, 'uploads', foundOrder.zip);
       deleteExistingZipFile(zipFilePathToDelete);
     }
 
-    // Update the order's 'zip' attribute to store the path of the saved zip file
+    foundOrder.status = "pending";
     foundOrder.zip = zipFilePath;
     await foundOrder.save();
 

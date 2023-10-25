@@ -19,7 +19,8 @@ router.post("/register", async (req, res) => {
         const token = createJWT(user._id, user.role);
 
 
-        res.status(200).json({ email, token});
+        res.status(200).json({ message: "User registered successfully!", role: user.role, token, name });
+    
 
     } catch (error) {
         res.status(400).json({error: error.message});
@@ -36,7 +37,7 @@ router.post("/login", async (req, res) => {
 
         const token = createJWT(user._id, user.role);
 
-        res.status(200).json({ message: "Admin logged in successfully!", role: user.role, token, name });
+        res.status(200).json({ message: "User logged in successfully!", role: user.role, token, name });
     } catch (error) {
         res.status(400).json({error: error.message});
     }

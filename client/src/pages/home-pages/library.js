@@ -39,7 +39,7 @@ const Library = () => {
                 <motion.div >
                     <StyledHide>
                         <motion.h2 variants={titleAnim}>
-                            Hello, <span>{user.name}</span>!
+                        Hello, <span>{user.name ? user.name : "dear user"}</span>!
                         </motion.h2>
                     </StyledHide>
                     <StyledHide>
