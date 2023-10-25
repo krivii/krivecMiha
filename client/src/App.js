@@ -1,3 +1,7 @@
+//Spletna aplikacija za fotografe/ Web application for photographers
+
+//Copyright (C) 2023  Luka Krivec (lk2378@student.uni-lj.si). Licensed under the GPL-3.0 or later.
+
 import "./App.css";
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate  } from "react-router-dom";
